@@ -1,0 +1,185 @@
+kind: Template
+apiVersion: template.openshift.io/v1
+metadata:
+  name: wordpress-mariadb-deployment
+  annotations:
+    openshift.io/display-name:  Deployment templates for the WordPress mariadb deploy.
+    description: Deployment templates for the WordPress mariadb deploy.
+    tags: mariadb,wordpress
+
+parameters:
+  - name: APP_NAME
+    displayName: "App Name"
+    description: "The name of the application (grouped)."
+    required: true
+    value: "wordpress"
+  - name: ROLE_NAME
+    displayName: "Component Name"
+    description: "The name of the application role."
+    required: true
+    value: "mariadb"
+  - name: PROJECT_NAMESPACE
+    displayName: "OpenShift Project Namespace"
+    description: "The namespace of the OpenShift project containing the application."
+    required: true
+    value: "23576a"
+  - name: ENV_NAME
+    displayName: "Environment name"
+    description: "The name for this environment [dev, test, prod, tools]"
+    required: true
+    value: "dev"
+  - name: SITE_NAME
+    displayName: "Site name"
+    description: "The name for the site (a-zA-Z_)"
+    required: true
+    value: "global"
+  - name: POOL_NAME
+    displayName: "Pool name"
+    description: "The database shared pool instance."
+    required: true
+    value: "pool"
+
+  - name: APP_PORT
+    displayName: "Application Port"
+    description: "The port used to communicate with the Pod"
+    value: "3306"
+  - name: REPLICAS
+    displayName: "Pod Replicas"
+    description: "Number of pod replicas to run"
+    value: "1"
+  - name: CPU_REQUEST
+    displayName: "CPU Request"
+    description: "Starting amount of CPU the container can use."
+    value: "100m"
+  - name: CPU_LIMIT
+    displayName: "CPU Limit"
+    description: "Maximum amount of CPU the container can use."
+    value: "1"
+  - name: MEMORY_REQUEST
+    displayName: "Memory Request"
+    description: "Starting amount of memory the container can use."
+    value: "100Mi"
+  - name: MEMORY_LIMIT
+    displayName: "Memory Limit"
+    description: "Maximum amount of memory the container can use."
+    value: "2Gi"
+
+objects:
+  - kind: Deployment
+    apiVersion: apps/v1
+    metadata:
+      name: ${APP_NAME}-${ROLE_NAME}--${SITE_NAME}
+      namespace: ${PROJECT_NAMESPACE}-${ENV_NAME}
+      labels:
+        app.kubernetes.io/part-of: ${APP_NAME}
+        app.openshift.io/runtime: mariadb
+        app.kubernetes.io/component: backend
+        app.kubernetes.io/instance: coreDB
+    spec:
+      replicas: ${{REPLICAS}}
+      selector:
+        matchLabels:
+          name: ${APP_NAME}-${ROLE_NAME}--${SITE_NAME}
+          app: ${APP_NAME}
+          role: ${ROLE_NAME}
+          env: ${ENV_NAME}
+          site: ${SITE_NAME}
+      strategy:
+        type: Recreate
+      template:
+        metadata:
+          annotations:
+            alpha.image.policy.openshift.io/resolve-names: '*'
+          labels:
+            name: ${APP_NAME}-${ROLE_NAME}--${SITE_NAME}
+            app: ${APP_NAME}
+            role: ${ROLE_NAME}
+            env: ${ENV_NAME}
+            site: ${SITE_NAME}
+            net-tcp-3306: server
+        spec:
+          volumes:
+            - name: db-configmap-volume
+              configMap:
+                name: ${APP_NAME}-${ROLE_NAME}-file-config--${SITE_NAME}
+                items:
+                  - key: my.cnf
+                    path: my.cnf
+                defaultMode: 420
+            - name: db-secrets-volume
+              secret:
+                secretName: ${APP_NAME}-${ROLE_NAME}-secrets--${SITE_NAME}
+                items:
+                  - key: MYSQL_PASSWORD
+                    path: mysql_password
+                  - key: MYSQL_ROOT_PASSWORD
+                    path: mysql_root_password
+                defaultMode: 420
+            - name: db-volume
+              persistentVolumeClaim:
+                claimName: ${APP_NAME}-${ROLE_NAME}--${POOL_NAME}
+          containers:
+            - name: ${APP_NAME}-${ROLE_NAME}--${SITE_NAME}
+              image: image-registry.openshift-image-registry.svc:5000/${PROJECT_NAMESPACE}-tools/wordpress-mariadb-run:${ENV_NAME}
+              imagePullPolicy: Always
+              envFrom:
+                - configMapRef:
+                    name: ${APP_NAME}-${ROLE_NAME}-env-config--${SITE_NAME}
+              env:
+                - name: MYSQL_ROOT_PASSWORD_FILE
+                  value: "/run/secrets/mysql_root_password"
+                - name: MYSQL_PASSWORD_FILE
+                  value: "/run/secrets/mysql_password"
+              ports:
+                - containerPort: ${{APP_PORT}}
+                  protocol: TCP
+              volumeMounts:
+                - name: db-configmap-volume
+                  mountPath: /etc/my.cnf.d/my.cnf
+                  subPath: my.cnf
+                - name: db-secrets-volume
+                  readOnly: true
+                  mountPath: /run/secrets/mysql_root_password
+                  subPath: mysql_root_password
+                - name: db-secrets-volume
+                  readOnly: true
+                  mountPath: /run/secrets/mysql_password
+                  subPath: mysql_password
+                - name: db-volume
+                  mountPath: /var/lib/mysql
+                  subPath: ${SITE_NAME}
+              resources:
+                requests:
+                  cpu: ${CPU_REQUEST}
+                  memory: ${MEMORY_REQUEST}
+                limits:
+                  cpu: ${CPU_LIMIT}
+                  memory: ${MEMORY_LIMIT}
+
+  - kind: Service
+    apiVersion: v1
+    metadata:
+      name: ${APP_NAME}-${ROLE_NAME}--${SITE_NAME}
+      namespace: ${PROJECT_NAMESPACE}-${ENV_NAME}
+      annotations:
+        description: Exposes and load balances the application pods.
+      labels:
+        name: ${APP_NAME}-${ROLE_NAME}--${SITE_NAME}
+        app: ${APP_NAME}
+        role: ${ROLE_NAME}
+        env: ${ENV_NAME}
+        site: ${SITE_NAME}
+    spec:
+      ports:
+        - name: ${APP_PORT}-tcp
+          port: ${{APP_PORT}}
+          protocol: TCP
+          targetPort: ${{APP_PORT}}
+      selector:
+        name: ${APP_NAME}-${ROLE_NAME}--${SITE_NAME}
+        app: ${APP_NAME}
+        role: ${ROLE_NAME}
+        env: ${ENV_NAME}
+        site: ${SITE_NAME}
+      sessionAffinity: None
+      type: ClusterIP

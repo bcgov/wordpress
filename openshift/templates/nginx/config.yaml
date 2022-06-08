@@ -1,0 +1,58 @@
+kind: Template
+apiVersion: template.openshift.io/v1
+metadata:
+  name: wordpress-nginx-configuration
+  annotations:
+    openshift.io/display-name:  Nginx configuration templates for the persistent storage (classic) version of WordPress deploy.
+    description: Nginx configuration templates for the persistent storage (classic) version of WordPress deploy.
+    tags: nginx,wordpress
+
+parameters:
+  - name: APP_NAME
+    displayName: "App Name"
+    description: "The name of the application (grouped)."
+    required: true
+    value: "wordpress"
+  - name: ROLE_NAME
+    displayName: "Component Name"
+    description: "The name of the application role."
+    required: true
+    value: "nginx"
+  - name: PROJECT_NAMESPACE
+    displayName: "OpenShift Project Namespace"
+    description: "The namespace of the OpenShift project containing the application."
+    required: true
+    value: "23576a"
+  - name: ENV_NAME
+    displayName: "Environment name"
+    description: "The name for this environment [dev, test, prod, tools]"
+    required: true
+    value: "dev"
+  - name: SITE_NAME
+    displayName: "Site name"
+    description: "The name for the site (a-zA-Z_)"
+    required: true
+    value: "global"
+  - name: NGINX_CONF
+    displayName: "Nginx config file"
+    description: "Nginx config file"
+    required: true
+    value: ""
+
+
+objects:
+  - kind: ConfigMap
+    apiVersion: v1
+    metadata:
+      name: ${APP_NAME}-${ROLE_NAME}-file-config--${SITE_NAME}
+      namespace: ${PROJECT_NAMESPACE}-${ENV_NAME}
+      annotations:
+        description: "${ROLE_NAME} file configuration"
+      labels:
+        name: ${APP_NAME}-${ROLE_NAME}-file-config--${SITE_NAME}
+        app: ${APP_NAME}
+        env: ${ENV_NAME}
+        site: ${SITE_NAME}
+    type: Opaque
+    data:
+      default.conf: ${NGINX_CONF}

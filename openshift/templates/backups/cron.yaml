@@ -1,0 +1,123 @@
+kind: Template
+apiVersion: template.openshift.io/v1
+metadata:
+  name: wordpress-backup-cronjob
+  annotations:
+    openshift.io/display-name:  Cron job templates for backups.
+    description: Cron job templates for backups.
+    tags: backups,wordpress
+
+parameters:
+  - name: APP_NAME
+    displayName: "App Name"
+    description: "The name of the application (grouped)."
+    required: true
+    value: "wordpress"
+  - name: ROLE_NAME
+    displayName: "Component Name"
+    description: "The name of the application role."
+    required: true
+    value: "mariadb"
+  - name: PROJECT_NAMESPACE
+    displayName: "OpenShift Project Namespace"
+    description: "The namespace of the OpenShift project containing the application."
+    required: true
+    value: "23576a"
+  - name: ENV_NAME
+    displayName: "Environment name"
+    description: "The name for this environment [dev, test, prod, tools]"
+    required: true
+    value: "dev"
+  - name: SCHEDULE
+    displayName: "Cronjob Schedule"
+    description: "Cronjob Schedule in linux cron format."
+    required: true
+    value: "30 10 * * *" # 10:30am UTC = 2:30am PST
+  - name: POOL_NAME
+    displayName: "Pool name"
+    description: "The database shared pool instance."
+    required: true
+    value: "pool"
+
+objects:
+  - kind: CronJob
+    apiVersion: batch/v1
+    metadata:
+      name: ${APP_NAME}-${ROLE_NAME}--${POOL_NAME}
+      namespace: ${PROJECT_NAMESPACE}-${ENV_NAME}
+      labels:
+        template: "${APP_NAME}-${ROLE_NAME}-cronjob"
+        cronjob: "${APP_NAME}-${ROLE_NAME}-backup"
+    spec:
+      schedule: ${SCHEDULE}
+      concurrencyPolicy: "Forbid"
+      successfulJobsHistoryLimit: 5
+      failedJobsHistoryLimit: 2
+      jobTemplate:
+        metadata:
+          labels:
+            template: "${APP_NAME}-${ROLE_NAME}-job"
+            cronjob: "${APP_NAME}-${ROLE_NAME}-backup"
+        spec:
+          backoffLimit: 0
+          template:
+            metadata:
+              labels:
+                template: "${APP_NAME}-${ROLE_NAME}-job"
+                cronjob: "${APP_NAME}-${ROLE_NAME}-backup"
+            spec:
+              containers:
+                - name: "${APP_NAME}-${ROLE_NAME}-cronjob--${POOL_NAME}"
+                  image: >-
+                    artifacts.developer.gov.bc.ca/bcgov-docker-local/backup-container-mariadb:latest
+                  command:
+                    - "/bin/bash"
+                    - "-c"
+                    - "/backup.sh -1"
+                  volumeMounts:
+                  - name: ${APP_NAME}-${ROLE_NAME}-backup
+                    mountPath: /backups/${POOL_NAME}/
+                  - name: ${APP_NAME}-${ROLE_NAME}-backup-verification
+                    mountPath: /var/lib/mysql/
+                  - name: ${APP_NAME}-${ROLE_NAME}-file-config--${POOL_NAME}
+                    mountPath: /backup.conf
+                    subPath: backup.conf
+                  env:
+                  - name: BACKUP_STRATEGY
+                    value: rolling
+                  - name: BACKUP_DIR
+                    value: /backups/${POOL_NAME}/
+                  - name: MONTHLY_BACKUPS
+                    value: "3"
+                  - name: DATABASE_USER
+                    value: "root"
+                  - name: DATABASE_PASSWORD
+                    valueFrom:
+                      secretKeyRef:
+                        name: ${APP_NAME}-mariadb-root-secrets--${POOL_NAME}
+                        key: MYSQL_ROOT_PASSWORD
+                  - name: ENVIRONMENT_FRIENDLY_NAME
+                    value: ${APP_NAME}-${ENV_NAME}
+                  - name: ENVIRONMENT_NAME
+                    value: ${ENV_NAME}
+              volumes:
+                - name: ${APP_NAME}-${ROLE_NAME}-backup
+                  persistentVolumeClaim:
+                    claimName: ${APP_NAME}-${ROLE_NAME}-backup
+                - name: ${APP_NAME}-${ROLE_NAME}-backup-verification
+                  persistentVolumeClaim:
+                    claimName: ${APP_NAME}-${ROLE_NAME}-backup-verification
+                - name: ${APP_NAME}-${ROLE_NAME}-file-config--${POOL_NAME}
+                  configMap:
+                    name: ${APP_NAME}-${ROLE_NAME}-file-config--${POOL_NAME}
+                    items:
+                      - key: backup.conf
+                        path: backup.conf
+              restartPolicy: "Never"
+              imagePullSecrets:
+                - name: artifactory-creds
+              terminationGracePeriodSeconds: 30
+              activeDeadlineSeconds: 1600
+              dnsPolicy: "ClusterFirst"
+              serviceAccountName: "default"
+              serviceAccount: "default"

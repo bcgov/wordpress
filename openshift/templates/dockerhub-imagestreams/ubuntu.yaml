@@ -1,0 +1,55 @@
+kind: Template
+apiVersion: v1
+metadata:
+  name: ubuntu-image-stream
+  annotations:
+    openshift.io/display-name: ubuntu Images
+    description: ImageStream definitions for ubuntu, needed for maintenance-sidecar, that originate from Dockerhub
+parameters:
+  - name: IMAGE_NAME
+    displayName: "The name of this image"
+    required: true
+    value: "ubuntu"
+  - name: APP_NAME
+    displayName: "App Name"
+    description: "The name of the application (grouped)."
+    required: true
+    value: "wordpress"
+  - name: ROLE_NAME
+    displayName: "Component Name"
+    description: "The name of the application role."
+    required: true
+    value: "ubuntu"
+  - name: PROJECT_NAMESPACE
+    displayName: "OpenShift Project Namespace"
+    description: "The namespace of the OpenShift project containing the application."
+    required: true
+    value: "23576a"
+  - name: ENV_NAME
+    displayName: "Environment name"
+    description: "The name for this environment [dev, test, prod, tools]"
+    required: true
+    value: "tools"
+
+objects:
+  - kind: ImageStream
+    apiVersion: v1
+    metadata:
+      name: ${IMAGE_NAME}
+      namespace: ${PROJECT_NAMESPACE}-${ENV_NAME}
+      annotations:
+        description: Keeps track of ${IMAGE_NAME} images that originate from Dockerhub
+      labels:
+        name: dockerhub-${IMAGE_NAME}-images
+        app: ${APP_NAME}
+        role: ${ROLE_NAME}
+        env: ${ENV_NAME}
+        source: dockerhub
+    spec:
+      tags:
+        - name: "22.04"
+          from:
+            kind: DockerImage
+            name: "docker-remote.artifacts.developer.gov.bc.ca/ubuntu:22.04"
+          referencePolicy:
+            type: Local

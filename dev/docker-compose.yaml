@@ -1,0 +1,85 @@
+version: '2.4'
+# docker compose --env-file .env up --build site --force-recreate
+networks:
+  wp_deploy:
+volumes:
+  database:
+  # Prevent anonymous volumes from accumulating.
+  nginx_cache:
+  nginx_run:
+  db_run:
+
+services:
+  nginx:
+    build:
+      context: ../openshift/templates/images/nginx/docker
+    ports:
+      - 80:8080
+      - 443:443
+    links:
+      - wordpress-php-fpm
+    depends_on:
+      - wordpress-php-fpm
+      - db
+    networks:
+      - wp_deploy
+    environment:
+      APP_NAME: ${APP_NAME}
+    volumes:
+      - nginx_cache:/var/cache/nginx
+      - nginx_run:/var/run
+      - ../openshift/templates/nginx/conf/wordpress-multi-site.conf:/etc/nginx/conf.d/wordpress.conf
+      - ./certs/nginx/ssl:/etc/ssl/certs:ro
+    volumes_from:
+      - wordpress-php-fpm:rw
+  db:
+    build:
+      context: ../openshift/templates/images/mariadb/docker
+    logging:
+      driver: none
+    environment:
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    volumes:
+      - db_run:/var/run
+      - ${DB_VOLUME:-database}:/var/lib/mysql
+    networks:
+      - wp_deploy
+    ports:
+      - 3306:3306
+  wordpress-php-fpm:
+    user: "${UID}:${GID}"
+    build:
+      args:
+        - WP_VERSION=${WP_VERSION}
+        - WP_SHA1=${WP_SHA1}
+      context: ../openshift/templates/images/wordpress/docker
+    environment:
+      WORDPRESS_DB_HOST: ${MYSQL_HOST}
+      WORDPRESS_DB_USER: ${MYSQL_USER}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
+      WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
+      WORDPRESS_DEBUG: ${WORDPRESS_DEBUG:-1}
+      WORDPRESS_ALLOW_MULTISITE: '1'
+      WORDPRESS_MULTISITE: ${MULTISITE}
+      WORDPRESS_SITE_ID_CURRENT_SITE: ${SITE_ID}
+      WORDPRESS_DOMAIN_CURRENT_SITE: ${DOMAIN_CURRENT_SITE}
+      WORDPRESS_CONFIG_EXTRA: |
+        /* For Active Directory Integration on Multisite. */
+        define( 'IS_WPMU', true );
+        /* Other configs */
+        define( 'WP_DEBUG_LOG', true );
+    ports:
+      - 9000:9000
+    volumes:
+      - /var/www/html
+      - ${PLUGIN_DIR}:/var/www/html/wp-content/plugins:rw
+      - ${THEME_DIR}:/var/www/html/wp-content/themes:rw
+      - ${UPLOADS_DIR}:/varw/www/html/wp-content/uploads
+      - ${TEMP_DIR:-~/tmp/WordPress}:/tmp/WordPress
+    networks:
+      - wp_deploy
+    depends_on:
+      - db

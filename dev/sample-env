@@ -1,0 +1,32 @@
+# Global
+WP_VERSION="5.9.3"
+WP_SHA1="cab576e112c45806c474b3cbe0d1263a2a879adf"
+APP_NAME=wordpress
+
+# WordPress 
+WORDPRESS_DIR="/Users/your-user-name/Development/dev-wp"
+# Used for wp-cli for sql.
+TEMP_DIR="/Users/your-user-name/tmp/WordPress"
+PLUGIN_DIR="/Users/your-user-name/Development/dev-wp/wp-content/plugins"
+THEME_DIR="/Users/your-user-name/Development/dev-wp/wp-content/themes"
+UPLOADS_DIR="/Users/your-user-name/Development/dev-wp/wp-content/uploads"
+WORDPRESS_DEBUG=true
+
+# WordPress Network
+# Make sure entry is added to host file.
+DOMAIN_CURRENT_SITE=localhost
+MULTISITE=false
+SITE_ID=1
+
+# Database
+#DB_VOLUME=
+MYSQL_USER=wp_user
+MYSQL_PASSWORD=password
+MYSQL_ROOT_PASSWORD=rootpassword
+MYSQL_HOST=db
+MYSQL_DATABASE=wordpress
+
+
+
+
+

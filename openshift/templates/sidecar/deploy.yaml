@@ -1,0 +1,255 @@
+kind: Template
+apiVersion: template.openshift.io/v1
+metadata:
+  name: wordpress-sidecar-deployment
+  annotations:
+    openshift.io/display-name:  Deployment templates for the WordPress sidecar deploy.
+    description: Deployment templates for the WordPress sidecar deploy.
+    tags: sidecar,wordpress
+
+parameters:
+  - name: APP_NAME
+    displayName: "App Name"
+    description: "The name of the application (grouped)."
+    required: true
+    value: "wordpress"
+  - name: ROLE_NAME
+    displayName: "Component Name"
+    description: "The name of the application role."
+    required: true
+    value: "sidecar"
+  - name: PROJECT_NAMESPACE
+    displayName: "OpenShift Project Namespace"
+    description: "The namespace of the OpenShift project containing the application."
+    required: true
+    value: "23576a"
+  - name: ENV_NAME
+    displayName: "Environment name"
+    description: "The name for this environment [dev, test, prod, tools]"
+    required: true
+    value: "dev"
+  - name: SITE_NAME
+    displayName: "Site name"
+    description: "The name for the site (a-zA-Z_)"
+    required: true
+    value: "global"
+  - name: POOL_NAME
+    displayName: "Pool name"
+    description: "The database shared pool instance."
+    required: true
+    value: "pool"
+
+  - name: GIT_REF
+    displayName: "Git Reference"
+    description: "The git reference or branch."
+    required: true
+    value: "development"
+
+  - name: RUN_AS_USER
+    displayName: "Run as User"
+    description: "User number to run as."
+    required: true
+    value: "1003760000"
+
+  - name: CPU_REQUEST
+    displayName: "CPU Request"
+    description: "Starting amount of CPU the container can use."
+    value: "100m"
+  - name: CPU_LIMIT
+    displayName: "CPU Limit"
+    description: "Maximum amount of CPU the container can use."
+    value: "1"
+  - name: MEMORY_REQUEST
+    displayName: "Memory Request"
+    description: "Starting amount of memory the container can use."
+    value: "100Mi"
+  - name: MEMORY_LIMIT
+    displayName: "Memory Limit"
+    description: "Maximum amount of memory the container can use."
+    value: "2Gi"
+
+objects:
+  - kind: Deployment
+    apiVersion: apps/v1
+    metadata:
+      name: ${APP_NAME}-${ROLE_NAME}--${SITE_NAME}
+      namespace: ${PROJECT_NAMESPACE}-${ENV_NAME}
+      labels:
+        app.kubernetes.io/part-of: ${APP_NAME}
+        app.openshift.io/runtime: linux
+      annotations:
+        image.openshift.io/triggers: >-
+          [{"from":{"kind":"ImageStreamTag","name":"${APP_NAME}-${ROLE_NAME}-ps-runtime.${GIT_REF}:${ENV_NAME}","namespace": "${PROJECT_NAMESPACE}-tools"},"fieldPath":"spec.template.spec.containers[?(@.name==\"${APP_NAME}-${ROLE_NAME}\")].image"}]
+    spec:
+      replicas: 0
+      selector:
+        matchLabels:
+          name: ${APP_NAME}-${ROLE_NAME}--${SITE_NAME}
+          app: ${APP_NAME}
+          role: ${ROLE_NAME}
+          env: ${ENV_NAME}
+          site: ${SITE_NAME}
+      strategy:
+        type: RollingUpdate
+        rollingParams:
+          updatePeriodSeconds: 1
+          intervalSeconds: 1
+          timeoutSeconds: 600
+          maxUnavailable: 25%
+          maxSurge: 25%
+        resources: {}
+        activeDeadlineSeconds: 21600
+      template:
+        metadata:
+          annotations:
+            alpha.image.policy.openshift.io/resolve-names: '*'
+          labels:
+            name: ${APP_NAME}-${ROLE_NAME}--${SITE_NAME}
+            app: ${APP_NAME}
+            role: ${ROLE_NAME}
+            env: ${ENV_NAME}
+            site: ${SITE_NAME}
+            net-tcp-3306: client
+        spec:
+          volumes:
+            - name: php-fpm-secrets-volume
+              secret:
+                secretName: ${APP_NAME}-php-fpm-secrets--${SITE_NAME}
+                defaultMode: 420
+            - name: php-fpm-configmap-volume
+              configMap:
+                name: ${APP_NAME}-php-fpm-file-config--${SITE_NAME}
+                items:
+                  - key: app.ini
+                    path: app.ini
+                defaultMode: 420
+            - name: mariadb-secrets-volume
+              secret:
+                secretName: ${APP_NAME}-mariadb-secrets--${SITE_NAME}
+                items:
+                  - key: MYSQL_PASSWORD
+                    path: MYSQL_PASSWORD
+                  - key: MYSQL_ROOT_PASSWORD
+                    path: MYSQL_ROOT_PASSWORD
+                defaultMode: 420
+            - name: git-secrets-volume
+              secret:
+                secretName: 0-bitbucket-token-git-credential-file
+                items:
+                  - key: git-credentials
+                    path: git-credentials
+                defaultMode: 420
+            - name: wordpress-htdocs
+              emptyDir: {}
+            - name: wordpress-volume
+              persistentVolumeClaim:
+                claimName: ${APP_NAME}-wordpress--${POOL_NAME}
+          containers:
+            - name: ${APP_NAME}-${ROLE_NAME}
+              image: image-registry.openshift-image-registry.svc:5000/${PROJECT_NAMESPACE}-tools/${APP_NAME}-sidecar-run:${ENV_NAME}
+              imagePullPolicy: Always
+              securityContext:
+                runAsUser: ${{RUN_AS_USER}}
+              volumeMounts:
+                - name: wordpress-htdocs
+                  mountPath: /var/www/html
+                - name: wordpress-volume
+                  mountPath: /var/www/html/wp-content/
+                  subPath: ${SITE_NAME}/wp-content
+                - name: php-fpm-configmap-volume
+                  mountPath: /usr/local/etc/php/conf.d/zzz-app.ini
+                  subPath: app.ini
+                  # The entire php-fpm-secrets gets loaded into the specified directory. wp-config-docker.php is going to pick them up. This matters for WP-CLI.
+                - name: php-fpm-secrets-volume
+                  readOnly: true
+                  mountPath: /run/secrets/wordpress
+                - name: mariadb-secrets-volume
+                  readOnly: true
+                  mountPath: /run/secrets/MYSQL_ROOT_PASSWORD
+                  subPath: MYSQL_ROOT_PASSWORD
+                - name: mariadb-secrets-volume
+                  readOnly: true
+                  mountPath: /run/secrets/WORDPRESS_DB_PASSWORD
+                  subPath: MYSQL_PASSWORD
+                - name: git-secrets-volume
+                  readOnly: true
+                  mountPath: /home/sidecar/.git-credentials-bitbucket
+                  subPath: git-credentials
+              env:
+                - name: MYSQL_ROOT_PASSWORD_FILE
+                  value: "/run/secrets/MYSQL_ROOT_PASSWORD"
+                - name: MYSQL_PASSWORD_FILE
+                  value: "/run/secrets/WORDPRESS_DB_PASSWORD"
+                - name: WORDPRESS_DB_USER
+                  valueFrom:
+                    configMapKeyRef:
+                      name: ${APP_NAME}-mariadb-env-config--${SITE_NAME}
+                      key: MYSQL_USER
+                - name: WORDPRESS_DB_NAME
+                  valueFrom:
+                    configMapKeyRef:
+                      name: ${APP_NAME}-mariadb-env-config--${SITE_NAME}
+                      key: MYSQL_DATABASE
+              envFrom:
+                # There are a bunch of password-file directives in the specified configmap, and they all get loaded into the environment for wp-config-docker.php to pick up. This matters for WP-CLI.
+                - configMapRef:
+                    name:
+                      ${APP_NAME}-php-fpm-env-config--${SITE_NAME}
+            - name: ${APP_NAME}-${ROLE_NAME}-wordpress-core
+              image: image-registry.openshift-image-registry.svc:5000/${PROJECT_NAMESPACE}-tools/${APP_NAME}-wordpress-run:${ENV_NAME}
+              imagePullPolicy: Always
+              securityContext:
+                runAsUser: ${{RUN_AS_USER}}
+              volumeMounts:
+                - name: wordpress-htdocs
+                  mountPath: /var/www/html
+                - name: wordpress-volume
+                  mountPath: /var/www/html/wp-content/
+                  subPath: ${SITE_NAME}/wp-content
+                - name: php-fpm-configmap-volume
+                  mountPath: /usr/local/etc/php/conf.d/zzz-app.ini
+                  subPath: app.ini
+                  # The entire php-fpm-secrets gets loaded into the specified directory. wp-config-docker.php is going to pick them up. This matters for WP-CLI.
+                - name: php-fpm-secrets-volume
+                  readOnly: true
+                  mountPath: /run/secrets/wordpress
+                - name: mariadb-secrets-volume
+                  readOnly: true
+                  mountPath: /run/secrets/MYSQL_ROOT_PASSWORD
+                  subPath: MYSQL_ROOT_PASSWORD
+                - name: mariadb-secrets-volume
+                  readOnly: true
+                  mountPath: /run/secrets/WORDPRESS_DB_PASSWORD
+                  subPath: MYSQL_PASSWORD
+                - name: git-secrets-volume
+                  readOnly: true
+                  mountPath: /home/sidecar/.git-credentials-bitbucket
+                  subPath: git-credentials
+              env:
+                - name: MYSQL_ROOT_PASSWORD_FILE
+                  value: "/run/secrets/MYSQL_ROOT_PASSWORD"
+                - name: MYSQL_PASSWORD_FILE
+                  value: "/run/secrets/WORDPRESS_DB_PASSWORD"
+                - name: WORDPRESS_DB_USER
+                  valueFrom:
+                    configMapKeyRef:
+                      name: ${APP_NAME}-mariadb-env-config--${SITE_NAME}
+                      key: MYSQL_USER
+                - name: WORDPRESS_DB_NAME
+                  valueFrom:
+                    configMapKeyRef:
+                      name: ${APP_NAME}-mariadb-env-config--${SITE_NAME}
+                      key: MYSQL_DATABASE
+              envFrom:
+                # There are a bunch of password-file directives in the specified configmap, and they all get loaded into the environment for wp-config-docker.php to pick up. This matters for WP-CLI.
+                - configMapRef:
+                    name:
+                      ${APP_NAME}-php-fpm-env-config--${SITE_NAME}
+          restartPolicy: Always
+          terminationGracePeriodSeconds: 30
+          dnsPolicy: ClusterFirst
+          securityContext: { }
+          schedulerName: default-scheduler
+            
+
+            

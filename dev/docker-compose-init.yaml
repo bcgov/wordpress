@@ -1,0 +1,19 @@
+version: '2.4'
+services:
+    self-signed-certificate-generator:
+        image: magnitus/certificate-generator:latest
+        environment:
+            COUNTRY: CA
+            STATE: British Columbia
+            CITY: Victoria
+            ORGANIZATION: BCGov
+            DEPARTMENT: IT
+            EMAIL: govwordpress@gov.bc.ca
+            DOMAINS: localhost
+            CERTIFICATE_DURATION: 1095
+            KEY_FILE: "localhost.key"
+            CSR_FILE: "localhost.csr"
+            CERTIFICATE_FILE: "localhost.crt"
+            OUTPUT_CERTIFICATE_INFO: "true"
+        volumes:
+            - ./certs/nginx/ssl:/opt/output

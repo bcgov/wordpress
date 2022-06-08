@@ -1,0 +1,49 @@
+kind: Template
+apiVersion: v1
+name: allow-tcp-port-9000
+description: Permit containers with the net-tcp-9000:client label to connect to containers with the net-tcp-9000:server label on port 9000
+parameters:
+  - name: PROJECT_NAMESPACE
+    displayName: "OpenShift Project Namespace"
+    description: "The namespace of the OpenShift project containing the application."
+    required: true
+    value: "23576a"
+  - name: ENV_NAME
+    displayName: "Environment name"
+    description: "The name for this environment [dev, test, prod, tools]"
+    required: true
+    value: "dev"
+
+  - name: PORT
+    displayName: "Port number"
+    description: "Port number"
+    required: true
+    value: "9000"
+  - name: PROTOCOL
+    displayName: "Protocol name lowercase"
+    description: "The protocol name [tcp, udp]"
+    required: true
+    value: "tcp"
+  - name: PROTOCOL_U
+    displayName: "The same protocol name, but uppercase."
+    description: "The protocol name [TCP, UDP]"
+    required: true
+    value: "TCP"
+objects:
+  - kind: NetworkPolicy
+    apiVersion: networking.k8s.io/v1
+    metadata:
+      name: allow-${PROTOCOL}-port-${PORT}
+      namespace: ${PROJECT_NAMESPACE}-${ENV_NAME}
+    spec:
+      podSelector:
+        matchLabels:
+          net-${PROTOCOL}-${PORT}: "server"
+      ingress:
+      - from:
+        - podSelector:
+            matchLabels:
+              net-${PROTOCOL}-${PORT}: "client"
+        ports:
+        - protocol: ${PROTOCOL_U}
+          port: ${{PORT}}

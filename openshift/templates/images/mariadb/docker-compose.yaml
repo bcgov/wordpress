@@ -1,0 +1,7 @@
+version: '3.1'
+services:
+  db:
+    build: ./docker
+    user: "1002:1001"
+    environment:
+      MARIADB_ROOT_PASSWORD: password

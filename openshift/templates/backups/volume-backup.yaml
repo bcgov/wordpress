@@ -1,0 +1,69 @@
+kind: Template
+apiVersion: template.openshift.io/v1
+metadata:
+  name: wordpress-mariadb-backup-volume
+  annotations:
+    openshift.io/display-name:  Backup volume.
+    description: Backup volume templates.
+    tags: backups,wordpress
+
+parameters:
+  - name: APP_NAME
+    displayName: "App Name"
+    description: "The name of the application (grouped)."
+    required: true
+    value: "wordpress"
+  - name: ROLE_NAME
+    displayName: "Component Name"
+    description: "The name of the application role."
+    required: true
+    value: "mariadb-backup"
+  - name: PROJECT_NAMESPACE
+    displayName: "OpenShift Project Namespace"
+    description: "The namespace of the OpenShift project containing the application."
+    required: true
+    value: "23576a"
+  - name: ENV_NAME
+    displayName: "Environment name"
+    description: "The name for this environment [dev, test, prod, tools]"
+    required: true
+    value: "dev"
+
+objects:
+  - kind: PersistentVolumeClaim
+    apiVersion: v1
+    metadata:
+      name: ${APP_NAME}-${ROLE_NAME}
+      namespace: ${PROJECT_NAMESPACE}-${ENV_NAME}
+      labels:
+        app: backup-container
+        env: ${ENV_NAME} # env (e.g. dev, test, prod)
+        name: ${APP_NAME}-${ROLE_NAME}
+        role: backup-container
+    spec:
+      accessModes:
+        - ReadWriteMany
+      resources:
+        requests:
+          storage: 500M
+      storageClassName: netapp-file-backup
+      volumeMode: Filesystem
+  - kind: PersistentVolumeClaim
+    apiVersion: v1
+    metadata:
+      name: ${APP_NAME}-file-backup
+      namespace: ${PROJECT_NAMESPACE}-${ENV_NAME}
+      labels:
+        app: backup-container-file
+        env: ${ENV_NAME} # env (e.g. dev, test, prod)
+        name: ${APP_NAME}-${ROLE_NAME}
+        role: backup-container-file
+    spec:
+      accessModes:
+        - ReadWriteMany
+      resources:
+        requests:
+          storage: 1Gi
+      storageClassName: netapp-file-standard
+      volumeMode: Filesystem
+    
