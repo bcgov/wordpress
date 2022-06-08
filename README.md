@@ -1,37 +1,31 @@
-# WordPress Cloud
+![Lifecycle:Experimental](https://img.shields.io/badge/Lifecycle-Experimental-339999)
 
-## OpenShift
-* All oc commands in repo documentation are meant to be run from the root directory.
+# WordPress Deployments
 
-### Images
+## Running on Docker
+The project can also be run locally using Docker and Docker Compose.  Refer to [Running with Docker](./dev/README.md) for instructions.
 
-| Image | Version | Description |
-| ----- | ------- | ----------- |
-| alpine | 3.15.4 | Base Alpine linux |
-| mariadb | 10.6.8-r0 | MariaDB version that gets build in base-images via Dockerfile. Dependent on the [Alpine version](https://pkgs.alpinelinux.org/packages?name=mariadb&branch=v3.15): |
-| nginx | 1.21.6-alpine | Nginx web server, used to serve WordPress / PHP |
-| php-fpm | 7.4.29-fpm-alpine | PHP-FPM for WordPress |
-| WordPress | 5.9.3 | WordPress Core. The appropriate version can be found at: https://wordpress.org/download/releases/ |
-| ubuntu | 22.04| Used for the sidecar |
+## Running on OpenShift
+To deploy using a local instance of OpenShift, refer to [Running on OpenShift](./openshift/templates/README.md).  These instructions, apart from the steps that are specific to setting up your local environment, can be used to get the project deployed to a production OpenShift environment.
 
-### Volumes
 
-### Naming Convention
-Use the convention [product]-[service component]-[pool_name] For example:
-* `wordpress-mariadb-trek`
-* `wordpress-mariadb-commencal`
+## Code of Conduct
+Please refer to the [Code of Conduct](./CODE_OF_CONDUCT.md) 
+
+## Contributing
+For information on how to contribute, refer to [Contributing](CONTRIBUTING.md)
+
+## License
+Code released under the [Apache License, Version 2.0](./LICENSE).
 
 ### Todo
 * Look into bringing in Wordpress php-fpm-74 not raw php (might have been done this way due to permissions and configurations)
 * Look into bring mariadb base image (might have been done this way due to permissions and configurations).
-* Need a way of ensuring that images are monitored for security and maintenance (possible a email list, rss feeds)
+* Implement image  monitoring through dependabot. (DESCW-433)
   * Alpine
   * nginx
   * mariadb
   * WordPress
   * php-fpm
   * ubuntu
-* Process of incorporating updates/fixes.
-* Reviewing image naming conventions from docker -> base images -> final images.
-* All Todo should have a Jira ticket associated with it.
-* Update Nginx configuration to support multi-site.
+

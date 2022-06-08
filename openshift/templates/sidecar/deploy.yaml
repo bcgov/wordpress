@@ -43,7 +43,7 @@ parameters:
     displayName: "Git Reference"
     description: "The git reference or branch."
     required: true
-    value: "development"
+    value: "main"
 
   - name: RUN_AS_USER
     displayName: "Run as User"
