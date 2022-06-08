@@ -22,12 +22,12 @@ parameters:
     displayName: "GIT Source Repo URL"
     description: "A GIT URL to your source code."
     required: true
-    value: "https://apps.itsm.gov.bc.ca/bitbucket/scm/des/wordpress-cloud.git"
+    value: "https://github.com/bcgov/wordpress.git"
   - name: GIT_REF
     displayName: "Git Reference"
     description: "The git reference or branch."
     required: true
-    value: "development"
+    value: "main"
   - name: SOURCE_CONTEXT_DIR
     displayName: "Source Context Directory"
     description: "The source context directory."
