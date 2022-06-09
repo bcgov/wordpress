@@ -104,15 +104,6 @@ objects:
           uri: ${GIT_URL}
         contextDir: ${SOURCE_CONTEXT_DIR}
       strategy:
-        dockerStrategy:
-          from:
-            kind: ImageStreamTag
-            name: ${APP_NAME}-php-fpm-build:${IMAGE_TAG}
-          buildArgs:
-            - name: "WP_VERSION"
-              value: "5.9.3"
-            - name: "WP_SHA1"
-              value: "cab576e112c45806c474b3cbe0d1263a2a879adf"
         type: Docker
       output:
         to:

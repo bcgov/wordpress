@@ -1,0 +1,25 @@
+name: Build WordPress Image.
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "openshift/templates/images/wordpress/**/*"
+  workflow_dispatch:
+defaults:
+  run:
+    working-directory: ./
+jobs:
+  deploy:
+    if: github.repository_owner == 'bcgov'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Image Build for WordPress Image
+        uses: redhat-developer/openshift-actions@v1.1
+        with:
+          version: "latest"
+          openshift_server_url: ${{ secrets.OpenShiftServerURL }}
+          parameters: '{"apitoken": "${{ secrets.OpenShiftToken }}", "acceptUntrustedCerts": "true"}'
+          cmd: |
+            oc project 23576a-tools
+            oc start-build wordpress-wordpress-run --follow
