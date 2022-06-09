@@ -30,6 +30,10 @@ parameters:
     description: "The name for this environment [dev, test, prod, tools]"
     required: true
     value: "tools"
+  - name: IMAGE_TAG
+    displayName: "The WordPress image tag"
+    description: "This is the official image tag, which is later used to build the wordpress-wordpress-run"
+    value: "6.0.0-php7.4-fpm-alpine"
 
 objects:
   - kind: ImageStream
@@ -47,9 +51,9 @@ objects:
         source: dockerhub
     spec:
       tags:
-        - name: "wordpress:6.0.0-php7.4-fpm-alpine"
+        - name: "wordpress:${IMAGE_TAG}"
           from:
             kind: DockerImage
-            name: "docker-remote.artifacts.developer.gov.bc.ca/wordpress:6.0.0-php7.4-fpm-alpine"
+            name: "docker-remote.artifacts.developer.gov.bc.ca/wordpress:${IMAGE_TAG}"
           referencePolicy:
             type: Local

@@ -15,7 +15,6 @@ This remediates the issue with restrictions from dockerhub.
 * wordpress:6.0.0-php7.4-fpm-alpine
   * `oc process -f openshift/templates/dockerhub-imagestreams/wordpress.yaml | oc apply -f -`
 
-
 ### Nginx
 * Used as a base image for web server
 * nginx:1.21.6-alpine -> nginx
@@ -25,10 +24,3 @@ This remediates the issue with restrictions from dockerhub.
 * Used for the base image of the maintenance sidecar.
 * ubuntu:22.04 -> ubuntu
   * `oc process -f openshift/templates/dockerhub-imagestreams/ubuntu.yaml | oc apply -f -`
-
-
-### PHP-fpm (Depricated)
-* Used as an initial php-fpm base, then adds php configs for WordPress, then gets used for WordPress.
-* php:7.4-fpm-alpine -> php
-  * `oc process -f openshift/templates/dockerhub-imagestreams/php-fpm-74.yaml | oc apply -f -`
-
