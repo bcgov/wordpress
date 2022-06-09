@@ -73,7 +73,6 @@ objects:
     data:
       WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}--${SITE_NAME}
       WORDPRESS_DB_PASSWORD_FILE: /run/secrets/WORDPRESS_DB_PASSWORD
-
       WORDPRESS_ALLOW_MULTISITE: "${WORDPRESS_MULTISITE}"
       WORDPRESS_MULTISITE: "${WORDPRESS_MULTISITE}"
       WORDPRESS_SUBDOMAIN_INSTALL: "0"
@@ -81,6 +80,19 @@ objects:
       WORDPRESS_PATH_CURRENT_SITE: "/"
       WORDPRESS_SITE_ID_CURRENT_SITE: "1"
       WORDPRESS_BLOG_ID_CURRENT_SITE: "1"
+      WORDPRESS_CONFIG_EXTRA: |
+        /* Multisite */
+        define( 'WP_ALLOW_MULTISITE', true );
+        define( 'MULTISITE', !!filter_var( getenv_docker( 'WORDPRESS_MULTISITE', '0' ), FILTER_VALIDATE_BOOLEAN ) );
+        define( 'SUBDOMAIN_INSTALL', false );
+        define( 'DOMAIN_CURRENT_SITE', '${APP_DOMAIN}' );
+        define( 'PATH_CURRENT_SITE', '/' );
+        define( 'SITE_ID_CURRENT_SITE', intval( getenv_docker( 'WORDPRESS_SITE_ID_CURRENT_SITE', '1' ) ) );
+        define( 'BLOG_ID_CURRENT_SITE', intval( getenv_docker( 'WORDPRESS_SITE_ID_CURRENT_SITE', '1' ) ) );
+        /* For Active Directory Integration on Multisite. */
+        define( 'IS_WPMU', true );
+        /* Other configs */
+        define( 'WP_DEBUG_LOG', false );
       # Using the _FILE uses secret from secret file via getenv_docker function https://github.com/docker-library/wordpress/blob/master/wp-config-docker.php#L30
       WORDPRESS_AUTH_KEY_FILE: /run/secrets/wordpress/WORDPRESS_AUTH_KEY
       WORDPRESS_AUTH_SALT_FILE: /run/secrets/wordpress/WORDPRESS_AUTH_SALT

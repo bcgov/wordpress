@@ -50,11 +50,8 @@ services:
     ports:
       - 3306:3306
   wordpress-php-fpm:
-    user: "${UID}:${GID}"
+    user: www-data:www-data
     build:
-      args:
-        - WP_VERSION=${WP_VERSION}
-        - WP_SHA1=${WP_SHA1}
       context: ../openshift/templates/images/wordpress/docker
     environment:
       WORDPRESS_DB_HOST: ${MYSQL_HOST}
@@ -67,6 +64,14 @@ services:
       WORDPRESS_SITE_ID_CURRENT_SITE: ${SITE_ID}
       WORDPRESS_DOMAIN_CURRENT_SITE: ${DOMAIN_CURRENT_SITE}
       WORDPRESS_CONFIG_EXTRA: |
+        /* Multisite */
+        define( 'WP_ALLOW_MULTISITE', true );
+        define( 'MULTISITE', !!filter_var( getenv_docker( 'WORDPRESS_ALLOW_MULTISITE', '0' ), FILTER_VALIDATE_BOOLEAN ) );
+        define( 'SUBDOMAIN_INSTALL', false );
+        define( 'DOMAIN_CURRENT_SITE', '${DOMAIN_CURRENT_SITE}' );
+        define( 'PATH_CURRENT_SITE', '/' );
+        define( 'SITE_ID_CURRENT_SITE', intval( getenv_docker( 'WORDPRESS_SITE_ID_CURRENT_SITE', '1' ) ) );
+        define( 'BLOG_ID_CURRENT_SITE', intval( getenv_docker( 'WORDPRESS_SITE_ID_CURRENT_SITE', '1' ) ) );
         /* For Active Directory Integration on Multisite. */
         define( 'IS_WPMU', true );
         /* Other configs */
@@ -75,10 +80,8 @@ services:
       - 9000:9000
     volumes:
       - /var/www/html
-      - ${PLUGIN_DIR}:/var/www/html/wp-content/plugins:rw
-      - ${THEME_DIR}:/var/www/html/wp-content/themes:rw
-      - ${UPLOADS_DIR}:/varw/www/html/wp-content/uploads
-      - ${TEMP_DIR:-~/tmp/WordPress}:/tmp/WordPress
+      - ${CONTENT_DIR}:/var/www/html/wp-content/
+      - ${TEMP_DIR:-~/tmp/WordPress}:/tmp/WordPress:rw
     networks:
       - wp_deploy
     depends_on:
