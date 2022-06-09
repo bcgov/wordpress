@@ -67,15 +67,15 @@ parameters:
   - name: CPU_LIMIT
     displayName: "CPU Limit"
     description: "Maximum amount of CPU the container can use."
-    value: "1"
+    value: "400m"
   - name: MEMORY_REQUEST
     displayName: "Memory Request"
     description: "Starting amount of memory the container can use."
-    value: "300Mi"
+    value: "250Mi"
   - name: MEMORY_LIMIT
     displayName: "Memory Limit"
     description: "Maximum amount of memory the container can use."
-    value: "2Gi"
+    value: "500Mi"
   - name: VOLUME_NAME
     displayName: "Volume Name"
     description: "Leave blank for normal volume or add -backup for backup volume"
