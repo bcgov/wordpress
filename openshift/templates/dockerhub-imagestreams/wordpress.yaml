@@ -1,15 +1,15 @@
 kind: Template
 apiVersion: v1
 metadata:
-  name: php74-image-stream
+  name: wordpress-php-fpm-image-stream
   annotations:
-    openshift.io/display-name: php 7.4 Images
-    description: ImageStream definitions for php 7.4 on alpine and bullseye that originate from Dockerhub
+    openshift.io/display-name: WordPress php-fpm Image
+    description: ImageStream definitions for WordPress fpm on alpine and bullseye that originate from Dockerhub
 parameters:
   - name: IMAGE_NAME
     displayName: "The name of this image"
     required: true
-    value: "php"
+    value: "wordpress-php-fpm"
   - name: APP_NAME
     displayName: "App Name"
     description: "The name of the application (grouped)."
@@ -19,7 +19,7 @@ parameters:
     displayName: "Component Name"
     description: "The name of the application role."
     required: true
-    value: "php"
+    value: "wordpress-php-fpm"
   - name: PROJECT_NAMESPACE
     displayName: "OpenShift Project Namespace"
     description: "The namespace of the OpenShift project containing the application."
@@ -30,6 +30,10 @@ parameters:
     description: "The name for this environment [dev, test, prod, tools]"
     required: true
     value: "tools"
+  - name: IMAGE_TAG
+    displayName: "The WordPress image tag"
+    description: "This is the official image tag, which is later used to build the wordpress-wordpress-run"
+    value: "6.0.0-php7.4-fpm-alpine"
 
 objects:
   - kind: ImageStream
@@ -40,16 +44,16 @@ objects:
       annotations:
         description: Keeps track of php 7.4 images that originate from Dockerhub
       labels:
-        name: dockerhub-php74-images
+        name: dockerhub-${ROLE_NAME}
         app: ${APP_NAME}
         role: ${ROLE_NAME}
         env: ${ENV_NAME}
         source: dockerhub
     spec:
       tags:
-        - name: "7.4.29-fpm-alpine"
+        - name: "wordpress:${IMAGE_TAG}"
           from:
             kind: DockerImage
-            name: "docker-remote.artifacts.developer.gov.bc.ca/php:7.4.29-fpm-alpine"
+            name: "docker-remote.artifacts.developer.gov.bc.ca/wordpress:${IMAGE_TAG}"
           referencePolicy:
             type: Local

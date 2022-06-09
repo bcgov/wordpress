@@ -12,13 +12,10 @@
   * Double-click the certificate.
   * Next to Trust, click the arrow and in the dropdown box for "When using this certificate:" select `Always Trust`.
 
-### Step 3: Pre Build php-74-fpm
-* `docker build -t wordpress-php-fpm-build:dev openshift/templates/images/php74-fpm/docker`
+### Step 3: Run Docker compose
+* `docker compose up` or `docker compose up --build` to rebuild all the images.
 
-### Step 4: Run Docker compose
-* `docker compose up`
-
-### Step 5: optional multi-site:
+### Step 4: optional multi-site:
 * In the WordPress admin UI, go to menu Tools -> Network Setup and click install
 * Bring down the WordPress site ```docker compose stop``` (or \<CTRL>-C if docker is in the foreground).
 * In your `.env` file, ensure
@@ -31,4 +28,4 @@
 ### Running Thereafter:
 * ```docker compose up``` runs the nginx, db, and WordPress containers, this will also output debug.log in the stdout.
 
-* Plugins ,themes, and uploads, can be found at the path specified in your `.env` under variable `PLUGIN_DIR`, `THEME_DIR`, `UPLOADS_DIR` respectively.
+* WordPress wp-content directory, can be found at the path specified in your `.env` under variable `CONTENT_DIR`, .

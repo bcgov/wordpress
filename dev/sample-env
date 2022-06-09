@@ -7,9 +7,7 @@ APP_NAME=wordpress
 WORDPRESS_DIR="/Users/your-user-name/Development/dev-wp"
 # Used for wp-cli for sql.
 TEMP_DIR="/Users/your-user-name/tmp/WordPress"
-PLUGIN_DIR="/Users/your-user-name/Development/dev-wp/wp-content/plugins"
-THEME_DIR="/Users/your-user-name/Development/dev-wp/wp-content/themes"
-UPLOADS_DIR="/Users/your-user-name/Development/dev-wp/wp-content/uploads"
+CONTENT_DIR="/Users/your-user-name/Development/dev-wp/wp-content"
 WORDPRESS_DEBUG=true
 
 # WordPress Network

@@ -17,17 +17,12 @@ Base images are images that would use dockerhub image streams to create an addit
 
 ### Nginx 
 * Creates the nginx web server.
-* nginx:1-alpine -> nginx-base
+* nginx:1.21.6-alpine -> wordpress-nginx-run
   *  `oc process -f openshift/templates/images/nginx/build.yaml | oc apply -f -`
 
-### php74 
-* Creates php-fpm 7.4 used for WordPress server side language.
-* php74 -> php74-fpm-base
-  * `oc process -f openshift/templates/images/php74-fpm/build.yaml | oc apply -f -`
-
 ### WordPress
-* Creates WordPress core 5.9.3
-* php74-fpm-base -> wordpress-core
+* Creates WordPress core 6.0.0
+* wordpress:6.0.0-php7.4-fpm-alpine -> wordpress-wordpress-run
   * `oc process -f openshift/templates/images/wordpress/build.yaml | oc apply -f -`
 
 ### Sidecar
@@ -43,7 +38,6 @@ Use the same convention as dockerhub, specifying the full version tag where poss
 * `alpine:3.15.4`
 * `mariadb:10.5.13-r0`
 * `nginx:1.21.6-alpine`
-* `php:7.4.29-fpm-alpine`
 
 ### Intermediate Images
 >An Intermediate image is any container image that relies on a base image and is used as a building block to build a standalone image.
