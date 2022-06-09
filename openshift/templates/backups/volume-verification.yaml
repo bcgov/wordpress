@@ -17,7 +17,7 @@ parameters:
     displayName: "Component Name"
     description: "The name of the application role."
     required: true
-    value: "mariadb-backup-verification"
+    value: "backup-verification"
   - name: PROJECT_NAMESPACE
     displayName: "OpenShift Project Namespace"
     description: "The namespace of the OpenShift project containing the application."
@@ -28,6 +28,11 @@ parameters:
     description: "The name for this environment [dev, test, prod, tools]"
     required: true
     value: "dev"
+  - name: POOL_NAME
+    displayName: "Pool name"
+    description: "The database shared pool instance."
+    required: true
+    value: "pool"
 
 objects:
   - kind: PersistentVolumeClaim
@@ -36,15 +41,15 @@ objects:
       name: ${APP_NAME}-${ROLE_NAME}
       namespace: ${PROJECT_NAMESPACE}-${ENV_NAME}
       labels:
-        app: backup-container
-        env: ${ENV_NAME} # env (e.g. dev, test, prod)
+        app: ${APP_NAME}-${ROLE_NAME}
+        env: ${ENV_NAME}
         name: ${APP_NAME}-${ROLE_NAME}
-        role: backup-container
+        role: verification-backup-container-db
     spec:
       accessModes:
         - ReadWriteOnce
       resources:
         requests:
-          storage: 1Gi
+          storage: 500M
       storageClassName: netapp-file-standard
       volumeMode: Filesystem

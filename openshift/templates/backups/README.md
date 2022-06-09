@@ -1,29 +1,35 @@
 # Backups
 In order to restore backups you will need to utilize the sidecar, this needs to be deployed, and the pod needs to be run. See deployment of sidecar for more information.
 
+## Variables
+```bash
+export OC_DEPLOY_PROJECT="dev" #(dev|test|prod)
+export SITE_NAME="cleanbc" # Site name otherwise defaults to global
+export POOL_NAME="pool" # Pool name otherwise defaults to pool
+```
+
+## Backup Deployment
+
+### Configs
+* This sets up the database connection string.
+* `oc process -p ENV_NAME=${OC_DEPLOY_PROJECT} -p SITE_NAME=${SITE_NAME}  -f openshift/templates/backups/config.yaml | oc apply -f -`
+
+### Cron
+* This sets up the cron job to deploy the container to do the backups.
+* ``oc process -p ENV_NAME=${OC_DEPLOY_PROJECT} -p SITE_NAME=${SITE_NAME} -p POOL_NAME=${POOL_NAME}  -f openshift/templates/backups/cron.yaml | oc apply -f -`
+
+### Volume Persistent Storage
+* Creates backup volumes for storing db backups, and a location to restore netapp-file-backup storage class backups.
+* `oc process -p ENV_NAME=${OC_DEPLOY_PROJECT} -p POOL_NAME=${POOL_NAME} -f openshift/templates/backups/volume-backup.yaml | oc apply -f -`
+*  Verification of database backups.
+*  `oc process -p ENV_NAME=${OC_DEPLOY_PROJECT} -p POOL_NAME=${POOL_NAME} -f openshift/templates/backups/volume-verification.yaml | oc apply -f -`
+
+
 ## Database Backups
-* The below configuration is for deployment to test.
-* For production replace ENV_NAME `test` with `prod` 
 * Once this is setup for production, there should be no further requirements, except occasionally verification of database being saved.
 
 ### Saving DB
 * The cron and configurations of the OS CronJob determines the [backup options](https://developer.gov.bc.ca/Backup-Container) of the database.
-
-```bash
-    # Add backup.conf string which is used to determine the service, port and database name.
-    oc process -p ENV_NAME="test" -p BACKUP_CONFIG="mariadb=wordpress-mariadb:3306/bcfd_test" -f openshift/templates/backups/config.yaml | oc apply -f -
-
-    # If adding multiple databases, consider using a backup file as a parameter. See https://github.com/BCDevOps/backup-container/blob/master/config/backup.conf
-    # oc process -p ENV_NAME="test" -param-file=backup.yaml -f openshift/templates/backups/config.yaml | oc apply -f -
-
-    # Creates volumes for database use netapp-file-backup, where verification uses netapp-file-standard
-    # The full purpose of the verification has yet to be determined.
-    oc process -p ENV_NAME="test" -f openshift/templates/backups/volume-backup.yaml | oc apply -f -
-    oc process -p ENV_NAME="test" -f openshift/templates/backups/volume-verification.yaml | oc apply -f -
-
-    # Add cron, This deploys a container which does the rolling backups for the db.
-    oc process -p ENV_NAME="test" -f openshift/templates/backups/cron.yaml | oc apply -f -
-```
 
 ### Restoring DB
 * Use the sidecar, see instructions for deploying the sidecar.
@@ -51,26 +57,3 @@ gzip -cd ~/backups/db/daily/test.sql.gz | mysql -u $WORDPRESS_DB_USER -p$(cat $M
 * Do a ```rsync -a --exclude=restore /home/sidecar/backups/html/ /var/www/html/``` 
     * you might have to delete the files in /var/www/html, but **WARNING** make sure you know what you are doing.
 * Switch from backup volume to regular volume as indicated below, so now WordPress should be using restored files.
-
-
-# Switching from regular volume to backup volume.
-
-```bash
-# Deploy WordPress using backup volume.
-oc process -p ENV_NAME="test" -p VOLUME_NAME="-backup" -f openshift/templates/wordpress-php-fpm/deploy.yaml | oc apply -f -
-oc process -p ENV_NAME="test" -p VOLUME_NAME="-backup" -f openshift/templates/nginx/deploy.yaml | oc apply -f -
-
-# Deploy WordPress using normal volume
-oc process -p ENV_NAME="test" -f openshift/templates/wordpress-php-fpm/deploy.yaml | oc apply -f -
-oc process -p ENV_NAME="test" -f openshift/templates/nginx/deploy.yaml | oc apply -f -
-```
-
-# Volume organization and credentials
-The current vision for volume organization is that there will be one or more mariadb instances (or "pools"), each with one or more databases.
-* Each pool may have multiple databases.
-* Each site will have a database with a unique username and password.
-* Each pool will have a root username and password which is shared with all its databases.
-* A single backup volume can be used for multiple pools.
-* Each pool will have its own cron and config.
-
-A potential future problem with this configuration is adding multiple databases with their corresponding credentials.

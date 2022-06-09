@@ -28,28 +28,25 @@ parameters:
     description: "The name for this environment [dev, test, prod, tools]"
     required: true
     value: "dev"
-  - name: POOL_NAME
-    displayName: "Pool name"
-    description: "The database shared pool instance."
+  - name: SITE_NAME
+    displayName: "Site name"
+    description: "The name for the site (a-zA-Z_)"
     required: true
-    value: "pool"
-  - name: BACKUP_CONFIG
-    displayName: "Backup config"
-    description: "The backup config."
-    required: false
-    value: ""
+    value: "global"
+
 
 objects:
   - kind: ConfigMap
     apiVersion: v1
     metadata:
-      name: ${APP_NAME}-${ROLE_NAME}-file-config--${POOL_NAME}
+      name: ${APP_NAME}-${ROLE_NAME}-file-config--${SITE_NAME}
       namespace: ${PROJECT_NAMESPACE}-${ENV_NAME}
       annotations:
         description: "${ROLE_NAME} file configuration"
       labels:
-        name: ${APP_NAME}-${ROLE_NAME}-file-config--${POOL_NAME}
+        name: ${APP_NAME}-${ROLE_NAME}-file-config--${SITE_NAME}
         app: ${APP_NAME}
         env: ${ENV_NAME}
+        site: ${SITE_NAME}
     data:
-      backup.conf: ${BACKUP_CONFIG}
+      backup.conf: 'mariadb=${APP_NAME}-mariadb--${SITE_NAME}:3306/${SITE_NAME}_${ENV_NAME}'

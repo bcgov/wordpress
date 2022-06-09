@@ -58,7 +58,7 @@ parameters:
   - name: CPU_LIMIT
     displayName: "CPU Limit"
     description: "Maximum amount of CPU the container can use."
-    value: "1"
+    value: "500m"
   - name: MEMORY_REQUEST
     displayName: "Memory Request"
     description: "Starting amount of memory the container can use."
@@ -66,7 +66,7 @@ parameters:
   - name: MEMORY_LIMIT
     displayName: "Memory Limit"
     description: "Maximum amount of memory the container can use."
-    value: "2Gi"
+    value: "600Mi"
 
 objects:
   - kind: Deployment
@@ -144,6 +144,12 @@ objects:
             - name: wordpress-volume
               persistentVolumeClaim:
                 claimName: ${APP_NAME}-wordpress--${POOL_NAME}
+            - name: ${APP_NAME}-backup-file
+              persistentVolumeClaim:
+                claimName: ${APP_NAME}-backup-file--${POOL_NAME}
+            - name: ${APP_NAME}-backup-db
+              persistentVolumeClaim:
+                claimName: ${APP_NAME}-backup-db--${POOL_NAME}
           containers:
             - name: ${APP_NAME}-${ROLE_NAME}
               image: image-registry.openshift-image-registry.svc:5000/${PROJECT_NAMESPACE}-tools/${APP_NAME}-sidecar-run:${ENV_NAME}
@@ -153,6 +159,11 @@ objects:
               volumeMounts:
                 - name: wordpress-htdocs
                   mountPath: /var/www/html
+                - name: ${APP_NAME}-backup-file
+                  mountPath: /home/sidecar/backups/
+                - name: ${APP_NAME}-backup-db
+                  readOnly: true
+                  mountPath: /home/sidecar/backups/db
                 - name: wordpress-volume
                   mountPath: /var/www/html/wp-content/
                   subPath: ${SITE_NAME}/wp-content
