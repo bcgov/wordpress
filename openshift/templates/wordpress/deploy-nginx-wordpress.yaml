@@ -219,7 +219,6 @@ objects:
               volumeMounts:
                 - name: wordpress-htdocs
                   mountPath: /var/www/html
-                  readOnly: true
                 - name: wordpress-volume
                   mountPath: /var/www/html/wp-content/
                   subPath: ${SITE_NAME}/wp-content

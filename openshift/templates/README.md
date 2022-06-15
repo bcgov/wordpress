@@ -22,7 +22,7 @@ Create [build images](./images/README.md)
 [Backup deployments](./backups/README.md)
 
 ## Create a new site
-
+[Create a site script](./site-builder.sh)
 
 
 ## Image versions
