@@ -16,7 +16,7 @@ export POOL_NAME="pool" # Pool name otherwise defaults to pool
 
 ### Cron
 * This sets up the cron job to deploy the container to do the backups.
-* ``oc process -p ENV_NAME=${OC_DEPLOY_PROJECT} -p SITE_NAME=${SITE_NAME} -p POOL_NAME=${POOL_NAME}  -f openshift/templates/backups/cron.yaml | oc apply -f -`
+* `oc process -p ENV_NAME=${OC_DEPLOY_PROJECT} -p SITE_NAME=${SITE_NAME} -p POOL_NAME=${POOL_NAME}  -f openshift/templates/backups/cron.yaml | oc apply -f -`
 
 ### Volume Persistent Storage
 * Creates backup volumes for storing db backups, and a location to restore netapp-file-backup storage class backups.

@@ -80,9 +80,9 @@ objects:
                     - "-c"
                     - "/backup.sh -1"
                   volumeMounts:
-                  - name: ${APP_NAME}-${ROLE_NAME}-backup
-                    mountPath: /backups/${POOL_NAME}/
-                  - name: ${APP_NAME}-${ROLE_NAME}-backup-verification
+                  - name: ${APP_NAME}-backup-db
+                    mountPath: /backups/${SITE_NAME}/
+                  - name: ${APP_NAME}-backup-verification
                     mountPath: /var/lib/mysql/
                   - name: ${APP_NAME}-${ROLE_NAME}-file-config--${SITE_NAME}
                     mountPath: /backup.conf
@@ -109,15 +109,15 @@ objects:
                   - name: ENVIRONMENT_NAME
                     value: ${ENV_NAME}
               volumes:
-                - name: ${APP_NAME}-${ROLE_NAME}-backup
+                - name: ${APP_NAME}-backup-db
                   persistentVolumeClaim:
-                    claimName: ${APP_NAME}-${ROLE_NAME}-backup
-                - name: ${APP_NAME}-${ROLE_NAME}-backup-verification
+                    claimName: ${APP_NAME}-backup-db--${POOL_NAME}
+                - name: ${APP_NAME}-backup-verification
                   persistentVolumeClaim:
-                    claimName: ${APP_NAME}-${ROLE_NAME}-backup-verification
-                - name: ${APP_NAME}-${ROLE_NAME}-file-config--${POOL_NAME}
+                    claimName: ${APP_NAME}-backup-verification
+                - name: ${APP_NAME}-${ROLE_NAME}-file-config--${SITE_NAME}
                   configMap:
-                    name: ${APP_NAME}-${ROLE_NAME}-file-config--${POOL_NAME}
+                    name: ${APP_NAME}-${ROLE_NAME}-file-config--${SITE_NAME}
                     items:
                       - key: backup.conf
                         path: backup.conf

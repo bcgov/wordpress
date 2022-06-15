@@ -12,9 +12,6 @@ export POOL_NAME="pool" # Pool name otherwise defaults to pool
 * Sets up the configuration for Nginx for WordPress and php-fpm.  This is the config file.
 * `oc process -p ENV_NAME=${OC_DEPLOY_PROJECT} -p SITE_NAME=${SITE_NAME} -p NGINX_CONF="$(envsubst '$APP_NAME,$SITE_NAME' < openshift/templates/nginx/conf/wordpress.conf | cat -)" -f openshift/templates/nginx/config.yaml | oc apply -f -`
 
-## Deploy Nginx
-* Deploys Nginx container.
-* `oc process -p ENV_NAME=${OC_DEPLOY_PROJECT} -f openshift/templates/nginx/deploy.yaml | oc apply -f -`
 
 ## Routes for Nginx.
 **IMPORTANT**  `APP_DOMAIN` setting should point to the hostname of where the WordPress instance will reside.
