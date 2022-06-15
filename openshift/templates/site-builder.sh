@@ -11,8 +11,6 @@ if [ ! -z "${OC_DEPLOY_PROJECT}" ] && [ ! -z "${APP_DOMAIN}" ] && [ ! -z "${SITE
     # This means i am logged in.
     if [ ! -z "${whoAmI}" ]; then
         templates="$(dirname $0)";
-        #apply=""
-        apply=" | oc apply -f -"
         printf >&2 "\nStarting Build......with user ${whoAmI}\n"
 
         printf >&2 "\nMARIADB SETUP\n"
