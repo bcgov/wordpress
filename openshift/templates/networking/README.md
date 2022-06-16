@@ -10,17 +10,17 @@ To make label-based container intercommunication permissions apply, run the foll
 
 ## Variables
 ```bash
-export OC_DEPLOY_PROJECT="dev" #(dev|test|prod);
+export OC_ENV="dev" #(dev|test|prod);
 ```
 
 ## MariaDB Networking
 * To setup networking so containers have access to db
-* `oc process -p ENV_NAME=${OC_DEPLOY_PROJECT} -f openshift/templates/networking/allow-tcp-port-3306.yaml | oc apply -f -`
+* `oc process -p ENV_NAME=${OC_ENV} -f openshift/templates/networking/allow-tcp-port-3306.yaml | oc apply -f -`
 
 ## PHP Networking
 * To setup networking so containers have access to php-fpm.
-* `oc process -p ENV_NAME=${OC_DEPLOY_PROJECT} -f openshift/templates/networking/allow-tcp-port-9000.yaml | oc apply -f -`
+* `oc process -p ENV_NAME=${OC_ENV} -f openshift/templates/networking/allow-tcp-port-9000.yaml | oc apply -f -`
 
 ## Nginx
 * To permit the outside world to reach the nginx container on a fundamental network-permissions level, run the following command on the command line.
-* `oc process -p ENV_NAME=${OC_DEPLOY_PROJECT} -f openshift/templates/networking/allow-from-openshift-ingress.yaml | oc apply -f -`
+* `oc process -p ENV_NAME=${OC_ENV} -f openshift/templates/networking/allow-from-openshift-ingress.yaml | oc apply -f -`

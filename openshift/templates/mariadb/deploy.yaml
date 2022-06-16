@@ -70,6 +70,9 @@ objects:
     metadata:
       name: ${APP_NAME}-${ROLE_NAME}--${SITE_NAME}
       namespace: ${PROJECT_NAMESPACE}-${ENV_NAME}
+      annotations:
+        image.openshift.io/triggers: >-
+          [{"from":{"kind":"ImageStreamTag","name":"${APP_NAME}-mariadb-run:${ENV_NAME}","namespace": "${PROJECT_NAMESPACE}-tools"},"fieldPath":"spec.template.spec.containers[?(@.name==\"${APP_NAME}-${ROLE_NAME}--${SITE_NAME}\")].image"}]
       labels:
         app.kubernetes.io/part-of: ${APP_NAME}
         app.openshift.io/runtime: mariadb
@@ -85,15 +88,7 @@ objects:
           env: ${ENV_NAME}
           site: ${SITE_NAME}
       strategy:
-        type: RollingUpdate
-        rollingParams:
-          updatePeriodSeconds: 1
-          intervalSeconds: 1
-          timeoutSeconds: 600
-          maxUnavailable: 25%
-          maxSurge: 25%
-        resources: {}
-        activeDeadlineSeconds: 21600
+        type: Recreate
       template:
         metadata:
           annotations:
@@ -109,7 +104,7 @@ objects:
           volumes:
             - name: db-configmap-volume
               configMap:
-                name: ${APP_NAME}-${ROLE_NAME}-file-config--${SITE_NAME}
+                name: ${APP_NAME}-config--${SITE_NAME}
                 items:
                   - key: my.cnf
                     path: my.cnf
@@ -125,14 +120,14 @@ objects:
                 defaultMode: 420
             - name: db-volume
               persistentVolumeClaim:
-                claimName: ${APP_NAME}-${ROLE_NAME}--${POOL_NAME}
+                claimName: ${APP_NAME}-${ROLE_NAME}--${SITE_NAME}
           containers:
             - name: ${APP_NAME}-${ROLE_NAME}--${SITE_NAME}
               image: image-registry.openshift-image-registry.svc:5000/${PROJECT_NAMESPACE}-tools/wordpress-mariadb-run:${ENV_NAME}
               imagePullPolicy: Always
               envFrom:
                 - configMapRef:
-                    name: ${APP_NAME}-${ROLE_NAME}-env-config--${SITE_NAME}
+                    name: ${APP_NAME}-config--${SITE_NAME}
               env:
                 - name: MYSQL_ROOT_PASSWORD_FILE
                   value: "/run/secrets/mysql_root_password"
@@ -155,7 +150,6 @@ objects:
                   subPath: mysql_password
                 - name: db-volume
                   mountPath: /var/lib/mysql
-                  subPath: ${SITE_NAME}
               resources:
                 requests:
                   cpu: ${CPU_REQUEST}
