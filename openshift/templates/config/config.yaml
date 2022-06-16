@@ -54,7 +54,7 @@ objects:
       name: ${APP_NAME}-${ROLE_NAME}--${SITE_NAME}
       namespace: ${PROJECT_NAMESPACE}-${ENV_NAME}
       annotations:
-        description: "Database env configuration"
+        description: "WordPress configurations"
       labels:
         name: ${APP_NAME}-${ROLE_NAME}-env-config--${SITE_NAME}
         app: ${APP_NAME}
