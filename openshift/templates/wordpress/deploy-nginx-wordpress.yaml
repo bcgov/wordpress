@@ -89,7 +89,10 @@ objects:
       namespace: ${PROJECT_NAMESPACE}-${ENV_NAME}
       annotations:
         image.openshift.io/triggers: >-
-          [{"from":{"kind":"ImageStreamTag","name":"${APP_NAME}-${ROLE_NAME}-deploy:${ENV_NAME}","namespace": "${PROJECT_NAMESPACE}-tools"},"fieldPath":"spec.template.spec.containers[?(@.name==\"${APP_NAME}-${ROLE_NAME}${INSTANCE}\")].image"}]
+          [
+            {"from":{"kind":"ImageStreamTag","name":"${APP_NAME}-wordpress-run:${ENV_NAME}","namespace": "${PROJECT_NAMESPACE}-tools"},"fieldPath":"spec.template.spec.containers[?(@.name==\"${APP_NAME}-${ROLE_NAME}--${SITE_NAME}\")].image"}
+            {"from":{"kind":"ImageStreamTag","name":"${APP_NAME}-nginx-run:${ENV_NAME}","namespace": "${PROJECT_NAMESPACE}-tools"},"fieldPath":"spec.template.spec.containers[?(@.name==\"${APP_NAME}-${ROLE_NAME}--${SITE_NAME}\")].image"}
+          ]
       labels:
         app.kubernetes.io/part-of: ${APP_NAME}
         app.openshift.io/runtime: nginx
@@ -127,10 +130,13 @@ objects:
             net-tcp-8080: "server"
             net-tcp-9000: "client"
         spec:
+          triggers:
+            - type: "ConfigChange"
+              
           volumes:
             - name: nginx-configmap-volume
               configMap:
-                name: ${APP_NAME}-nginx-file-config--${SITE_NAME}
+                name: ${APP_NAME}-config--${SITE_NAME}
                 items:
                   - key: default.conf
                     path: nginx-default.conf
@@ -142,7 +148,7 @@ objects:
                 claimName: ${APP_NAME}-wordpress--${POOL_NAME}
             - name: php-fpm-configmap-volume
               configMap:
-                name: ${APP_NAME}-php-fpm-file-config--${SITE_NAME}
+                name: ${APP_NAME}-config--${SITE_NAME}
                 items:
                   - key: app.ini
                     path: app.ini
@@ -189,17 +195,17 @@ objects:
                 - name: WORDPRESS_DB_USER
                   valueFrom:
                     configMapKeyRef:
-                      name: ${APP_NAME}-mariadb-env-config--${SITE_NAME}
+                      name: ${APP_NAME}-config--${SITE_NAME}
                       key: MYSQL_USER
                 - name: WORDPRESS_DB_NAME
                   valueFrom:
                     configMapKeyRef:
-                      name: ${APP_NAME}-mariadb-env-config--${SITE_NAME}
+                      name: ${APP_NAME}-config--${SITE_NAME}
                       key: MYSQL_DATABASE
               envFrom:
                 # There are a bunch of password-file directives in the specified configmap, and they all get loaded into the environment for wp-config-docker.php to pick up.
                 - configMapRef:
-                    name: ${APP_NAME}-php-fpm-env-config--${SITE_NAME}
+                    name: ${APP_NAME}-config--${SITE_NAME}
               terminationMessagePolicy: File
               terminationMessagePath: /dev/termination-log
               resources:

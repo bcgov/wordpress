@@ -1,11 +1,11 @@
 kind: Template
 apiVersion: template.openshift.io/v1
 metadata:
-  name: wordpress-php-fpm-configuration
+  name: wordpress-configuration
   annotations:
-    openshift.io/display-name:  Configuration templates for the persistent storage (classic) version of the WordPress deploy.
-    description: Configuration templates for the persistent storage (classic) version of the WordPress deploy.
-    tags: php-fpm,wordpress
+    openshift.io/display-name:  Configuration templates for the WordPress deploy.
+    description: Configuration templates for the WordPress  deploy.
+    tags: mariadb,wordpress,php,nginx
 
 parameters:
   - name: APP_NAME
@@ -17,7 +17,7 @@ parameters:
     displayName: "Component Name"
     description: "The name of the application role."
     required: true
-    value: "php-fpm"
+    value: "config"
   - name: PROJECT_NAMESPACE
     displayName: "OpenShift Project Namespace"
     description: "The namespace of the OpenShift project containing the application."
@@ -28,16 +28,6 @@ parameters:
     description: "The name for this environment [dev, test, prod, tools]"
     required: true
     value: "dev"
-  - name: SITE_NAME
-    displayName: "Site name"
-    description: "The name for the site (a-zA-Z_)"
-    required: true
-    value: "global"
-  - name: POOL_NAME
-    displayName: "Pool name"
-    description: "The database shared pool instance."
-    required: true
-    value: "pool"
   - name: MAX_FILE_SIZE
     displayName: "The max file size for upload"
     value: "512M"
@@ -46,24 +36,25 @@ parameters:
     displayName: "Application Hostname"
     description: "The exposed hostname that will route to the the application."
     value: "wp-dev.apps.silver.devops.gov.bc.ca"
-  - name: WORDPRESS_DB_HOST
-    displayName: "WORDPRESS_DB_HOST"
-    description: "Database server hostname."
-    value: "wordpress-mariadb"
   - name: WORDPRESS_MULTISITE
     displayName: "WORDPRESS_MULTISITE"
     description: "Set to 1 to enable multisite, 0 to disable.  IMPORTANT, it has to be 0 for initial setup."
     required: true
     value: ""
+  - name: SITE_NAME
+    displayName: "Site name"
+    description: "The name for the site (a-zA-Z_)"
+    required: true
+    value: "global"
 
 objects:
   - kind: ConfigMap
     apiVersion: v1
     metadata:
-      name: ${APP_NAME}-${ROLE_NAME}-env-config--${SITE_NAME}
+      name: ${APP_NAME}-${ROLE_NAME}--${SITE_NAME}
       namespace: ${PROJECT_NAMESPACE}-${ENV_NAME}
       annotations:
-        description: "php-fpm env configuration"
+        description: "WordPress configurations"
       labels:
         name: ${APP_NAME}-${ROLE_NAME}-env-config--${SITE_NAME}
         app: ${APP_NAME}
@@ -71,7 +62,13 @@ objects:
         site: ${SITE_NAME}
     type: Opaque
     data:
-      WORDPRESS_DB_HOST: ${WORDPRESS_DB_HOST}--${SITE_NAME}
+      # Database
+      MYSQL_USER: ${SITE_NAME}_user
+      MYSQL_DATABASE: ${SITE_NAME}_${ENV_NAME}
+      # Backups
+      backup.conf: 'mariadb=${APP_NAME}-mariadb--${SITE_NAME}:3306/${SITE_NAME}_${ENV_NAME}'
+      # WordPress
+      WORDPRESS_DB_HOST: ${APP_NAME}-mariadb--${SITE_NAME}
       WORDPRESS_DB_PASSWORD_FILE: /run/secrets/WORDPRESS_DB_PASSWORD
       WORDPRESS_ALLOW_MULTISITE: "1"
       WORDPRESS_MULTISITE: "${WORDPRESS_MULTISITE}"
@@ -101,23 +98,66 @@ objects:
       WORDPRESS_NONCE_SALT_FILE: /run/secrets/wordpress/WORDPRESS_NONCE_SALT
       WORDPRESS_SECURE_AUTH_KEY_FILE: /run/secrets/wordpress/WORDPRESS_SECURE_AUTH_KEY
       WORDPRESS_SECURE_AUTH_SALT_FILE: /run/secrets/wordpress/WORDPRESS_SECURE_AUTH_SALT
-  - kind: ConfigMap
-    apiVersion: v1
-    metadata:
-      name: ${APP_NAME}-${ROLE_NAME}-file-config--${SITE_NAME}
-      namespace: ${PROJECT_NAMESPACE}-${ENV_NAME}
-      annotations:
-        description: "php-fpm file configuration"
-      labels:
-        name: ${APP_NAME}-${ROLE_NAME}-file-config--${SITE_NAME}
-        app: ${APP_NAME}
-        env: ${ENV_NAME}
-        site: ${SITE_NAME}
-    type: Opaque
-    data:
+      # PHP configuration [to be moved to image build]
       app.ini: |-
         upload_max_filesize=${MAX_FILE_SIZE}
         post_max_size=${MAX_FILE_SIZE}
         memory_limit=256M
         max_execution_time=300
         max_input_time=300
+      # Maria DB configuration [to be moved to image build]
+      my.cnf: |-
+        [mariadb]
+        innodb_buffer_pool_size = 10M
+        innodb_log_buffer_size = 512K # default / 2
+        innodb_log_file_size = 8M
+        lower_case_table_names = 1
+        key_buffer_size = 4194304 # default / 2
+      # Ngnix configuration [to be moved to image build]
+      default.conf: |-
+        server {
+          index index.php index.html;
+          server_name localhost;
+          #listen 8443 ssl;
+          listen 8080;
+          error_log  /dev/stderr;
+          access_log /dev/stdout;
+          root /var/www/html/;
+          # Sets Nginx max file upload size;
+          client_max_body_size 1000M;
+
+          location ~ /\. {
+              return 404;
+              deny all;
+          }
+
+          location / {
+              try_files $uri $uri/ /index.php?$args; 
+          }
+          # Required for multi-site wp-admin.
+          if (!-e $request_filename) {
+              rewrite /wp-admin$ $scheme://$host$uri/ permanent;  
+              rewrite ^(/[^/]+)?(/wp-.*) $2 last;                     
+              rewrite ^(/[^/]+)?(/.*.php) $2 last;                   
+          }
+          location /nginx_status {
+              stub_status on;
+              access_log off;
+              log_not_found off;
+              allow 127.0.0.1;
+              deny all;
+          }
+
+          location ~ \.php$ {
+              try_files $uri =404;
+              fastcgi_split_path_info ^(.+\.php)(/.+)$;
+              fastcgi_pass 127.0.0.1:9000;
+              fastcgi_index index.php;
+              include fastcgi_params;
+              fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+              fastcgi_param PATH_INFO $fastcgi_path_info;
+              fastcgi_param SERVER_NAME $server_name; 
+          }
+
+        }
+      

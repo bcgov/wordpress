@@ -5,15 +5,15 @@
 
 ## Variables
 ```bash
-export OC_DEPLOY_PROJECT="dev" #(dev|test|prod)
+export OC_ENV="dev" #(dev|test|prod)
 export OC_NAMESPACE="mynamespace"
-export SITE_NAME="cleanbc" # Site name otherwise defaults to global
-export APP_DOMAIN="cleanbc-dev.apps.silver.devops.gov.bc.ca" #unique url
-export POOL_NAME="pool" # Pool name otherwise defaults to pool
+export OC_SITE_NAME="cleanbc" # Site name otherwise defaults to global
+export OC_APP_DOMAIN="cleanbc-dev.apps.silver.devops.gov.bc.ca" #unique url
+export OC_POOL_NAME="pool" # Pool name otherwise defaults to pool
 ```
 
 ## Deployment
-* `oc process -p ENV_NAME=${OC_DEPLOY_PROJECT} -p SITE_NAME=${SITE_NAME} -p POOL_NAME=${POOL_NAME} -p RUN_AS_USER=$(oc describe project ${OC_NAMESPACE}-${OC_DEPLOY_PROJECT} | grep openshift.io/sa.scc.uid-range | cut -d '=' -f 2 | cut -d '/' -f 1) -f openshift/templates/sidecar/deploy.yaml | oc apply -f -`
+* `oc process -p ENV_NAME=${OC_ENV} -p SITE_NAME=${OC_SITE_NAME} -p POOL_NAME=${OC_POOL_NAME} -p RUN_AS_USER=$(oc describe project ${OC_NAMESPACE}-${OC_ENV} | grep openshift.io/sa.scc.uid-range | cut -d '=' -f 2 | cut -d '/' -f 1) -f openshift/templates/sidecar/deploy.yaml | oc apply -f -`
 
 ## Tools provided:
 * Ubuntu

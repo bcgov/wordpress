@@ -32,19 +32,19 @@ parameters:
     displayName: "Volume size"
     description: "The Volume size ie 1Gi"
     required: true
-    value: "5Gi"
-  - name: POOL_NAME
-    displayName: "Pool name"
-    description: "The database shared pool instance."
+    value: "500M"
+  - name: SITE_NAME
+    displayName: "Site name"
+    description: "The name for the site (a-zA-Z_)"
     required: true
-    value: "pool"
+    value: "global"
 
 objects:
   # PVC for the runtime image.
   - kind: "PersistentVolumeClaim"
     apiVersion: v1
     metadata:
-      name: ${APP_NAME}-${ROLE_NAME}--${POOL_NAME}
+      name: ${APP_NAME}-${ROLE_NAME}--${SITE_NAME}
       namespace: ${PROJECT_NAMESPACE}-${ENV_NAME}
     spec:
       accessModes:

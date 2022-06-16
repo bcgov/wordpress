@@ -3,26 +3,26 @@ In order to restore backups you will need to utilize the sidecar, this needs to 
 
 ## Variables
 ```bash
-export OC_DEPLOY_PROJECT="dev" #(dev|test|prod)
-export SITE_NAME="cleanbc" # Site name otherwise defaults to global
-export POOL_NAME="pool" # Pool name otherwise defaults to pool
+export OC_ENV="dev" #(dev|test|prod)
+export OC_SITE_NAME="cleanbc" # Site name otherwise defaults to global
+export OC_POOL_NAME="pool" # Pool name otherwise defaults to pool
 ```
 
 ## Backup Deployment
 
 ### Configs
 * This sets up the database connection string.
-* `oc process -p ENV_NAME=${OC_DEPLOY_PROJECT} -p SITE_NAME=${SITE_NAME}  -f openshift/templates/backups/config.yaml | oc apply -f -`
+* `oc process -p ENV_NAME=${OC_ENV} -p SITE_NAME=${OC_SITE_NAME}  -f openshift/templates/backups/config.yaml | oc apply -f -`
 
 ### Cron
 * This sets up the cron job to deploy the container to do the backups.
-* `oc process -p ENV_NAME=${OC_DEPLOY_PROJECT} -p SITE_NAME=${SITE_NAME} -p POOL_NAME=${POOL_NAME}  -f openshift/templates/backups/cron.yaml | oc apply -f -`
+* `oc process -p ENV_NAME=${OC_ENV} -p SITE_NAME=${OC_SITE_NAME} -p POOL_NAME=${OC_POOL_NAME}  -f openshift/templates/backups/cron.yaml | oc apply -f -`
 
 ### Volume Persistent Storage
 * Creates backup volumes for storing db backups, and a location to restore netapp-file-backup storage class backups.
-* `oc process -p ENV_NAME=${OC_DEPLOY_PROJECT} -p POOL_NAME=${POOL_NAME} -f openshift/templates/backups/volume-backup.yaml | oc apply -f -`
+* `oc process -p ENV_NAME=${OC_ENV} -p POOL_NAME=${OC_POOL_NAME} -f openshift/templates/backups/volume-backup.yaml | oc apply -f -`
 *  Verification of database backups.
-*  `oc process -p ENV_NAME=${OC_DEPLOY_PROJECT} -p POOL_NAME=${POOL_NAME} -f openshift/templates/backups/volume-verification.yaml | oc apply -f -`
+*  `oc process -p ENV_NAME=${OC_ENV} -p POOL_NAME=${OC_POOL_NAME} -f openshift/templates/backups/volume-verification.yaml | oc apply -f -`
 
 
 ## Database Backups
