@@ -89,10 +89,7 @@ objects:
       namespace: ${PROJECT_NAMESPACE}-${ENV_NAME}
       annotations:
         image.openshift.io/triggers: >-
-          [
-            {"from":{"kind":"ImageStreamTag","name":"${APP_NAME}-wordpress-run:${ENV_NAME}","namespace": "${PROJECT_NAMESPACE}-tools"},"fieldPath":"spec.template.spec.containers[?(@.name==\"${APP_NAME}-${ROLE_NAME}--${SITE_NAME}\")].image"}
-            {"from":{"kind":"ImageStreamTag","name":"${APP_NAME}-nginx-run:${ENV_NAME}","namespace": "${PROJECT_NAMESPACE}-tools"},"fieldPath":"spec.template.spec.containers[?(@.name==\"${APP_NAME}-${ROLE_NAME}--${SITE_NAME}\")].image"}
-          ]
+          [{"from":{"kind":"ImageStreamTag","name":"${APP_NAME}-wordpress-run:${ENV_NAME}","namespace": "${PROJECT_NAMESPACE}-tools"},"fieldPath":"spec.template.spec.containers[?(@.name==\"${APP_NAME}-wordpress--${SITE_NAME}\")].image"},{"from":{"kind":"ImageStreamTag","name":"${APP_NAME}-nginx-run:${ENV_NAME}","namespace": "${PROJECT_NAMESPACE}-tools"},"fieldPath":"spec.template.spec.containers[?(@.name==\"${APP_NAME}-nginx--${SITE_NAME}\")].image"}]
       labels:
         app.kubernetes.io/part-of: ${APP_NAME}
         app.openshift.io/runtime: nginx
@@ -132,7 +129,7 @@ objects:
         spec:
           triggers:
             - type: "ConfigChange"
-              
+
           volumes:
             - name: nginx-configmap-volume
               configMap:
