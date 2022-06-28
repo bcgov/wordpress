@@ -1,0 +1,37 @@
+version: 2
+updates:
+  # Maintain dependencies for nginx
+  - package-ecosystem: "docker"
+    directory: "/openshift/templates/images/nginx/docker/"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 2
+    reviewers:
+      - bcgov/gdx-engagement-admin
+
+  # Maintain dependencies for wordpress
+  - package-ecosystem: "docker"
+    directory: "/openshift/templates/images/wordpress/docker/"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 2
+    reviewers:
+      - bcgov/gdx-engagement-admin
+
+  # Maintain dependencies for mariadb
+  - package-ecosystem: "docker"
+    directory: "/openshift/templates/images/mariadb/docker/"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 2
+    reviewers:
+      - bcgov/gdx-engagement-admin
+
+  # Maintain dependencies for the sidecar
+  - package-ecosystem: "docker"
+    directory: "/openshift/templates/images/sidecar/docker/"
+    schedule:
+      interval: "daily"
+    open-pull-requests-limit: 2
+    reviewers:
+      - bcgov/gdx-engagement-admin
