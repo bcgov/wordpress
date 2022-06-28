@@ -1,4 +1,6 @@
 # Changelog
+## June 28, 2022 (DESCW(433))
+- Dependabot monitoring for docker images.
 
 ## June 16, 2022 (DESCW-424)
 - Triggers in deployments for image updates.
