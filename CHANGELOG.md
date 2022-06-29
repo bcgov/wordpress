@@ -1,4 +1,9 @@
 # Changelog
+## June 29, 2022 (DESCW(443))
+- Move php config into wordpress docker build.
+- Move mariadb config into mariadb docker build.
+- Move nginx config into nginx docker build.
+
 ## June 28, 2022 (DESCW(433))
 - Dependabot monitoring for docker images.
 

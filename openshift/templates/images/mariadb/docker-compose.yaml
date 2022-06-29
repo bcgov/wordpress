@@ -1,7 +1,13 @@
-version: '3.1'
+version: "3.1"
 services:
   db:
     build: ./docker
     user: "1002:1001"
     environment:
       MARIADB_ROOT_PASSWORD: password
+    command: >-
+      mariadb --innodb-buffer-pool-size=10M
+      --innodb_log_buffer_size=512K
+      --innodb_log_file_size = 8M
+      --lower_case_table_names = 1
+      --key_buffer_size = 4194304
