@@ -7,3 +7,4 @@ RUN set -ex; \
         docker-php-ext-enable ldap;
 
 COPY php.conf.ini /usr/local/etc/php/conf.d/php.ini
+COPY --chown=www-data:0 wp-config-docker.php /usr/src/wordpress/
