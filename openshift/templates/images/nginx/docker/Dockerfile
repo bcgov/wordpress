@@ -11,4 +11,6 @@ HEALTHCHECK --start-period=5s CMD pgrep nginx
 
 VOLUME ["/var/www/html", "/var/log/nginx"]
 
+COPY default.conf /etc/nginx/default.conf
+
 EXPOSE 80 443
