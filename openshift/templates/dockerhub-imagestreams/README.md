@@ -17,7 +17,7 @@ This remediates the issue with restrictions from dockerhub.
 
 ### Nginx
 * Used as a base image for web server
-* nginx:1.21.6-alpine -> nginx
+* nginx:1.23.1-alpine -> nginx
   * `oc process -f openshift/templates/dockerhub-imagestreams/nginx.yaml | oc apply -f -`
 
 ### Maintenance sidecar
