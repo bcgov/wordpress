@@ -47,9 +47,9 @@ objects:
         source: dockerhub
     spec:
       tags:
-        - name: "1.21.6-alpine"
+        - name: "1.23.1-alpine"
           from:
             kind: DockerImage
-            name: "docker-remote.artifacts.developer.gov.bc.ca/nginx:1.21.6-alpine"
+            name: "docker-remote.artifacts.developer.gov.bc.ca/nginx:1.23.1-alpine"
           referencePolicy:
             type: Local

@@ -1,5 +1,9 @@
 # Changelog
 
+## Jul 20, 2022(DESCW(469))
+
+- Bump nginx to version 1.23.1
+
 ## Jul 13, 2022 (DESCW(470))
 
 - Disable dependabot automatic pull requests.
