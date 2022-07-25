@@ -17,7 +17,7 @@ Base images are images that would use dockerhub image streams to create an addit
 
 ### Nginx 
 * Creates the nginx web server.
-* nginx:1.21.6-alpine -> wordpress-nginx-run
+* nginx:1.23.1-alpine -> wordpress-nginx-run
   *  `oc process -f openshift/templates/images/nginx/build.yaml | oc apply -f -`
 
 ### WordPress
@@ -37,7 +37,7 @@ Base images are images that would use dockerhub image streams to create an addit
 Use the same convention as dockerhub, specifying the full version tag where possible. For example:
 * `alpine:3.15.4`
 * `mariadb:10.5.13-r0`
-* `nginx:1.21.6-alpine`
+* `nginx:1.23.1-alpine`
 
 ### Intermediate Images
 >An Intermediate image is any container image that relies on a base image and is used as a building block to build a standalone image.

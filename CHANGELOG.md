@@ -1,8 +1,9 @@
 # Changelog
 
-## Jul 20, 2022(DESCW(469))
+## Jul 21, 2022(DESCW(469))
 
 - Bump nginx to version 1.23.1
+- Add reference locations for images in openshift templates README.
 
 ## Jul 13, 2022 (DESCW(470))
 
