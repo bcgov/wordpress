@@ -135,8 +135,8 @@ objects:
               configMap:
                 name: ${APP_NAME}-config--${SITE_NAME}
                 items:
-                  - key: default.conf
-                    path: nginx-default.conf
+                  - key: nginx.conf
+                    path: nginx.conf
                 defaultMode: 420
             - name: wordpress-htdocs
               emptyDir: {}
@@ -226,8 +226,8 @@ objects:
                   mountPath: /var/www/html/wp-content/
                   subPath: ${SITE_NAME}/wp-content
                 - name: nginx-configmap-volume
-                  mountPath: /etc/nginx/conf.d/default.conf
-                  subPath: nginx-default.conf
+                  mountPath: /etc/nginx/conf.d/nginx.conf
+                  subPath: nginx.conf
               terminationMessagePolicy: File
               terminationMessagePath: /dev/termination-log
               resources:

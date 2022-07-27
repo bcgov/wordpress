@@ -20,6 +20,10 @@ Base images are images that would use dockerhub image streams to create an addit
 * nginx:1.23.1-alpine -> wordpress-nginx-run
   *  `oc process -f openshift/templates/images/nginx/build.yaml | oc apply -f -`
 
+#### Build locally
+* `docker build -t wordpress-nginx-run:dev -f openshift/templates/images/nginx/docker/Dockerfile ./openshift/templates/images/nginx/docker`
+* verify image `docker run -it wordpress-nginx-run:dev sh`
+
 ### WordPress
 * Creates WordPress core 6.0.0
 * wordpress:6.0.0-php7.4-fpm-alpine -> wordpress-wordpress-run

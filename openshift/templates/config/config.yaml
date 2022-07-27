@@ -64,6 +64,8 @@ objects:
       MYSQL_DATABASE: ${SITE_NAME}_${ENV_NAME}
       # Backups
       backup.conf: "mariadb=${APP_NAME}-mariadb--${SITE_NAME}:3306/${SITE_NAME}_${ENV_NAME}"
+      nginx.conf: |-
+        # Extra ngix configs.
       # WordPress
       WORDPRESS_DB_HOST: ${APP_NAME}-mariadb--${SITE_NAME}
       WORDPRESS_DB_PASSWORD_FILE: /run/secrets/WORDPRESS_DB_PASSWORD
