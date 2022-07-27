@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"wordpress-mariadb-run:dev","namespace":
+      "23576a-tools"},"fieldPath":"spec.template.spec.containers[?(@.name==\"wordpress-mariadb--dev\")].image"}]'
+  labels:
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/instance: coreDB
+    app.kubernetes.io/part-of: wordpress
+    app.openshift.io/runtime: mariadb
+  name: wordpress-mariadb--dev
+  namespace: 23576a-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wordpress
+      env: dev
+      name: wordpress-mariadb--dev
+      role: mariadb
+      site: dev
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        alpha.image.policy.openshift.io/resolve-names: '*'
+      labels:
+        app: wordpress
+        env: dev
+        name: wordpress-mariadb--dev
+        net-tcp-3306: server
+        role: mariadb
+        site: dev
+    spec:
+      containers:
+      - env:
+        - name: MYSQL_ROOT_PASSWORD_FILE
+          value: /run/secrets/mysql_root_password
+        - name: MYSQL_PASSWORD_FILE
+          value: /run/secrets/mysql_password
+        envFrom:
+        - configMapRef:
+            name: wordpress-config--dev
+        image: image-registry.openshift-image-registry.svc:5000/23576a-tools/wordpress-mariadb-run:dev
+        imagePullPolicy: Always
+        name: wordpress-mariadb--dev
+        ports:
+        - containerPort: 3306
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 500m
+            memory: 500Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        volumeMounts:
+        - mountPath: /run/secrets/mysql_root_password
+          name: db-secrets-volume
+          readOnly: true
+          subPath: mysql_root_password
+        - mountPath: /run/secrets/mysql_password
+          name: db-secrets-volume
+          readOnly: true
+          subPath: mysql_password
+        - mountPath: /var/lib/mysql
+          name: db-volume
+      volumes:
+      - name: db-secrets-volume
+        secret:
+          defaultMode: 420
+          items:
+          - key: MYSQL_PASSWORD
+            path: mysql_password
+          - key: MYSQL_ROOT_PASSWORD
+            path: mysql_root_password
+          secretName: wordpress-mariadb-secrets--dev
+      - name: db-volume
+        persistentVolumeClaim:
+          claimName: wordpress-mariadb--dev

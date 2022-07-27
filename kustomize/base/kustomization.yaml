@@ -1,0 +1,10 @@
+resources:
+- volumes.yaml
+- deployment.yaml
+
+configMapGenerator:
+- name: wordpress-config-env-config--dev
+  literals:
+  - MYSQL_DATABASE=dev_dev
+  - WORDPRESS_DB_HOST=wordpress-mariadb--dev
+  - WORDPRESS_DB_PASSWORD_FILE=/run/secrets/WORDPRESS_DB_PASSWORD
