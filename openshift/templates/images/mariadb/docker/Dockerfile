@@ -1,4 +1,4 @@
-FROM alpine:3.15.4
+FROM alpine:3.16.1
 
 # https://github.com/opencontainers/image-spec/blob/master/annotations.md
 ARG BUILD_DATE
