@@ -4,7 +4,6 @@ metadata:
   name: wordpress-mariadb--dev
   namespace: default
 spec:
-  storageClassName: manual
   volumeMode: Filesystem
   accessModes:
   - ReadWriteOnce

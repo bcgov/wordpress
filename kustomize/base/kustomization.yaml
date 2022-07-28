@@ -10,3 +10,10 @@ configMapGenerator:
   - MYSQL_DATABASE=dev_dev
   - WORDPRESS_DB_HOST=wordpress-mariadb--dev
   - WORDPRESS_DB_PASSWORD_FILE=/run/secrets/WORDPRESS_DB_PASSWORD
+secretGenerator:
+- name: wordpress-mariadb-secrets--dev
+  type: Opaque
+  literals:
+  - MYSQL_PASSWORD=mysqlpassword
+  - MYSQL_ROOT_PASSWORD=rootmysqlpassword
+
