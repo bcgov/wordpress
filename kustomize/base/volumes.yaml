@@ -9,5 +9,5 @@ spec:
   resources:
     requests:
       storage: 50M
-  storageClassName: manual
+  storageClassName: local-storage
   volumeMode: Filesystem
