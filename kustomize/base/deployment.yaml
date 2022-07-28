@@ -9,17 +9,14 @@ metadata:
     app.kubernetes.io/instance: coreDB
     app.kubernetes.io/part-of: wordpress
     app.openshift.io/runtime: mariadb
-  name: wordpress-mariadb--dev
-  namespace: 23576a-dev
+  name: wordpress-mariadb
+  namespace: default
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: wordpress
-      env: dev
-      name: wordpress-mariadb--dev
+      name: wordpress-mariadb
       role: mariadb
-      site: dev
   strategy:
     type: Recreate
   template:
@@ -27,12 +24,9 @@ spec:
       annotations:
         alpha.image.policy.openshift.io/resolve-names: '*'
       labels:
-        app: wordpress
-        env: dev
-        name: wordpress-mariadb--dev
+        name: wordpress-mariadb
         net-tcp-3306: server
         role: mariadb
-        site: dev
     spec:
       containers:
       - env:
@@ -42,10 +36,10 @@ spec:
           value: /run/secrets/mysql_password
         envFrom:
         - configMapRef:
-            name: wordpress-config--dev
+            name: wordpress-config
         image: image-registry.openshift-image-registry.svc:5000/23576a-tools/wordpress-mariadb-run:dev
         imagePullPolicy: Always
-        name: wordpress-mariadb--dev
+        name: wordpress-mariadb
         ports:
         - containerPort: 3306
           protocol: TCP
@@ -76,7 +70,7 @@ spec:
             path: mysql_password
           - key: MYSQL_ROOT_PASSWORD
             path: mysql_root_password
-          secretName: wordpress-mariadb-secrets--dev
+          secretName: wordpress-secrets
       - name: db-volume
         persistentVolumeClaim:
-          claimName: wordpress-mariadb--dev
+          claimName: wordpress-mariadb

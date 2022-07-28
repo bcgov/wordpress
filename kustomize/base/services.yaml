@@ -4,13 +4,10 @@ metadata:
   annotations:
     description: Exposes and load balances the application pods.
   labels:
-    app: wordpress
-    env: dev
-    name: wordpress-mariadb--dev
+    name: wordpress-mariadb
     role: mariadb
-    site: dev
-  name: wordpress-mariadb--dev
-  namespace: 23576a-dev
+  name: wordpress-mariadb
+  namespace: default
 spec:
   ports:
   - name: 3306-tcp
@@ -18,10 +15,7 @@ spec:
     protocol: TCP
     targetPort: 3306
   selector:
-    app: wordpress
-    env: dev
-    name: wordpress-mariadb--dev
+    name: wordpress-mariadb
     role: mariadb
-    site: dev
   sessionAffinity: None
   type: ClusterIP
