@@ -29,6 +29,10 @@ Base images are images that would use dockerhub image streams to create an addit
 * wordpress:6.0.0-php7.4-fpm-alpine -> wordpress-wordpress-run
   * `oc process -f openshift/templates/images/wordpress/build.yaml | oc apply -f -`
 
+#### Build locally
+* `docker build -t sturple/wordpress-wordpress-run:dev -f openshift/templates/images/wordpress/docker/Dockerfile ./openshift/templates/images/wordpress/docker`
+* verify image `docker run -it wordpress-wordpress-run:dev sh`
+
 ### Sidecar
 * Creates Sidecar image used for WordPress maintenance and diagnostics.
 * ubuntu -> wordpress-sidecar
