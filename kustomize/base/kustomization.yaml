@@ -1,10 +1,6 @@
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-resources:
-- volumes.yaml
-- services.yaml
-- deployment.yaml
-
+bases:
+- mariadb
+- wordpress
 namespace: default
 commonLabels:
   app: wordpress
@@ -14,13 +10,21 @@ commonLabels:
 configMapGenerator:
 - name: wordpress-config
   literals:
-  - MYSQL_DATABASE=dev_dev
-  - WORDPRESS_DB_HOST=wordpress-mariadb--dev
-  - WORDPRESS_DB_PASSWORD_FILE=/run/secrets/WORDPRESS_DB_PASSWORD
+  - MYSQL_DATABASE=local
+  - WORDPRESS_DB_HOST=wordpress-mariadb
+  - MYSQL_USER=local_user
+  - nginx.conf="# Extra ngix configs"
 secretGenerator:
 - name: wordpress-secrets
   type: Opaque
   literals:
   - MYSQL_PASSWORD=mysqlpassword
   - MYSQL_ROOT_PASSWORD=rootmysqlpassword
-
+  - WORDPRESS_AUTH_KEY=authkey
+  - WORDPRESS_SECURE_AUTH_KEY=secureauthkey
+  - WORDPRESS_LOGGED_IN_KEY=loggedinkey
+  - WORDPRESS_NONCE_KEY=noncekey
+  - WORDPRESS_AUTH_SALT=authsalt
+  - WORDPRESS_SECURE_AUTH_SALT=secureauthsalt
+  - WORDPRESS_LOGGED_IN_SALT=loggedinsalt
+  - WORDPRESS_NONCE_SALT=noncesalt

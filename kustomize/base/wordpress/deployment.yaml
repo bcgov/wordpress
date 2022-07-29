@@ -1,0 +1,135 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    image.openshift.io/triggers: '[{"from":{"kind":"ImageStreamTag","name":"wordpress-wordpress-run:dev","namespace":
+      "23576a-tools"},"fieldPath":"spec.template.spec.containers[?(@.name==\"wordpress-wordpress--dev\")].image"},{"from":{"kind":"ImageStreamTag","name":"wordpress-nginx-run:dev","namespace":
+      "23576a-tools"},"fieldPath":"spec.template.spec.containers[?(@.name==\"wordpress-nginx--dev\")].image"}]'
+  labels:
+    app.kubernetes.io/component: nginx
+    app.kubernetes.io/instance: webserver
+    app.kubernetes.io/part-of: wordpress
+    app.openshift.io/runtime: nginx
+  name: wordpress
+  namespace: default
+spec:
+  selector:
+  strategy:
+    activeDeadlineSeconds: 21600
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 600
+      updatePeriodSeconds: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        alpha.image.policy.openshift.io/resolve-names: '*'
+      labels:
+        net-tcp-8080: server
+        net-tcp-9000: client
+    spec:
+      containers:
+      - env:
+        - name: WORDPRESS_DB_USER
+          valueFrom:
+            configMapKeyRef:
+              key: MYSQL_USER
+              name: wordpress-config
+        - name: WORDPRESS_DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              key: MYSQL_DATABASE
+              name: wordpress-config
+        envFrom:
+        - configMapRef:
+            name: wordpress-config
+        image: image-registry.openshift-image-registry.svc:5000/23576a-tools/wordpress-wordpress-run:dev
+        imagePullPolicy: Always
+        name: wordpress-core
+        ports:
+        - containerPort: 9000
+          name: 9000-tcp
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 400m
+            memory: 500Mi
+          requests:
+            cpu: 100m
+            memory: 250Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /var/www/html
+          name: wordpress-htdocs
+        - mountPath: /run/secrets/wordpress
+          name: php-fpm-secrets-volume
+          readOnly: true
+        - mountPath: /run/secrets/WORDPRESS_DB_PASSWORD
+          name: mariadb-secrets-volume
+          readOnly: true
+          subPath: MYSQL_PASSWORD
+        - mountPath: /var/www/html/wp-content/
+          name: wordpress-volume
+          subPath: dev/wp-content
+      - image: image-registry.openshift-image-registry.svc:5000/23576a-tools/wordpress-nginx-run:dev
+        imagePullPolicy: Always
+        name: wordpress-nginx
+        ports:
+        - containerPort: 8080
+          name: 8080-tcp
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 400m
+            memory: 500Mi
+          requests:
+            cpu: 100m
+            memory: 250Mi
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /var/www/html
+          name: wordpress-htdocs
+        - mountPath: /var/www/html/wp-content/
+          name: wordpress-volume
+          subPath: dev/wp-content
+        - mountPath: /etc/nginx/conf.d/nginx.conf
+          name: nginx-configmap-volume
+          subPath: nginx.conf
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      triggers:
+      - type: ConfigChange
+      volumes:
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: nginx.conf
+            path: nginx.conf
+          name: wordpress-config
+        name: nginx-configmap-volume
+      - emptyDir: {}
+        name: wordpress-htdocs
+      - name: wordpress-volume
+        persistentVolumeClaim:
+          claimName: wordpress
+      - name: php-fpm-secrets-volume
+        secret:
+          defaultMode: 420
+          secretName: wordpress-secrets
+      - name: mariadb-secrets-volume
+        secret:
+          defaultMode: 420
+          items:
+          - key: MYSQL_PASSWORD
+            path: MYSQL_PASSWORD
+          secretName: wordpress-secrets
+

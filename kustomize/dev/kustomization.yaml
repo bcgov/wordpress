@@ -3,8 +3,20 @@ kind: Kustomization
 bases:
 - ../base
 
-namePrefix: dev-
+namePrefix: dev--
 namespace: 23576a-dev
+commonLabels:
+  app: wordpress
+  site: dev
+  pool: pool-dev
+  env: dev
+configMapGenerator:
+- name: wordpress-config
+  behavior: replace
+  literals:
+  - MYSQL_DATABASE=dev
+  - WORDPRESS_DB_HOST=dev--wordpress-mariadb
+  - MYSQL_USER=dev_user
 patchesStrategicMerge:
 - patch.yaml
 

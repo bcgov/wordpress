@@ -19,7 +19,7 @@ The secrets template is set to automatically generate random passwords for you. 
 * `oc process -p ENV_NAME=${OC_ENV} -p SITE_NAME=${OC_SITE_NAME} -f openshift/templates/wordpress/secrets.yaml | oc apply -f -`
 
 ## Volumes
-* `oc process -p ENV_NAME=${OC_ENV} -p POOL_NAME=${POOL_NAME} -f openshift/templates/wordpress/volume.yaml | oc apply -f -`
+* `oc process -p ENV_NAME=${OC_ENV} -p POOL_NAME=${OC_POOL_NAME} -f openshift/templates/wordpress/volume.yaml | oc apply -f -`
 
 ## Deployment
 * `oc process -p ENV_NAME=${OC_ENV} -p SITE_NAME=${OC_SITE_NAME} -p POOL_NAME=${OC_POOL_NAME} -f openshift/templates/wordpress/deploy-nginx-wordpress.yaml | oc apply -f -`

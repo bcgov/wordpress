@@ -7,3 +7,25 @@ spec:
     requests:
       storage: 500M
   storageClassName: netapp-block-standard
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wordpress
+  namespace: default
+spec:
+  resources:
+    requests:
+      storage: 500M
+  storageClassName: netapp-file-standard
+
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: wordpress-nginx
+spec:
+  host: wp-dev.apps.silver.devops.gov.bc.ca
+  to:
+    name: dev--wordpress-nginx

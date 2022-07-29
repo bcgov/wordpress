@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+bases:
+- ../dev
+
+namePrefix: test--
+namespace: 23576a-test
+configMapGenerator:
+- name: wordpress-config
+  behavior: replace
+  literals:
+  - MYSQL_DATABASE=local
+  - WORDPRESS_DB_HOST=wordpress-mariadb
+  - MYSQL_USER=local_user
+patchesStrategicMerge:
+- patch.yaml
+

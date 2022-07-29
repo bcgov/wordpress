@@ -4,18 +4,18 @@ metadata:
   annotations:
     description: Exposes and load balances the application pods.
   labels:
-    name: wordpress-mariadb
-    role: mariadb
-  name: wordpress-mariadb
+    name: wordpress-nginx
+    role: nginx
+  name: wordpress-nginx
   namespace: default
 spec:
   ports:
-  - name: 3306-tcp
-    port: 3306
+  - name: 8080-tcp
+    port: 8080
     protocol: TCP
-    targetPort: 3306
+    targetPort: 8080
   selector:
-    name: wordpress-mariadb
-    role: mariadb
+    name: wordpress-nginx
+    role: nginx
   sessionAffinity: None
   type: ClusterIP
