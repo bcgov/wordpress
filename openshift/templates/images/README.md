@@ -25,8 +25,8 @@ Base images are images that would use dockerhub image streams to create an addit
 * verify image `docker run -it wordpress-nginx-run:dev sh`
 
 ### WordPress
-* Creates WordPress core 6.0.0
-* wordpress:6.0.0-php7.4-fpm-alpine -> wordpress-wordpress-run
+* Creates WordPress core 6.0.2
+* wordpress:6.0.2-php7.4-fpm-alpine -> wordpress-wordpress-run
   * `oc process -f openshift/templates/images/wordpress/build.yaml | oc apply -f -`
 
 ### Sidecar

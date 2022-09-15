@@ -1,5 +1,8 @@
 # Changelog
 
+## September 15 2022 (DESCW-593)
+- Upgrade wordpress to use v6.0.2
+
 ## July 27, 2022 (DESSO-467)
 - Fixed Nginx config directory
 - Added nginx.conf configmap mount for nginx site specific overrides.
