@@ -1,4 +1,4 @@
-FROM alpine:3.15.4
+FROM alpine:3.16.2
 
 # https://github.com/opencontainers/image-spec/blob/master/annotations.md
 ARG BUILD_DATE
@@ -18,7 +18,7 @@ SHELL ["/bin/ash", "-euo", "pipefail", "-c"]
 
 # Mariadb versions are here: https://pkgs.alpinelinux.org/packages?name=mariadb&branch=v3.15
 RUN \
-  apk add --no-cache mariadb=10.6.8-r0 && \
+  apk add --no-cache mariadb=10.6.10-r0 && \
   TO_KEEP=$(echo " \
     usr/bin/mysql$ \
     usr/bin/mysqld$ \
