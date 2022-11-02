@@ -1,4 +1,6 @@
 # Changelog
+## November 02 2022 (DESCW-592)
+- Upgrade wordpress to use v6.0.3
 
 ## September 15 2022 (DESCW-593)
 - Upgrade wordpress to use v6.0.2
