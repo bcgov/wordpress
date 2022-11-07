@@ -3,7 +3,7 @@
 [Back to images](../README.md)
 
 ## Updating WordPress Core
-* Get [WordPress official image](https://hub.docker.com/_/wordpress) and verify.
+* Get [WordPress official image](https://hub.docker.com/_/wordpress) and verify the version exists.
 * Update [Image stream reference](https://github.com/bcgov/wordpress/blob/main/openshift/templates/dockerhub-imagestreams/wordpress.yaml#L36) to new version of the WordPress official image.  -- **Is this step needed**
 * Add new WordPress official image to OpenShift `oc process -f openshift/templates/dockerhub-imagestreams/wordpress.yaml | oc apply -f -` -- **Is this step needed**
 * Update [Dockerfile](https://github.com/bcgov/wordpress/blob/main/openshift/templates/images/wordpress/docker/Dockerfile#L1) to reference new version of WordPress core 
