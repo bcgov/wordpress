@@ -25,9 +25,10 @@ Base images are images that would use dockerhub image streams to create an addit
 * verify image `docker run -it wordpress-nginx-run:dev sh`
 
 ### WordPress
-* Creates WordPress core 6.0.3
-* wordpress:6.0.3-php7.4-fpm-alpine -> wordpress-wordpress-run
+* Creates WordPress core
+* wordpress:official-image-tag -> wordpress-wordpress-run
   * `oc process -f openshift/templates/images/wordpress/build.yaml | oc apply -f -`
+* [Updating WordPress Image](./wordpress/README.md) in OpenShift process
 
 ### Sidecar
 * Creates Sidecar image used for WordPress maintenance and diagnostics.
@@ -63,7 +64,7 @@ Use the convention [product]-[service component]-run:tag. For example:
 ### Recommended Labels
 | Name | Description | Example |
 |------|:-----------:|--------:|
-| app.kubernetes.io/part-of | The name of the top level software system this resource is part of | ticketmonster
+| app.kubernetes.io/part-of | The name of the top level software system this resource is part of | wordpress
 | app.kubernetes.io/name | The name, reflecting component. | mysql
 | app.kubernetes.io/component | This is the role/type of the component | frontend
 | app.kubernetes.io/version	| The current version of the application |	5.7.21	| string
