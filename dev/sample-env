@@ -8,23 +8,14 @@ WORDPRESS_DIR="/Users/your-user-name/Development/dev-wp"
 # Used for wp-cli for sql.
 TEMP_DIR="/Users/your-user-name/tmp/WordPress"
 CONTENT_DIR="/Users/your-user-name/Development/dev-wp/wp-content"
-WORDPRESS_DEBUG=true
 
-# WordPress Network
 # Make sure entry is added to host file.
-DOMAIN_CURRENT_SITE=localhost
-MULTISITE=false
-SITE_ID=1
+DOMAIN_CURRENT_SITE="localhost"
+MULTISITE=0
 
 # Database
-#DB_VOLUME=
 MYSQL_USER=wp_user
 MYSQL_PASSWORD=password
 MYSQL_ROOT_PASSWORD=rootpassword
 MYSQL_HOST=db
 MYSQL_DATABASE=wordpress
-
-
-
-
-

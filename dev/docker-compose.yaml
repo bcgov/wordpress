@@ -1,4 +1,4 @@
-version: "2.4"
+version: "3.8"
 # docker compose --env-file .env up --build site --force-recreate
 networks:
   wp_deploy:
@@ -14,7 +14,7 @@ services:
     build:
       context: ../openshift/templates/images/nginx/docker
     ports:
-      - 80:8080
+      - 80:80
       - 443:443
     links:
       - wordpress-php-fpm
@@ -23,8 +23,6 @@ services:
       - db
     networks:
       - wp_deploy
-    environment:
-      APP_NAME: ${APP_NAME}
     volumes:
       - nginx_cache:/var/cache/nginx
       - nginx_run:/var/run
@@ -34,6 +32,26 @@ services:
       - ./certs/nginx/ssl:/etc/ssl/certs:ro
     volumes_from:
       - wordpress-php-fpm:rw
+  wp-cli:
+    image: wordpress:cli-php7.4
+    volumes_from:
+      - wordpress-php-fpm:rw
+    networks:
+      - wp_deploy
+    depends_on:
+      - wordpress-php-fpm
+    command: tail -f /dev/null
+    environment:
+      WORDPRESS_DB_HOST: ${MYSQL_HOST}
+      WORDPRESS_DB_USER: ${MYSQL_USER}
+      WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
+      WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
+      WORDPRESS_MULTISITE: ${MULTISITE}
+      WORDPRESS_CONFIG_EXTRA: |
+        /* Multisite */
+        define( 'WP_ALLOW_MULTISITE', true );
+        define( 'MULTISITE', !!filter_var( getenv_docker( 'WORDPRESS_MULTISITE', '0' ), FILTER_VALIDATE_BOOLEAN ) );
+        define( 'DOMAIN_CURRENT_SITE', '${DOMAIN_CURRENT_SITE}' );
   db:
     build:
       context: ../openshift/templates/images/mariadb/docker
@@ -53,6 +71,14 @@ services:
       - 3306:3306
   wordpress-php-fpm:
     user: www-data:www-data
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 500M
+        reservations:
+          cpus: '0.5'
+          memory: 100M
     build:
       context: ../openshift/templates/images/wordpress/docker
     environment:
@@ -61,19 +87,13 @@ services:
       WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
       WORDPRESS_DB_NAME: ${MYSQL_DATABASE}
       WORDPRESS_DEBUG: ${WORDPRESS_DEBUG:-1}
-      WORDPRESS_ALLOW_MULTISITE: "1"
       WORDPRESS_MULTISITE: ${MULTISITE}
-      WORDPRESS_SITE_ID_CURRENT_SITE: ${SITE_ID}
       WORDPRESS_DOMAIN_CURRENT_SITE: ${DOMAIN_CURRENT_SITE}
       WORDPRESS_CONFIG_EXTRA: |
         /* Multisite */
         define( 'WP_ALLOW_MULTISITE', true );
-        define( 'MULTISITE', !!filter_var( getenv_docker( 'WORDPRESS_ALLOW_MULTISITE', '0' ), FILTER_VALIDATE_BOOLEAN ) );
-        define( 'SUBDOMAIN_INSTALL', false );
+        define( 'MULTISITE', !!filter_var( getenv_docker( 'WORDPRESS_MULTISITE', '0' ), FILTER_VALIDATE_BOOLEAN ) );
         define( 'DOMAIN_CURRENT_SITE', '${DOMAIN_CURRENT_SITE}' );
-        define( 'PATH_CURRENT_SITE', '/' );
-        define( 'SITE_ID_CURRENT_SITE', intval( getenv_docker( 'WORDPRESS_SITE_ID_CURRENT_SITE', '1' ) ) );
-        define( 'BLOG_ID_CURRENT_SITE', intval( getenv_docker( 'WORDPRESS_SITE_ID_CURRENT_SITE', '1' ) ) );
         /* For Active Directory Integration on Multisite. */
         define( 'IS_WPMU', true );
         /* Other configs */
