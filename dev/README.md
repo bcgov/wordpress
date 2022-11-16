@@ -7,7 +7,7 @@
   * The `TEMP_DIR` variable can be used to import/export db using the wp-cli command.
 
 ## Step 2: Setting up SSL on Mac (required)
-* ```docker compose --file docker-compose-init.yaml run self-signed-certificate-generator``` sets up `loclahost` self signed certs.
+* ```docker compose --file docker-compose-init.yaml run self-signed-certificate-generator``` sets up `localhost` self signed certs.
 * Drag ./Docker/nginx/ssl/localhost.crt to KeyChain app (login) section and trust always:
   * Double-click the certificate.
   * Next to Trust, click the arrow and in the dropdown box for "When using this certificate:" select `Always Trust`.
