@@ -82,7 +82,7 @@ services:
     networks:
       - wp_deploy
     ports:
-      - 8081:80
+      - ${MYADMIN_PORT:-8081}:80
   wordpress-php-fpm:
     user: www-data:www-data
     deploy:
