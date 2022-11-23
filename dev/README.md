@@ -18,6 +18,8 @@
 ## Step 3: Run Docker compose
 * `docker compose up` or `docker compose up --build` to rebuild all the images.
   * The build flag is required, anytime there are changes to the images.
+* Access Wordpress at https://localhost
+* Access PHPMyAdmin at http://localhost:8081 (Note: does not use https)
 
 ## Step 4: Optional multi-site (Recommended):
 * In the WordPress admin UI, go to menu Tools -> Network Setup and click install
