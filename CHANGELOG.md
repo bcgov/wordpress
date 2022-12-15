@@ -1,5 +1,8 @@
 # Changelog
 
+## December 15 2022 (DESCW-716)
+- Upgrade wordpress to use v6.1.1
+
 ## November 23 2022 (N/A)
 - Added PHPMyAdmin container to docker-compose.yaml
 - Updated README
