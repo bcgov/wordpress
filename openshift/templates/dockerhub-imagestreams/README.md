@@ -12,7 +12,7 @@ This remediates the issue with restrictions from dockerhub.
 
 ### WordPress image with php-fpm
 * Used as an initial php-fpm base, then adds php configs for WordPress, then gets used for WordPress.
-* wordpress:6.0.3-php7.4-fpm-alpine
+* wordpress:6.1.1-php7.4-fpm-alpine
   * `oc process -f openshift/templates/dockerhub-imagestreams/wordpress.yaml | oc apply -f -`
 
 ### Nginx

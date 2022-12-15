@@ -33,7 +33,7 @@ parameters:
   - name: IMAGE_TAG
     displayName: "The WordPress image tag"
     description: "This is the official image tag, which is later used to build the wordpress-wordpress-run"
-    value: "6.0.3-php7.4-fpm-alpine"
+    value: "6.1.1-php7.4-fpm-alpine"
 
 objects:
   - kind: ImageStream
