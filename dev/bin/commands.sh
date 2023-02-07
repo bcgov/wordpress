@@ -1,4 +1,9 @@
+#!/usr/bin/env bash 
 ROOT_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../"
+# Accomodate zsh
+if [ ! -f "$ROOT_PATH/.env" ]; then 
+    ROOT_PATH="$(dirname $(readlink -f $0))/../"
+fi
 # Load in the env file
 source "$ROOT_PATH.env"
 
@@ -23,6 +28,11 @@ wp_stop() {
 wp() {
     cd $ROOT_PATH
     docker exec -it dev-wp-cli-1 wp $@
+}
+
+# Audit plugins or themes
+wp_audit() {
+    source "${ROOT_PATH}bin/wpaudit.sh"
 }
     
 # Goes to either the plugin directory or theme directory
