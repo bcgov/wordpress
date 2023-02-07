@@ -1,4 +1,7 @@
 # Changelog
+## February 7, 2023 (N/A)
+- added audit utility
+- updated commands.sh to be compatible with .zsh shell
 
 ## December 15 2022 (DESCW-716)
 - Upgrade wordpress to use v6.1.1
