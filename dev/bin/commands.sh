@@ -1,6 +1,6 @@
 #!/usr/bin/env bash 
 ROOT_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/../"
-# Accomidate zsh
+# Accomodate zsh
 if [ ! -f "$ROOT_PATH/.env" ]; then 
     ROOT_PATH="$(dirname $(readlink -f $0))/../"
 fi
