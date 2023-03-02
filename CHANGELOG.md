@@ -1,4 +1,7 @@
 # Changelog
+## March 02, 2023 (DESCW-972)
+- Removed specific mariadb version from image build to prevent it from failing whenever the alpine package is updated.
+
 ## February 7, 2023 (N/A)
 - added audit utility
 - updated commands.sh to be compatible with .zsh shell
