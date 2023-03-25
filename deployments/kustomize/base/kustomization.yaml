@@ -1,0 +1,50 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+bases:
+- mariadb
+- wordpress
+- sidecar
+# Overrides the namespace
+namespace: default
+
+# Updates the labels for all containers.
+commonLabels:
+  app: wordpress
+  site: local
+  env: local
+# Creates the configmaps which automatically get version controlled via hashes.
+configMapGenerator:
+- name: wordpress-config
+  literals:
+  - MYSQL_DATABASE=local
+  - WORDPRESS_DB_HOST=wordpress-mariadb
+  - MYSQL_USER=local_user
+  - WORDPRESS_DB_PASSWORD_FILE=/run/secrets/WORDPRESS_DB_PASSWORD
+  - WORDPRESS_MULTISITE=0
+  - APP_DOMAIN=apps.silver.devops.gov.bc.ca
+  - WORDPRESS_AUTH_KEY_FILE=/run/secrets/wordpress/WORDPRESS_AUTH_KEY
+  - WORDPRESS_AUTH_SALT_FILE=/run/secrets/wordpress/WORDPRESS_AUTH_SALT
+  - WORDPRESS_LOGGED_IN_KEY_FILE=/run/secrets/wordpress/WORDPRESS_LOGGED_IN_KEY
+  - WORDPRESS_LOGGED_IN_SALT_FILE=/run/secrets/wordpress/WORDPRESS_LOGGED_IN_SALT
+  - WORDPRESS_NONCE_KEY_FILE=/run/secrets/wordpress/WORDPRESS_NONCE_KEY
+  - WORDPRESS_NONCE_SALT_FILE=/run/secrets/wordpress/WORDPRESS_NONCE_SALT
+  - WORDPRESS_SECURE_AUTH_KEY_FILE=/run/secrets/wordpress/WORDPRESS_SECURE_AUTH_KEY
+  - WORDPRESS_SECURE_AUTH_SALT_FILE=/run/secrets/wordpress/WORDPRESS_SECURE_AUTH_SALT
+  - nginx.conf="# Extra ngix configs"
+  files:
+  - WORDPRESS_CONFIG_EXTRA
+# The Secrets, these values should not be used for production.
+secretGenerator:
+- name: wordpress-secrets
+  type: Opaque
+  literals:
+  - MYSQL_PASSWORD=mysqlpassword
+  - MYSQL_ROOT_PASSWORD=rootmysqlpassword
+  - WORDPRESS_AUTH_KEY=authkey
+  - WORDPRESS_SECURE_AUTH_KEY=secureauthkey
+  - WORDPRESS_LOGGED_IN_KEY=loggedinkey
+  - WORDPRESS_NONCE_KEY=noncekey
+  - WORDPRESS_AUTH_SALT=authsalt
+  - WORDPRESS_SECURE_AUTH_SALT=secureauthsalt
+  - WORDPRESS_LOGGED_IN_SALT=loggedinsalt
+  - WORDPRESS_NONCE_SALT=noncesalt

@@ -1,0 +1,47 @@
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  name: wordpress-sidecar-run
+  annotations:
+    description: Keeps track of changes to the sidecar runtime deploy image
+  labels:
+    name: wordpress-sidecar-run
+spec:
+  lookupPolicy:
+    local: true
+
+---
+kind: BuildConfig
+apiVersion: build.openshift.io/v1
+metadata:
+  name: wordpress-sidecar-run
+  annotations:
+    description: Builds sidecar final image.
+  labels:
+    name: wordpress-sidecar-run
+spec:
+  successfulBuildsHistoryLimit: 2
+  failedBuildsHistoryLimit: 2
+  runPolicy: Parallel
+  completionDeadlineSeconds: 1800
+  source:
+    type: Git
+    git:
+      ref: main
+      uri: https://github.com/bcgov/wordpress.git
+    contextDir: openshift/templates/images/sidecar/docker
+  strategy:
+    # The FROM line in the Dockerfile gets replaced by the `name:` in the dockerStrategy below.
+    dockerStrategy:
+      buildArgs:
+        - name: CHANGE_USER
+          value: '1003760000'
+    type: Docker
+  output:
+    to:
+      kind: ImageStreamTag
+      name: wordpress-sidecar-run:dev
+  resources:
+    limits:
+      cpu: 1
+      memory: 6Gi

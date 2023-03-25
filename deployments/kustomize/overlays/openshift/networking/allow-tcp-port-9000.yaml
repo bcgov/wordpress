@@ -1,0 +1,16 @@
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: allow-tcp-port-9000
+spec:
+  podSelector:
+    matchLabels:
+      net-tcp-9000: "server"
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          net-tcp-9000: "client"
+    ports:
+    - protocol: TCP
+      port: 9000

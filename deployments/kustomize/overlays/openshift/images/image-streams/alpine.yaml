@@ -1,0 +1,16 @@
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  name: alpine
+  annotations:
+    description: Keeps track of alpine images that originate from DockerHub
+  labels:
+    source: docker-remote
+spec:
+  tags:
+    - name: "3.15.4"
+      from:
+        kind: DockerImage
+        name: "artifacts.developer.gov.bc.ca/docker-remote/alpine:3.15.4"
+      referencePolicy:
+        type: Local

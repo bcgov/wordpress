@@ -1,0 +1,120 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/part-of: wordpress
+  name: wordpress-sidecar
+  namespace: default
+spec:
+  replicas: 1
+  strategy: 
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        name: wordpress-sidecar
+        net-tcp-3306: client
+    spec:
+      containers:
+      - name: wordpress-sidecar
+        image: wordpress-sidecar-run
+        env:
+        - name: MYSQL_ROOT_PASSWORD_FILE
+          value: /run/secrets/MYSQL_ROOT_PASSWORD
+        - name: MYSQL_PASSWORD_FILE
+          value: /run/secrets/WORDPRESS_DB_PASSWORD
+        - name: WORDPRESS_DB_USER
+          valueFrom:
+            configMapKeyRef:
+              key: MYSQL_USER
+              name: wordpress-config
+        - name: WORDPRESS_DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              key: MYSQL_DATABASE
+              name: wordpress-config
+        envFrom:
+        - configMapRef:
+            name: wordpress-config
+        imagePullPolicy: Always
+        securityContext:
+        volumeMounts:
+        - name: wordpress-htdocs
+          mountPath: /var/www/html
+        - name: wordpress-volume
+          mountPath: /var/www/html/wp-content/
+          subPath: dev/wp-content
+        - name: php-fpm-secrets-volume
+          mountPath: /run/secrets/wordpress
+          readOnly: true
+        - name: mariadb-secrets-volume
+          mountPath: /run/secrets/MYSQL_ROOT_PASSWORD
+          readOnly: true
+          subPath: MYSQL_ROOT_PASSWORD
+        - name: mariadb-secrets-volume
+          mountPath: /run/secrets/WORDPRESS_DB_PASSWORD
+          readOnly: true
+          subPath: MYSQL_PASSWORD
+      - name: wordpress-core
+        image: wordpress-wordpress-run
+        env:
+        - name: MYSQL_ROOT_PASSWORD_FILE
+          value: /run/secrets/MYSQL_ROOT_PASSWORD
+        - name: MYSQL_PASSWORD_FILE
+          value: /run/secrets/WORDPRESS_DB_PASSWORD
+        - name: WORDPRESS_DB_USER
+          valueFrom:
+            configMapKeyRef:
+              key: MYSQL_USER
+              name: wordpress-config
+        - name: WORDPRESS_DB_NAME
+          valueFrom:
+            configMapKeyRef:
+              key: MYSQL_DATABASE
+              name: wordpress-config
+        envFrom:
+        - configMapRef:
+            name: wordpress-config
+        imagePullPolicy: Always
+        securityContext:
+        volumeMounts:
+        - mountPath: /var/www/html
+          name: wordpress-htdocs
+        - name: wordpress-volume
+          mountPath: /var/www/html/wp-content/
+          subPath: dev/wp-content
+        - name: php-fpm-secrets-volume
+          mountPath: /run/secrets/wordpress
+          readOnly: true
+        - name: mariadb-secrets-volume
+          mountPath: /run/secrets/MYSQL_ROOT_PASSWORD
+          readOnly: true
+          subPath: MYSQL_ROOT_PASSWORD
+        - name: mariadb-secrets-volume
+          mountPath: /run/secrets/WORDPRESS_DB_PASSWORD
+          readOnly: true
+          subPath: MYSQL_PASSWORD
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: php-fpm-secrets-volume
+        secret:
+          defaultMode: 420
+          secretName: wordpress-secrets
+      - name: mariadb-secrets-volume
+        secret:
+          defaultMode: 420
+          items:
+          - key: MYSQL_PASSWORD
+            path: MYSQL_PASSWORD
+          - key: MYSQL_ROOT_PASSWORD
+            path: MYSQL_ROOT_PASSWORD
+          secretName: wordpress-secrets
+      - name: wordpress-htdocs
+        emptyDir: {}
+      - name: wordpress-volume
+        persistentVolumeClaim:
+          claimName: wordpress

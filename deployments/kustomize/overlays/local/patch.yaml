@@ -1,0 +1,14 @@
+---
+# Patch WordPress service, change type to NodePort, and remove nodePort
+apiVersion: v1
+kind: Service
+metadata:
+  name: wordpress-nginx
+spec:
+  ports:
+  - name: 8080-tcp
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+    nodePort: 30080
+  type: NodePort

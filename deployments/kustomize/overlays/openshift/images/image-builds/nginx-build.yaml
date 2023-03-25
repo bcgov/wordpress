@@ -1,0 +1,33 @@
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  name: wordpress-nginx-run
+  annotations:
+    description: Keeps track of wordpress-nginx-run images
+  labels:
+    name: wordpress-nginx-run-images
+---
+kind: BuildConfig
+apiVersion: build.openshift.io/v1
+metadata:
+  name: wordpress-nginx-run
+strategy:
+  dockerStrategy:
+    forcePull: true
+spec:
+  successfulBuildsHistoryLimit: 2
+  failedBuildsHistoryLimit: 2
+  runPolicy: Serial
+  source:
+    type: Git
+    git:
+      ref: main
+      uri: https://github.com/bcgov/wordpress.git
+    contextDir: openshift/templates/images/nginx/docker
+  strategy:
+    type: Docker
+  output:
+    to:
+      kind: ImageStreamTag
+      name: wordpress-nginx-run:dev
+

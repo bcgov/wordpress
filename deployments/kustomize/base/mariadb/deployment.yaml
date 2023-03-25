@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/instance: coreDB
+    app.kubernetes.io/part-of: wordpress
+  name: wordpress-mariadb
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: wordpress-mariadb
+      role: mariadb
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        name: wordpress-mariadb
+        net-tcp-3306: server
+        role: mariadb
+    spec:
+      containers:
+      - name: wordpress-mariadb
+        image: wordpress-mariadb-run
+        env:
+        - name: MYSQL_ROOT_PASSWORD_FILE
+          value: /run/secrets/mysql_root_password
+        - name: MYSQL_PASSWORD_FILE
+          value: /run/secrets/mysql_password
+        envFrom:
+        - configMapRef:
+            name: wordpress-config
+        
+        imagePullPolicy: Always
+        
+        ports:
+        - containerPort: 3306
+          protocol: TCP
+        resources:
+          limits:
+            cpu: 500m
+            memory: 500Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
+        volumeMounts:
+        - mountPath: /run/secrets/mysql_root_password
+          name: db-secrets-volume
+          readOnly: true
+          subPath: mysql_root_password
+        - mountPath: /run/secrets/mysql_password
+          name: db-secrets-volume
+          readOnly: true
+          subPath: mysql_password
+        - mountPath: /var/lib/mysql
+          name: db-volume
+      volumes:
+      - name: db-secrets-volume
+        secret:
+          defaultMode: 420
+          items:
+          - key: MYSQL_PASSWORD
+            path: mysql_password
+          - key: MYSQL_ROOT_PASSWORD
+            path: mysql_root_password
+          secretName: wordpress-secrets
+      - name: db-volume
+        persistentVolumeClaim:
+          claimName: wordpress-mariadb

@@ -1,0 +1,35 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- ../../base
+- routes.yaml
+- networking
+
+namespace: licensePlate-dev
+images:
+  - name: wordpress-mariadb-run
+    newName: image-registry.openshift-image-registry.svc:5000/licensePlate-tools/wordpress-mariadb-run
+    newTag: dev
+  - name: wordpress-wordpress-run
+    newName: image-registry.openshift-image-registry.svc:5000/licensePlate-tools/wordpress-wordpress-run
+    newTag: dev
+  - name: wordpress-nginx-run
+    newName: image-registry.openshift-image-registry.svc:5000/licensePlate-tools/wordpress-nginx-run
+    newTag: dev
+  - name: wordpress-sidecar-run
+    newName: image-registry.openshift-image-registry.svc:5000/licensePlate-tools/wordpress-sidecar-run
+    newTag: dev
+commonLabels:
+  app: wordpress
+  site: gdx
+  env: dev
+configMapGenerator:
+- name: wordpress-config
+  behavior: merge
+  literals:
+  - MYSQL_DATABASE=dev
+  - WORDPRESS_DB_HOST=wordpress-mariadb
+  - MYSQL_USER=dev_user
+  - APP_DOMAIN=example.gov.bc.ca
+patchesStrategicMerge:
+- patch.yaml
