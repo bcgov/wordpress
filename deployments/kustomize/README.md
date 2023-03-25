@@ -48,7 +48,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 # Points to the overlay that creates the images.
 resources:
-- github.com/bcgov/wordpress/blob/main/deployments/kustomize/overlays/openshift/images
+- github.com/bcgov/wordpress/deployments/kustomize/overlays/openshift/images
 # Update to your license plate in the tools namespace.
 namespace: 123456-tools
 ```
@@ -60,7 +60,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 # Points to the overlay that creates the images.
 resources:
-- github.com/bcgov/wordpress/blob/main/deployments/kustomize/overlays/openshift
+- github.com/bcgov/wordpress/deployments/kustomize/overlays/openshift
 # Update to your license plate in the dev|test|prod namespace.
 namespace: 123456-dev
 images:

@@ -3,7 +3,6 @@ kind: Kustomization
 resources:
 - image-streams
 - image-builds
-namespace: licensePlate-tools
 commonLabels:
   app: wordpress
   env: tools
