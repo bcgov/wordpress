@@ -111,6 +111,9 @@ apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   name: wordpress-nginx
+  annotations:
+     haproxy.router.openshift.io/ip_whitelist: >-
+      # Add all ip's to whitelist, to only allow certain ip ranges, ie Only ally if on VPN.
 spec:
   host: my-wordpress-url.com
 ```
@@ -124,7 +127,204 @@ spec:
 
 
 ## OpenShift Deployment with Vault Secrets
-Contact Digital Engagement Solutions Custom Web Team.
+* Update the example code so that your license plate replaces 123456-tools.
+
+#### Sample Overlay for WordPress deployment to dev namespace
+```yaml
+# my-wordpress-deploy/kustomization.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+# Points to the overlay that creates the images.
+resources:
+- github.com/bcgov/wordpress/deployments/kustomize/overlays/openshift
+# Update to your license plate in the dev|test|prod namespace.
+namespace: 123456-dev
+images:
+  - name: wordpress-mariadb-run
+    newName: image-registry.openshift-image-registry.svc:5000/123456-tools/wordpress-mariadb-run
+    newTag: dev
+  - name: wordpress-wordpress-run
+    newName: image-registry.openshift-image-registry.svc:5000/123456-tools/wordpress-wordpress-run
+    newTag: dev
+  - name: wordpress-nginx-run
+    newName: image-registry.openshift-image-registry.svc:5000/123456-tools/wordpress-nginx-run
+    newTag: dev
+  - name: wordpress-sidecar-run
+    newName: image-registry.openshift-image-registry.svc:5000/123456-tools/wordpress-sidecar-run
+    newTag: dev
+configMapGenerator:
+- name: wordpress-config
+  behavior: merge
+  literals:
+  - APP_DOMAIN=my-wordpress-url.co
+patchesStrategicMerge:
+- patch.yaml
+```
+
+#### Sample WordPress Deploy overlay Patch file.
+```yaml
+# my-wordpress-deploy/patch.yaml
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: wordpress-nginx
+  annotations:
+     haproxy.router.openshift.io/ip_whitelist: >-
+      # Add all ip's to whitelist, to only allow certain ip ranges, ie Only ally if on VPN.
+spec:
+  host: my-wordpress-url.com
+
+---
+kind: Deployment
+metadata:
+  name: wordpress
+spec:
+  template:
+    metadata:
+      annotations:
+        vault.hashicorp.com/agent-inject-secret-mysql_password: 23576a-nonprod/dev
+        vault.hashicorp.com/agent-inject-template-mysql_password: |
+          {{- with secret "23576a-nonprod/dev" -}}
+          {{ .Data.data.MYSQL_PASSWORD }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-mysql_root_password: 23576a-nonprod/dev
+        vault.hashicorp.com/agent-inject-template-mysql_root_password: |
+          {{- with secret "23576a-nonprod/dev" -}}
+          {{ .Data.data.MYSQL_ROOT_PASSWORD }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-wordpress_auth_key: 23576a-nonprod/dev
+        vault.hashicorp.com/agent-inject-template-wordpress_auth_key: |
+          {{- with secret "23576a-nonprod/dev" -}}
+          {{ .Data.data.WORDPRESS_AUTH_KEY }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-wordpress_auth_salt: 23576a-nonprod/dev
+        vault.hashicorp.com/agent-inject-template-wordpress_auth_salt: |
+          {{- with secret "23576a-nonprod/dev" -}}
+          {{ .Data.data.WORDPRESS_AUTH_SALT_FILE }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-wordpress_logged_in_key: 23576a-nonprod/dev
+        vault.hashicorp.com/agent-inject-template-wordpress_logged_in_key: |
+          {{- with secret "23576a-nonprod/dev" -}}
+          {{ .Data.data.WORDPRESS_LOGGED_IN_KEY_FILE }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-wordpress_logged_in_salt: 23576a-nonprod/dev
+        vault.hashicorp.com/agent-inject-template-wordpress_logged_in_salt: |
+          {{- with secret "23576a-nonprod/dev" -}}
+          {{ .Data.data.WORDPRESS_LOGGED_IN_SALT_FILE }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-wordpress_nonce_key: 23576a-nonprod/dev
+        vault.hashicorp.com/agent-inject-template-wordpress_nonce_key: |
+          {{- with secret "23576a-nonprod/dev" -}}
+          {{ .Data.data.WORDPRESS_NONCE_KEY_FILE }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-wordpress_nonce_salt: 23576a-nonprod/dev
+        vault.hashicorp.com/agent-inject-template-wordpress_nonce_salt: |
+          {{- with secret "23576a-nonprod/dev" -}}
+          {{ .Data.data.WORDPRESS_NONCE_SALT_FILE }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-wordpress_secure_auth_key: 23576a-nonprod/dev
+        vault.hashicorp.com/agent-inject-template-wordpress_secure_auth_key: |
+          {{- with secret "23576a-nonprod/dev" -}}
+          {{ .Data.data.WORDPRESS_SECURE_AUTH_KEY_FILE }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-wordpress_secure_auth_salt: 23576a-nonprod/dev
+        vault.hashicorp.com/agent-inject-template-wordpress_secure_auth_salt: |
+          {{- with secret "23576a-nonprod/dev" -}}
+          {{ .Data.data.WORDPRESS_SECURE_AUTH_SALT_FILE }}
+          {{- end }}
+        vault.hashicorp.com/role: 23576a-nonprod
+    spec:
+      serviceAccountName: 23576a-vault
+      serviceAccount: 23576a-vault
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress-mariadb
+spec:
+  template:
+    metadata:
+      annotations:
+        vault.hashicorp.com/role: 23576a-nonprod
+        vault.hashicorp.com/agent-inject-secret-mysql_password: 23576a-nonprod/dev
+        vault.hashicorp.com/agent-inject-template-mysql_password: |
+          {{- with secret "23576a-nonprod/dev" -}}
+          {{ .Data.data.MYSQL_PASSWORD }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-mysql_root_password: 23576a-nonprod/dev
+        vault.hashicorp.com/agent-inject-template-mysql_root_password: |
+          {{- with secret "23576a-nonprod/dev" -}}
+          {{ .Data.data.MYSQL_PASSWORD }}
+          {{- end }}
+    spec:
+      serviceAccountName: 23576a-vault
+      serviceAccount: 23576a-vault
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress-sidecar
+  template:
+    metadata:
+      annotations:
+        vault.hashicorp.com/role: 23576a-nonprod
+        vault.hashicorp.com/agent-inject-secret-mysql_password: 23576a-nonprod/dev
+        vault.hashicorp.com/agent-inject-template-mysql_password: |
+          {{- with secret "23576a-nonprod/dev" -}}
+          {{ .Data.data.MYSQL_PASSWORD }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-mysql_root_password: 23576a-nonprod/dev
+        vault.hashicorp.com/agent-inject-template-mysql_root_password: |
+          {{- with secret "23576a-nonprod/dev" -}}
+          {{ .Data.data.MYSQL_PASSWORD }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-wordpress_auth_key: 23576a-nonprod/dev
+        vault.hashicorp.com/agent-inject-template-wordpress_auth_key: |
+          {{- with secret "23576a-nonprod/dev" -}}
+          {{ .Data.data.WORDPRESS_AUTH_KEY }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-wordpress_auth_salt: 23576a-nonprod/dev
+        vault.hashicorp.com/agent-inject-template-wordpress_auth_salt: |
+          {{- with secret "23576a-nonprod/dev" -}}
+          {{ .Data.data.WORDPRESS_AUTH_SALT }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-wordpress_logged_in_key: 23576a-nonprod/dev
+        vault.hashicorp.com/agent-inject-template-wordpress_logged_in_key: |
+          {{- with secret "23576a-nonprod/dev" -}}
+          {{ .Data.data.WORDPRESS_LOGGED_IN_KEY }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-wordpress_logged_in_salt: 23576a-nonprod/dev
+        vault.hashicorp.com/agent-inject-template-wordpress_logged_in_salt: |
+          {{- with secret "23576a-nonprod/dev" -}}
+          {{ .Data.data.WORDPRESS_LOGGED_IN_SALT }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-wordpress_nonce_key: 23576a-nonprod/dev
+        vault.hashicorp.com/agent-inject-template-wordpress_nonce_key: |
+          {{- with secret "23576a-nonprod/dev" -}}
+          {{ .Data.data.WORDPRESS_NONCE_KEY }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-wordpress_nonce_salt: 23576a-nonprod/dev
+        vault.hashicorp.com/agent-inject-template-wordpress_nonce_salt: |
+          {{- with secret "23576a-nonprod/dev" -}}
+          {{ .Data.data.WORDPRESS_NONCE_SALT }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-wordpress_secure_auth_key: 23576a-nonprod/dev
+        vault.hashicorp.com/agent-inject-template-wordpress_secure_auth_key: |
+          {{- with secret "23576a-nonprod/dev" -}}
+          {{ .Data.data.WORDPRESS_SECURE_AUTH_KEY }}
+          {{- end }}
+        vault.hashicorp.com/agent-inject-secret-wordpress_secure_auth_salt: 23576a-nonprod/dev
+        vault.hashicorp.com/agent-inject-template-wordpress_secure_auth_salt: |
+          {{- with secret "23576a-nonprod/dev" -}}
+          {{ .Data.data.WORDPRESS_SECURE_AUTH_SALT }}
+          {{- end }}
+    spec:
+      serviceAccountName: 23576a-vault
+      serviceAccount: 23576a-vault
+
+
+```
 
 ## Image versions
 
