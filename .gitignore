@@ -1,3 +1,4 @@
 .env
 dev/certs/*
 .DS_Store
+deployments/kustomize/overlays/experimental
