@@ -1,0 +1,116 @@
+# Patch Mariadb PV , change storage amount, and make a block storage
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wordpress-mariadb
+spec:
+  resources:
+    requests:
+      storage: 500M
+  storageClassName: netapp-block-standard
+
+---
+# Patch WordPress PV for holding wp-content for different storage size, and readwritemany as this will be required for OS. 
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: wordpress
+spec:
+  accessModes:
+  - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: netapp-file-standard
+
+---
+# Patch WordPress deployment for OS.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    #image.openshift.io/triggers: ''
+  labels:
+    app.kubernetes.io/component: nginx
+    app.kubernetes.io/instance: webserver
+    app.kubernetes.io/part-of: wordpress
+    app.openshift.io/runtime: nginx
+  name: wordpress
+spec:
+  selector:
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    spec:
+      containers:
+      - name: wordpress-core
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: 400m
+            memory: 500Mi
+          requests:
+            cpu: 100m
+            memory: 250Mi
+      - name: wordpress-nginx
+        resources:
+          limits:
+            cpu: 400m
+            memory: 500Mi
+          requests:
+            cpu: 100m
+            memory: 250Mi
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      terminationGracePeriodSeconds: 30
+
+---
+# Patch DB for OS.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    #image.openshift.io/triggers: ''
+  labels:
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/instance: coreDB
+    app.kubernetes.io/part-of: wordpress
+    app.openshift.io/runtime: mariadb
+  name: wordpress-mariadb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: wordpress-mariadb
+      role: mariadb
+  strategy:
+    type: Recreate
+  template:
+    spec:
+      containers:
+      - name: wordpress-mariadb
+        imagePullPolicy: Always
+        resources:
+          limits:
+            cpu: 500m
+            memory: 500Mi
+          requests:
+            cpu: 100m
+            memory: 100Mi
+---
+# Patch sidecar for OS dev env.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress-sidecar
+  labels:
+    app.openshift.io/runtime: sidecar
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+
+

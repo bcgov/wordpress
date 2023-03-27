@@ -1,0 +1,17 @@
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  name: nginx
+  annotations:
+    description: Keeps track of nginx images that originate from DockerHub
+  labels:
+    name: nginx-images
+    source: docker-remote
+spec:
+  tags:
+    - name: "1.23.1-alpine"
+      from:
+        kind: DockerImage
+        name: "artifacts.developer.gov.bc.ca/docker-remote/nginx:1.23.1-alpine"
+      referencePolicy:
+        type: Local

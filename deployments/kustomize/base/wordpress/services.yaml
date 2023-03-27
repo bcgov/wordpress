@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    description: Exposes the WordPress pod, so that it can be used for a load balancer.
+  labels:
+    name: wordpress-nginx
+    role: nginx
+  name: wordpress-nginx
+  namespace: default
+spec:
+  ports:
+  - name: 8080-tcp
+    port: 8080
+    protocol: TCP
+    targetPort: 8080
+  selector:
+    name: wordpress-nginx
+    role: nginx
+  sessionAffinity: None
+  type: ClusterIP

@@ -1,0 +1,40 @@
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  name: wordpress-wordpress-run
+  annotations:
+    description: Keeps track of base WordPress core images
+  labels:
+    name: wordpress-wordpress-run-images
+spec:
+  lookupPolicy:
+    local: true
+
+---
+kind: BuildConfig
+apiVersion: build.openshift.io/v1
+metadata:
+  name: wordpress-wordpress-run
+  labels:
+    name: wordpress-wordpress-run
+spec:
+  successfulBuildsHistoryLimit: 2
+  failedBuildsHistoryLimit: 2
+  runPolicy: Parallel
+  completionDeadlineSeconds: 1800
+  source:
+    type: Git
+    git:
+      ref: main
+      uri: https://github.com/bcgov/wordpress.git
+    contextDir: openshift/templates/images/wordpress/docker
+  strategy:
+    type: Docker
+  output:
+    to:
+      kind: ImageStreamTag
+      name: wordpress-wordpress-run:dev
+  resources:
+    limits:
+      cpu: 1
+      memory: 6Gi

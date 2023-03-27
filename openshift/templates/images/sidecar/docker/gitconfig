@@ -1,4 +1,0 @@
-[credential]
-	helper = store --file ~/.git-credentials-bitbucket
-	helper = store --file ~/.git-credentials
-	helper = cache --timeout 30000

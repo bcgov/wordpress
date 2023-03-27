@@ -1,0 +1,24 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    description: The Route for the wordpress application.
+  labels:
+    name: wordpress-nginx
+    role: nginx
+  name: wordpress-nginx
+spec:
+  host: example.gov.bc.ca
+  port:
+    targetPort: 8080-tcp
+  tls:
+    caCertificate: ""
+    certificate: ""
+    insecureEdgeTerminationPolicy: Redirect
+    key: ""
+    termination: edge
+  to:
+    kind: Service
+    name: wordpress-nginx
+    weight: 100
+  wildcardPolicy: None

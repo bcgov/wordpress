@@ -1,0 +1,31 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- ../../base
+
+# Sets the images for all the containers, to enable quick startup, uses DockerHub images.
+# These images are used to allow for quick startup of local development, and should NEVER be used in production.
+# https://hub.docker.com/?namespace=bcgovgdx
+images:
+  - name: wordpress-mariadb-run
+    newName: bcgovgdx/wordpress-mariadb-run
+    newTag: latest
+  - name: wordpress-wordpress-run
+    newName: bcgovgdx/wordpress-wordpress-run
+    newTag: latest
+  - name: wordpress-nginx-run
+    newName: bcgovgdx/wordpress-nginx-run
+    newTag: latest
+  - name: wordpress-sidecar-run
+    newName: bcgovgdx/wordpress-sidecar-run
+    newTag: latest
+configMapGenerator:
+- name: wordpress-config
+  behavior: merge
+  literals:
+  - MYSQL_DATABASE=local
+  - WORDPRESS_DB_HOST=wordpress-mariadb
+  - MYSQL_USER=local_user
+  - APP_DOMAIN=0.0.0.0
+patchesStrategicMerge:
+- patch.yaml
