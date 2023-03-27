@@ -1,4 +1,9 @@
 # Changelog
+## March 27, 2023 (DESCW-981)
+- Adding Kustomize base deployments for local Kubernetes, and OpenShift deployments.
+- Removed all referenced to OpenShift deployments, except backups, as they still need to be included with the OpenShift Kustomize deployments.
+- Referenced to [OpenShift Template Deployments](https://github.com/bcgov/wordpress/tree/bb8fd6066bcc2087605c50f941b8b906dc0e9b61/openshift/templates) in case the reference is still required
+
 ## March 02, 2023 (DESCW-972)
 - Removed specific mariadb version from image build to prevent it from failing whenever the alpine package is updated.
 

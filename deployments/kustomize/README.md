@@ -1,5 +1,9 @@
 # Deployment WordPress
-All commands are given from root of the repository.
+*All commands are given from root of the repository.
+
+## Deprecated OpenShift Template Deployments
+**Warning**  Use of the OpenShift templates including image builds and deployments will be deprecated in favour of using Kustomize deployments.  Refer to [OpenShift Template Deployment](https://github.com/bcgov/wordpress/tree/bb8fd6066bcc2087605c50f941b8b906dc0e9b61/openshift/templates)
+
 
 ## Local Deployment with Docker
 [Deploying WordPress with Docker Compose](../../dev/README.md)
@@ -121,3 +125,13 @@ spec:
 
 ## OpenShift Deployment with Vault Secrets
 Contact Digital Engagement Solutions Custom Web Team.
+
+## Image versions
+
+| Image | Version | Description |
+| ----- | ------- | ----------- |
+| alpine | 3.15.4 | Base Alpine linux |
+| mariadb | 10.6.8-r0 | MariaDB version that gets build in base-images via Dockerfile. Dependent on the [Alpine version](https://pkgs.alpinelinux.org/packages?name=mariadb&branch=v3.15): |
+| nginx | 1.23.1-alpine | Nginx web server, used to serve WordPress / PHP |
+| wordpress | 6.1.1-php7.4-fpm-alpine | PHP-FPM for WordPress |
+| ubuntu | 22.04| Used for the sidecar |

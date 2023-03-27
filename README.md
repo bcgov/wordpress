@@ -5,8 +5,11 @@
 ## Running on Docker
 The project can also be run locally using Docker and Docker Compose.  Refer to [Running with Docker](./dev/README.md) for instructions.
 
+## Running on Kubernetes using Kustomize
+To deploy on Kubernetes cluster refer to [Deploy with Kustomize](./deployments/kustomize/README.md)
+
 ## Running on OpenShift
-To deploy using a local instance of OpenShift, refer to [Running on OpenShift](./openshift/templates/README.md).  These instructions, apart from the steps that are specific to setting up your local environment, can be used to get the project deployed to a production OpenShift environment.
+To deploy using a local instance of OpenShift, refer to [OpenShift Deployment With OpenShift Secrets](./deployments/kustomize/README.md).
 
 
 ## Code of Conduct
@@ -28,4 +31,6 @@ Code released under the [Apache License, Version 2.0](./LICENSE).
   * WordPress
   * php-fpm
   * ubuntu
+  * Add OpenShift Kustomize deploy using Vault secrets
+  * Update dev docker instance to deploy on url other than localhost:443 to prevent conflict with Kubernetes cluster
 
