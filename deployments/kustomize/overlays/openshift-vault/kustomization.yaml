@@ -1,0 +1,24 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+# Points to the overlay that creates the images.
+resources:
+- ../openshift
+configMapGenerator:
+- name: wordpress-config
+  behavior: merge
+  literals:
+  - MYSQL_ROOT_PASSWORD_FILE=/vault/secrets/wordpress/mysql_root_password
+  - WORDPRESS_DB_PASSWORD_FILE=/vault/secrets/wordpress/mysql_password
+  - WORDPRESS_AUTH_KEY_FILE=/vault/secrets/wordpress/wordpress_auth_key
+  - WORDPRESS_AUTH_SALT_FILE=/vault/secrets/wordpress/wordpress_auth_salt
+  - WORDPRESS_LOGGED_IN_KEY_FILE=/vault/secrets/wordpress/wordpress_logged_in_key
+  - WORDPRESS_LOGGED_IN_SALT_FILE=/vault/secrets/wordpress/wordpress_logged_in_salt
+  - WORDPRESS_NONCE_KEY_FILE=/vault/secrets/wordpress/wordpress_nonce_key
+  - WORDPRESS_NONCE_SALT_FILE=/vault/secrets/wordpress/wordpress_nonce_salt
+  - WORDPRESS_SECURE_AUTH_KEY_FILE=/vault/secrets/wordpress/wordpress_secure_auth_key
+  - WORDPRESS_SECURE_AUTH_SALT_FILE=/vault/secrets/wordpress/wordpress_secure_auth_salt
+secretGenerator:
+- name: wordpress-secrets
+  behavior: replace
+patchesStrategicMerge:
+- patch.yaml

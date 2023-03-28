@@ -1,0 +1,127 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: wordpress-nginx
+spec:
+  host: wp-dev.apps.silver.devops.gov.bc.ca
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress
+spec:
+  template:
+    metadata:
+      annotations:
+        alpha.image.policy.openshift.io/resolve-names: '*'
+        vault.hashicorp.com/agent-inject: 'true'
+        vault.hashicorp.com/secret-volume-path: /vault/secrets/wordpress
+        vault.hashicorp.com/agent-inject-token: 'true'
+        vault.hashicorp.com/auth-path: auth/k8s-silver
+        vault.hashicorp.com/namespace: platform-services
+    spec:
+      volumes:
+        - name: php-fpm-secrets-volume
+          $patch: delete
+        - name: mariadb-secrets-volume
+          $patch: delete
+      containers:
+        - name: wordpress-core
+          volumeMounts:
+          - name: php-fpm-secrets-volume
+            mountPath: /run/secrets/wordpress
+            $patch: delete
+          - name: mariadb-secrets-volume
+            mountPath: /run/secrets/WORDPRESS_DB_PASSWORD
+            $patch: delete
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress-mariadb
+spec:
+  template:
+    metadata:
+      annotations:
+        alpha.image.policy.openshift.io/resolve-names: '*'
+        vault.hashicorp.com/agent-inject: 'true'
+        vault.hashicorp.com/agent-inject-token: 'true'
+        vault.hashicorp.com/auth-path: auth/k8s-silver
+        vault.hashicorp.com/namespace: platform-services
+        vault.hashicorp.com/secret-volume-path: /vault/secrets/mariadb
+    spec:
+      containers:
+        - name: wordpress-mariadb
+          env:
+          - name: MYSQL_ROOT_PASSWORD_FILE
+            value: /vault/secrets/mariadb/mysql_root_password
+          - name: MYSQL_PASSWORD_FILE
+            value: /vault/secrets/mariadb/mysql_password
+          volumeMounts:
+            - mountPath: /run/secrets/mysql_root_password
+              name: db-secrets-volume
+              $patch: delete
+            - mountPath: /run/secrets/mysql_password
+              name: db-secrets-volume
+              $patch: delete
+
+      volumes:
+        - name: db-secrets-volume
+          $patch: delete
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wordpress-sidecar
+spec:
+  template:
+    metadata:
+      annotations:
+        alpha.image.policy.openshift.io/resolve-names: '*'
+        vault.hashicorp.com/agent-inject: 'true'
+        vault.hashicorp.com/agent-inject-token: 'true'
+        vault.hashicorp.com/auth-path: auth/k8s-silver
+        vault.hashicorp.com/namespace: platform-services
+        vault.hashicorp.com/secret-volume-path: /vault/secrets/wordpress
+    spec:
+      volumes:
+        - name: php-fpm-secrets-volume
+          $patch: delete
+        - name: mariadb-secrets-volume
+          $patch: delete
+      containers:
+        - name: wordpress-sidecar
+          env:
+          - name: MYSQL_ROOT_PASSWORD_FILE
+            value: /vault/secrets/wordpress/mysql_root_password
+          - name: MYSQL_PASSWORD_FILE
+            value: /vault/secrets/wordpress/mysql_password
+          volumeMounts:
+          - name: php-fpm-secrets-volume
+            mountPath: /run/secrets/wordpress
+            $patch: delete
+          - name: mariadb-secrets-volume
+            mountPath: /run/secrets/MYSQL_ROOT_PASSWORD
+            $patch: delete
+          - name: mariadb-secrets-volume
+            mountPath: /run/secrets/WORDPRESS_DB_PASSWORD
+            $patch: delete
+        - name: wordpress-core
+          env:
+          - name: MYSQL_ROOT_PASSWORD_FILE
+            value: /vault/secrets/wordpress/mysql_root_password
+          - name: MYSQL_PASSWORD_FILE
+            value: /vault/secrets/wordpress/mysql_password
+          volumeMounts:
+          - name: php-fpm-secrets-volume
+            mountPath: /run/secrets/wordpress
+            $patch: delete
+          - name: mariadb-secrets-volume
+            mountPath: /run/secrets/MYSQL_ROOT_PASSWORD
+            $patch: delete
+          - name: mariadb-secrets-volume
+            mountPath: /run/secrets/WORDPRESS_DB_PASSWORD
+            $patch: delete
+      
