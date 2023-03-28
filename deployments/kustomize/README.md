@@ -1,7 +1,7 @@
-# Deployment WordPress
+# WordPress Deployments
 *All commands are given from root of the repository.
 
-## Deprecated OpenShift Template Deployments
+## OpenShift Template Deployments are Deprecated
 **Warning**  Use of the OpenShift templates including image builds and deployments will be deprecated in favour of using Kustomize deployments.  Refer to [OpenShift Template Deployment](https://github.com/bcgov/wordpress/tree/bb8fd6066bcc2087605c50f941b8b906dc0e9b61/openshift/templates)
 
 
@@ -67,7 +67,7 @@ namespace: 123456-tools
 
 ## OpenShift Deployment With OpenShift Secrets
 * Create Kustomization.yaml file for example my-wordpress-deploy/kustomization.yaml
-  * Update your namespace with your license plate, and env you to deploy (dev|test|prod)
+  * Update your namespace with your license plate and the OpenShift environment (dev|test|prod). Ex. 123456-dev
   * Update your images to point to your tools repo with your license plate.
 * Add your patch file my-wordpress-deploy/patch.yaml
   * include the route with the update host url
@@ -131,7 +131,7 @@ metadata:
   name: wordpress-nginx
   annotations:
      haproxy.router.openshift.io/ip_whitelist: >-
-      # Add all ip's to whitelist, to only allow certain ip ranges, ie Only ally if on VPN.
+      # Add all IP's to whitelist, to only allow certain IP ranges.
 spec:
   host: my-wordpress-url.com
 ```
