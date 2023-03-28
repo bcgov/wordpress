@@ -79,6 +79,7 @@ spec:
   template:
     metadata:
       annotations:
+        alpha.image.policy.openshift.io/resolve-names: '*'
         vault.hashicorp.com/agent-inject: 'true'
         vault.hashicorp.com/agent-inject-token: 'true'
         vault.hashicorp.com/auth-path: auth/k8s-silver
