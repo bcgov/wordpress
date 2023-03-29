@@ -8,6 +8,7 @@ metadata:
     role: nginx
   name: wordpress-nginx
 spec:
+  podSelector: {}
   host: example.gov.bc.ca
   port:
     targetPort: 8080-tcp
