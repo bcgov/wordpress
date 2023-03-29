@@ -1,17 +1,17 @@
-# WordPress Deployments
+# WordPress deployments
 *All commands are given from root of the repository.
 
-## OpenShift Template Deployments are Deprecated
+## OpenShift template deployments are deprecated
 **Warning**  Use of the OpenShift templates including image builds and deployments will be deprecated in favour of using Kustomize deployments.  Refer to [OpenShift Template Deployment](https://github.com/bcgov/wordpress/tree/bb8fd6066bcc2087605c50f941b8b906dc0e9b61/openshift/templates)
 
 
 
-## Local Deployment with Docker
+## Local deployment with Docker
 [Deploying WordPress with Docker Compose](../../dev/README.md)
 
-## Local Deployment with Kubernetes and Kustomize
+## Local deployment with Kubernetes and Kustomize
 
-### Set local kubernetes context
+### Set local Kubernetes context
 Assuming you have rancher desktop installed, you might have different contexts, especially if you deploy OpenShift applications.
 
 * To get a list of all contexts you can run ```kubectl config get-contexts```
@@ -47,7 +47,7 @@ Assuming you have rancher desktop installed, you might have different contexts, 
 * In order for deployments in openshift to work, you will have to generate your own overlay which will point to the `./deployments/kustomize/overlays/openshift/images` folder of this repo.
 * Update your license plate in the kustomization.yaml file.
 
-#### Sample Overlay for Image deployment in tool namespace
+#### Sample overlay for image deployment in tool namespace
 ```yaml
 # my-image-deploy/kustomization.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
@@ -59,13 +59,13 @@ resources:
 namespace: 123456-tools
 ```
 
-### Deploying images and WordPress deployment using overlays
+### Deploying images used for WordPress deployments
 * Login to OpenShift via the `oc` command line.
 * Deploy your images to OpenShift ```oc apply -k my-image-deploy``` 
   * Deploying the images, will **not** trigger a build, this has to be done manually in OpenShift.
 
 
-## OpenShift Deployment With OpenShift Secrets
+## OpenShift deployment with OpenShift secrets
 * Create Kustomization.yaml file for example my-wordpress-deploy/kustomization.yaml
   * Update your namespace with your license plate and the OpenShift environment (dev|test|prod). Ex. 123456-dev
   * Update your images to point to your tools repo with your license plate.
@@ -74,7 +74,7 @@ namespace: 123456-tools
 * Deploy WordPress to OpenShift ```oc apply -k my-wordpress-deploy```
 * Visit your site at my-wordpress-url.com to finish the installation.
 
-### Sample Overlay for WordPress deployment to dev namespace
+### Sample Overlay for WordPress deployment to dev namespace with secrets
 ```yaml
 # my-wordpress-deploy/kustomization.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
@@ -122,7 +122,7 @@ patchesStrategicMerge:
 - patch.yaml
 ```
 
-### Sample WordPress Deploy overlay Patch file.
+### Sample WordPress deploy overlay patch file with secrets
 ```yaml
 # my-wordpress-deploy/patch.yaml
 apiVersion: route.openshift.io/v1
@@ -137,7 +137,7 @@ spec:
 ```
 
 
-## OpenShift Deployment with Vault Secrets
+## OpenShift deployment with Vault secrets
 * Create Kustomization.yaml file for example my-wordpress-deploy-with-vault/kustomization.yaml
   * Update your namespace with your license plate, and env you to deploy (dev|test|prod)
   * Update your images to point to your tools repo with your license plate.
@@ -154,14 +154,14 @@ spec:
 * Visit your site at my-wordpress-url.com to finish the installation.
 
 
-#### Sample Overlay for WordPress deployment to dev namespace
+#### Sample Overlay for WordPress deployment to dev namespace with Vault secrets
 ```yaml
 # my-wordpress-deploy-with-vault/kustomization.yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 # Points to the overlay that creates the images.
 resources:
-- github.com/bcgov/wordpress/deployments/kustomize/overlays/openshift
+- github.com/bcgov/wordpress/deployments/kustomize/overlays/openshift-vault
 # Update to your license plate in the dev|test|prod namespace.
 namespace: 123456-dev
 images:
@@ -186,7 +186,7 @@ patchesStrategicMerge:
 - patch.yaml
 ```
 
-#### Sample WordPress Deploy overlay Patch file.
+#### Sample WordPress deploy overlay patch file with Vault secrets.
 ```yaml
 # my-wordpress-deploy-with-vault/patch.yaml
 apiVersion: route.openshift.io/v1
@@ -352,7 +352,7 @@ spec:
 
 
 ```
-### Figure 1 Vault Secrets
+### Figure 1 Vault secrets
 ![](../../docs/images/vault-secrets.png)
 
 
