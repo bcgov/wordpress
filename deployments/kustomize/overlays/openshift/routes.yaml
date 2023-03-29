@@ -12,10 +12,7 @@ spec:
   port:
     targetPort: 8080-tcp
   tls:
-    caCertificate: ""
-    certificate: ""
     insecureEdgeTerminationPolicy: Redirect
-    key: ""
     termination: edge
   to:
     kind: Service
