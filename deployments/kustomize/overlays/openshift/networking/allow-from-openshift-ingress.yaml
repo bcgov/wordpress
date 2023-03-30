@@ -8,5 +8,6 @@ spec:
         - namespaceSelector:
             matchLabels:
               network.openshift.io/policy-group: ingress
+  podSelector: {}
   policyTypes:
     - Ingress
