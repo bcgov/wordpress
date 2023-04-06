@@ -1,4 +1,7 @@
 # Changelog
+## April 6, 2023 (DESCW=971)
+- Backups are now using Kustomize, with updated documentation.
+
 ## March 27, 2023 (DESCW-981)
 - Adding Kustomize base deployments for local Kubernetes, and OpenShift deployments.
 - Removed all referenced to OpenShift deployments, except backups, as they still need to be included with the OpenShift Kustomize deployments.

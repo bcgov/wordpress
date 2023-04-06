@@ -1,9 +1,21 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-
+  - backup-db-volumes.yaml
+  - backup-db-cron.yaml
 commonLabels:
-  role: backups
-  name: wordpress-backups
-
-
+  role: wordpress-backups
+  app: wordpress
+# Configuration for backup
+configMapGenerator:
+- name: wordpress-backup-config
+  literals:
+  - BACKUP_DIR=/backups/local/
+  - MYSQL_USER=dev_user
+  # format backup.conf=mariadb={db service}:3306/{db user}
+  - backup.conf=mariadb=wordpress-mariadb:3306/dev_user
+secretGenerator:
+- name: wordpress-backup-secrets
+  type: Opaque
+  literals:
+  - MYSQL_PASSWORD=mysqlpassword
