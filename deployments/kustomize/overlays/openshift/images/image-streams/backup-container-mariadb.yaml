@@ -1,0 +1,18 @@
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  name: backup-container-mariadb
+  annotations:
+    description: Keeps track of mariadb backup images that originate from DockerHub
+  labels:
+    source: docker-remote
+spec:
+  tags:
+    - name: "latest"
+      from:
+        kind: DockerImage
+        name: "artifacts.developer.gov.bc.ca/bcgov-docker-local/backup-container-mariadb:latest"
+      referencePolicy:
+        type: Local
+
+        

@@ -1,0 +1,83 @@
+kind: CronJob
+apiVersion: batch/v1
+metadata:
+  name: wordpress-mariadb-backup-cron
+  annotations:
+    openshift.io/display-name:  Cron job templates for backups.
+    description: Cron job to backup WordPress database, https://developer.gov.bc.ca/Backup-Container.
+    tags: backups,wordpress
+  labels:
+    template: "wordpress-mariadb-cron-cronjob"
+    cronjob: "wordpress-mariadb-cron-backup"
+spec:
+  schedule: "30 10 * * *" # 10:30am UTC = 2:30am PST
+  concurrencyPolicy: "Forbid"
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 2
+  jobTemplate:
+    metadata:
+      labels:
+        template: "wordpress-mariadb-cron-job"
+        cronjob: "wordpress-mariadb-cron-backup"
+    spec:
+      backoffLimit: 0
+      template:
+        metadata:
+          labels:
+            template: "wordpress-mariadb-cron-job"
+            cronjob: "wordpress-mariadb-cron-backup"
+        spec:
+          containers:
+            - name: wordpress-mariadb-backup-runner
+              image: backup-container-mariadb
+              command:
+                - "/bin/bash"
+                - "-c"
+                - "/backup.sh -1"
+              volumeMounts:
+              - name: wordpress-backup-db
+                mountPath: /backups/
+              - name: wordpress-backup-verification
+                mountPath: /var/lib/mysql/
+              - name: wordpress-backup-config
+                mountPath: /backup.conf
+                subPath: backup.conf
+              env:
+              - name: BACKUP_STRATEGY
+                value: rolling
+              - name: BACKUP_DIR
+                valueFrom:
+                  configMapKeyRef:
+                    name: wordpress-backup-config
+                    key: BACKUP_DIR
+              - name: MONTHLY_BACKUPS
+                value: "3"
+              - name: DATABASE_USER
+                valueFrom:
+                  configMapKeyRef:
+                    name: wordpress-backup-config
+                    key: MYSQL_USER
+              - name: DATABASE_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: wordpress-backup-secrets
+                    key: MYSQL_PASSWORD
+          volumes:
+            - name: wordpress-backup-db
+              persistentVolumeClaim:
+                claimName: wordpress-backup-db
+            - name: wordpress-backup-verification
+              persistentVolumeClaim:
+                claimName: wordpress-backup-verification
+            - name: wordpress-backup-config
+              configMap:
+                name: wordpress-backup-config
+                items:
+                  - key: backup.conf
+                    path: backup.conf
+          restartPolicy: "Never"
+          terminationGracePeriodSeconds: 30
+          activeDeadlineSeconds: 1600
+          dnsPolicy: "ClusterFirst"
+          serviceAccountName: "default"
+          serviceAccount: "default"
