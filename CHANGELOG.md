@@ -1,5 +1,9 @@
 # Changelog
-## April 6, 2023 (DESCW=971)
+## April 20, 2023 (DESCW-1014)
+- Update WordPress version 6.2, and updated PHP version to 8.2 from 7.4
+- Update WordPress image build config name to just wordpress
+
+## April 6, 2023 (DESCW-971)
 - Backups are now using Kustomize, with updated documentation.
 
 ## March 27, 2023 (DESCW-981)

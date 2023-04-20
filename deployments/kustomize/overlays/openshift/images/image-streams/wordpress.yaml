@@ -1,7 +1,7 @@
 kind: ImageStream
 apiVersion: image.openshift.io/v1
 metadata:
-  name: wordpress-php-fpm
+  name: wordpress
   annotations:
     description: Keeps track of WordPress images that originate from DockerHub
   labels:
@@ -9,9 +9,9 @@ metadata:
     source: docker-remote
 spec:
   tags:
-    - name: "wordpress:6.1.1-php7.4-fpm-alpine"
+    - name: "6.2.0-php8.2-fpm-alpine"
       from:
         kind: DockerImage
-        name: "artifacts.developer.gov.bc.ca/docker-remote/wordpress:6.1.1-php7.4-fpm-alpine"
+        name: "artifacts.developer.gov.bc.ca/docker-remote/wordpress:6.2.0-php8.2-fpm-alpine"
       referencePolicy:
         type: Local
