@@ -1,12 +1,12 @@
 version: "3.8"
 volumes:
-  dev_plugins:
+  plugins_themes:
     external: true
 services:
-  plugin-deploy:
+  deploy:
     build:
       context: .
-    container_name: plugin-deploy
+    container_name: plugins-themes
     volumes:
-      - dev_plugins:/html/wp-content/plugins
+      - plugins_themes:/html/wp-content/
     restart: 'no'
