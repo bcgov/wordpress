@@ -13,6 +13,6 @@ RUN apk update && apk add \
   unzip
 RUN curl -sS https://getcomposer.org/installer | \
     php -- --install-dir=/usr/bin/ --filename=composer \
-    && chmod 770 /html composer.json
+    && chmod -R 770 /html composer.json
 
 ENTRYPOINT ["/entrypoint.sh"]
