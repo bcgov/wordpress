@@ -1,4 +1,4 @@
-FROM composer as composer
+FROM composer:lts as composer
 
 # Install composer
 WORKDIR /html/

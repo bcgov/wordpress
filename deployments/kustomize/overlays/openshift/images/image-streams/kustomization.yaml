@@ -6,5 +6,6 @@ resources:
 - ubuntu.yaml
 - wordpress.yaml
 - backup-container-mariadb.yaml
+- composer.yaml
 
 
