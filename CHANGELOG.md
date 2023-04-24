@@ -1,4 +1,7 @@
 # Changelog
+## April 21, 2023 (DESCW-1014)
+- Update WordPress version 6.2, and updated PHP version to 8.0 from 8.2 as this is more widely supported by plugins and themes.
+
 ## April 20, 2023 (DESCW-1014)
 - Update WordPress version 6.2, and updated PHP version to 8.2 from 7.4
 - Update WordPress image build config name to just wordpress
