@@ -1,7 +1,7 @@
 FROM composer:lts as composer
 
 # Install composer
-WORKDIR /var/www/html/
+WORKDIR /var/www/html
 #VOLUME /html/wp-content
 
 # Install the plugins
