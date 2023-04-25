@@ -2,7 +2,7 @@ FROM composer:lts as composer
 
 # Install composer
 WORKDIR /var/www/html
-#VOLUME /html/wp-content
+VOLUME /var/www/html/wp-content
 
 # Install the plugins
 COPY composer.json composer.json
