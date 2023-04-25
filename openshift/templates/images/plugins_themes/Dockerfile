@@ -1,7 +1,7 @@
 FROM composer:lts as composer
 
 # Install composer
-WORKDIR /html/
+WORKDIR /var/www/html/
 #VOLUME /html/wp-content
 
 # Install the plugins
@@ -13,7 +13,6 @@ RUN apk update && apk add \
   unzip
 RUN curl -sS https://getcomposer.org/installer | \
     php -- --install-dir=/usr/bin/ --filename=composer \
-    && chmod -R 770 /html composer.json \
-    && mkdir -p /html/wp-content/plugins
+    && chmod -R 770 /var/www/html composer.json
 
 ENTRYPOINT ["/entrypoint.sh"]
