@@ -1,15 +1,14 @@
 FROM composer:lts as composer
 
 # Install composer
-WORKDIR /var/www/html/
-VOLUME /var/www/html/wp-content/plugins
+WORKDIR /html/
 
 RUN apk update && apk add \
   zip \
   unzip
 RUN curl -sS https://getcomposer.org/installer | \
     php -- --install-dir=/usr/bin/ --filename=composer \
-    && chmod -R 770 /var/www/html/
+    && chmod -R 770 /html/
 
 # Install the plugins
 COPY composer.json composer.json
