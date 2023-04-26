@@ -1,7 +1,7 @@
 FROM composer:lts as composer
 
 # Install composer
-WORKDIR /
+WORKDIR /var/www/html/wp-content/
 
 RUN apk update && apk add \
   zip \
@@ -12,7 +12,7 @@ RUN curl -sS https://getcomposer.org/installer | \
 
 
 # Install the plugins
-COPY composer.json /composer.json
+COPY composer.json /var/www/html/wp-content/composer.json
 COPY entrypoint.sh /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
