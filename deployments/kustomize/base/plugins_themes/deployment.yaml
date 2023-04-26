@@ -23,7 +23,6 @@ spec:
         - configMapRef:
             name: wordpress-config
         imagePullPolicy: Always
-        restartPolicy: Never
         securityContext:
         volumeMounts:
         - name: plugins-themes
@@ -33,3 +32,4 @@ spec:
       - name: plugins-themes
         persistentVolumeClaim:
           claimName: wordpress
+      restartPolicy: Never
