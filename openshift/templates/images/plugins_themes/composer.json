@@ -16,7 +16,7 @@
       ],
     "require": {
         "wpackagist-plugin/advanced-custom-fields": "6.0.7",
-        "wpackagist-plugin/all-bootstrap-blocks": "1.3.4"
+        "wpackagist-plugin/all-bootstrap-blocks": "1.3.5"
     },
     "config": {
       "allow-plugins": {
