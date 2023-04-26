@@ -1,5 +1,5 @@
 #!/bin/bash
-cp /composer.json /var/www/html/wp-content/composer.json
-cd /var/www/html/wp-content
+cp /composer.json /var/www/html/composer.json
+cd /var/www/html/
 composer install;
 sleep infinity;
