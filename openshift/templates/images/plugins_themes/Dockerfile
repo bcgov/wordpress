@@ -8,7 +8,8 @@ RUN apk update && apk add \
   unzip
 RUN curl -sS https://getcomposer.org/installer | \
     php -- --install-dir=/usr/bin/ --filename=composer \
-    && chmod -R 770 /html/
+    && chmod -R 770 /var/www/html/wp-content/plugins
+
 
 # Install the plugins
 COPY composer.json composer.json
