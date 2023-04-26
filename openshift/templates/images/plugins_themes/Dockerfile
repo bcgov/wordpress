@@ -1,4 +1,4 @@
-FROM composer:lts as composer
+FROM docker.io/library/composer:lts
 
 RUN apk update && apk add \
   zip \
