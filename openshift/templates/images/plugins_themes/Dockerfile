@@ -1,7 +1,7 @@
 FROM composer:lts as composer
 
 # Install composer
-#WORKDIR /var/www/html/wp-content/plugins
+WORKDIR /
 
 RUN apk update && apk add \
   zip \
