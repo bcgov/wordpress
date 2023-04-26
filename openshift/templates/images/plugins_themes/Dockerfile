@@ -12,7 +12,7 @@ RUN curl -sS https://getcomposer.org/installer | \
 
 
 # Install the plugins
-COPY composer.json /var/www/html/wp-content/composer.json
+COPY composer.json /composer.json
 COPY entrypoint.sh /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
