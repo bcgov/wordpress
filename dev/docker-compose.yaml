@@ -117,7 +117,7 @@ services:
       - 9000:9000
     volumes:
       - /var/www/html
-      - plugins_themes:/var/www/html/wp-content/plugins:ro
+      - plugins_themes:/var/www/html/wp-content/plugins:rw
       - ${CONTENT_DIR}:/var/www/html/wp-content/
       - ${TEMP_DIR:-~/tmp/WordPress}:/tmp/WordPress:rw
     networks:
