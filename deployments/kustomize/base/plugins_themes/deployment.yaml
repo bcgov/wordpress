@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Pod
+kind: Job
 metadata:
   labels:
     app.kubernetes.io/part-of: wordpress
