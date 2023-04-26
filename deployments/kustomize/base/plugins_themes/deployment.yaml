@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: Pod
 metadata:
   labels:
     app.kubernetes.io/part-of: wordpress
@@ -23,6 +23,7 @@ spec:
         - configMapRef:
             name: wordpress-config
         imagePullPolicy: Always
+        restartPolicy: Never
         securityContext:
         volumeMounts:
         - name: plugins-themes
