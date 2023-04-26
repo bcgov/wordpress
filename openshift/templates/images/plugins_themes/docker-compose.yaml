@@ -8,5 +8,5 @@ services:
       context: .
     container_name: plugins-themes
     volumes:
-      - plugins_themes:/html/wp-content/
+      - plugins_themes:/html/wp-content/plugins
     restart: 'no'
