@@ -20,27 +20,8 @@
         "bcgov-theme/bcgov-wordpress-block-theme": "dev-development"
     },
     "config": {
-      "sort-packages": true,
-      "optimize-autoloader": true,
-      "platform": {
-        "php": "7.4"
-      },
-      "preferred-install": "dist",
       "allow-plugins": {
-        "composer/installers": true,
-        "roots/wordpress-core-installer": true,
-        "oomphinc/composer-installers-extender": true,
-        "php-http/discovery": true
+        "composer/installers": true
       }
-    },
-    "extra": {
-      "installer-paths": {
-        "web/app/mu-plugins/{$name}/": ["type:wordpress-muplugin"],
-        "web/app/plugins/{$name}/": ["type:wordpress-plugin"],
-        "web/app/themes/{$name}/": ["type:wordpress-theme"],
-        "web/app/assets/{$vendor}/{$name}/": ["type:wordpress-assets"]
-      },
-      "installer-types": ["wordpress-assets"],
-      "wordpress-install-dir": "web/wp"
     }
 }

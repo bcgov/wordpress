@@ -25,15 +25,10 @@ spec:
         imagePullPolicy: Always
         securityContext:
         volumeMounts:
-        - name: plugins
-          mountPath: /var/www/html/wp-content/plugins
-        - name: themes
-          mountPath: /var/www/html/wp-content/themes
+        - name: plugins_themes
+          mountPath: /var/www/html/wp-content/
       volumes:
-      - name: plugins
+      - name: plugins_themes
         persistentVolumeClaim:
           claimName: plugins
-      - name: themes
-        persistentVolumeClaim:
-        claimName: themes
       restartPolicy: Never

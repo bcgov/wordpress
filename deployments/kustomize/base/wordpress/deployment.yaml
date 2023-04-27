@@ -52,11 +52,13 @@ spec:
         - name: wordpress-volume
           mountPath: /var/www/html/wp-content/
           subPath: dev/wp-content
-        - name: plugins
-          mountPath: /var/www/html/wp-content/plugins
+        - name: plugins_themes
+          mountPath: /var/www/html/wp-content/
+          subPath: plugins
           readOnly: true
-        - name: themes
-          mountPath: /var/www/html/wp-content/themes
+        - name: plugins_themes
+          mountPath: /var/www/html/wp-content/
+          subPath: themes
           readOnly: true
       - name: wordpress-nginx
         image: wordpress-nginx-run
@@ -101,12 +103,9 @@ spec:
       - name: wordpress-volume
         persistentVolumeClaim:
           claimName: wordpress
-      - name: plugins
+      - name: plugins_themes
         persistentVolumeClaim:
           claimName: plugins
-      - name: themes
-        persistentVolumeClaim:
-        claimName: themes
       - name: php-fpm-secrets-volume
         secret:
           defaultMode: 420
