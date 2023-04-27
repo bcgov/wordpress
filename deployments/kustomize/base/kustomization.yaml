@@ -34,6 +34,7 @@ configMapGenerator:
   - nginx.conf="# Extra ngix configs"
   files:
   - WORDPRESS_CONFIG_EXTRA
+  - composer.json
 # The Secrets, these values should not be used for production.
 secretGenerator:
 - name: wordpress-secrets

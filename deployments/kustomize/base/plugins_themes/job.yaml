@@ -25,10 +25,20 @@ spec:
         imagePullPolicy: Always
         securityContext:
         volumeMounts:
-        - name: plugins_themes
-          mountPath: /var/www/html/wp-content/
+        - name: plugins-themes
+          mountPath: /var/www/html/
+        - name: composer-json
+          mountPath: /var/www/html/composer.json
+          subPath: composer.json
       volumes:
-      - name: plugins_themes
+      - name: plugins-themes
         persistentVolumeClaim:
           claimName: plugins
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: composer.json
+            path: composer.json
+          name: wordpress-config
+        name: composer-json
       restartPolicy: Never

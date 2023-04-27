@@ -1,0 +1,27 @@
+{
+    "name": "test/test",
+    "type": "project",
+    "license": "MIT",
+    "description": "Plugin and theme installer for WordPress",
+    "repositories": [
+        {
+          "type": "composer",
+          "url": "https://wpackagist.org",
+          "only": ["wpackagist-plugin/*", "wpackagist-theme/*"]
+        },
+        {
+          "type": "composer",
+          "url": "https://apps.itsm.gov.bc.ca/satis"
+        }
+      ],
+    "require": {
+        "wpackagist-plugin/advanced-custom-fields": "6.0.7",
+        "wpackagist-plugin/all-bootstrap-blocks": "1.3.6",
+        "bcgov-theme/bcgov-wordpress-block-theme": "dev-development"
+    },
+    "config": {
+      "allow-plugins": {
+        "composer/installers": true
+      }
+    }
+}

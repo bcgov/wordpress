@@ -6,7 +6,8 @@ RUN apk update && apk add \
 RUN curl -sS https://getcomposer.org/installer | \
     php -- --install-dir=/usr/bin/ --filename=composer
 
-COPY composer.json /composer.json
 COPY entrypoint.sh /entrypoint.sh
+
+WORKDIR /var/www/html/
 
 ENTRYPOINT ["/entrypoint.sh"]
