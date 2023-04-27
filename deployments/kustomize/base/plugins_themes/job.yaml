@@ -27,7 +27,7 @@ spec:
         volumeMounts:
         - name: plugins-themes
           mountPath: /var/www/html/wp-content/
-          subPath: dev/wp-content
+          subPath: plugins
       volumes:
       - name: plugins-themes
         persistentVolumeClaim:

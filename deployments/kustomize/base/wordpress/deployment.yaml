@@ -55,6 +55,7 @@ spec:
         - name: plugins-themes
           mountPath: /var/www/html/wp-content/
           subPath: plugins
+          readOnly: true
       - name: wordpress-nginx
         image: wordpress-nginx-run
         imagePullPolicy: Always
@@ -100,7 +101,7 @@ spec:
           claimName: wordpress
       - name: plugins-themes
         persistentVolumeClaim:
-          claimName: plugins-themes  
+          claimName: plugins-themes
       - name: php-fpm-secrets-volume
         secret:
           defaultMode: 420
