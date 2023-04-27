@@ -16,7 +16,8 @@
       ],
     "require": {
         "wpackagist-plugin/advanced-custom-fields": "6.0.7",
-        "wpackagist-plugin/all-bootstrap-blocks": "1.3.5"
+        "wpackagist-plugin/all-bootstrap-blocks": "1.3.5",
+        "bcgov-theme/bcgov-wordpress-block-theme": "dev-development"
     },
     "config": {
       "allow-plugins": {
