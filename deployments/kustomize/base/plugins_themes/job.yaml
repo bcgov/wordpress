@@ -6,7 +6,7 @@ metadata:
   name: wordpress-plugins-themes
   namespace: default
 spec:
-  replicas: 1
+  ttlSecondsAfterFinished: 120
   strategy: 
     type: Recreate
   template:
@@ -31,5 +31,5 @@ spec:
       volumes:
       - name: plugins-themes
         persistentVolumeClaim:
-          claimName: wordpress
+          claimName: plugins-themes
       restartPolicy: Never
