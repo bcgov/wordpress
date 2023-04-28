@@ -33,7 +33,7 @@ spec:
       volumes:
       - name: plugins-themes
         persistentVolumeClaim:
-          claimName: plugins
+          claimName: plugins-themes
       - configMap:
           defaultMode: 420
           items:

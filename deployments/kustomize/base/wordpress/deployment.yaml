@@ -109,7 +109,7 @@ spec:
           claimName: wordpress
       - name: plugins-themes
         persistentVolumeClaim:
-          claimName: plugins
+          claimName: plugins-themes
       - name: php-fpm-secrets-volume
         secret:
           defaultMode: 420
