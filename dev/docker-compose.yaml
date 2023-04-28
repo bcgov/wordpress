@@ -8,8 +8,7 @@ volumes:
   nginx_cache:
   nginx_run:
   db_run:
-  plugins_themes:
-    external: true
+
 services:
   nginx:
     build:
@@ -117,7 +116,6 @@ services:
       - 9000:9000
     volumes:
       - /var/www/html
-      - plugins_themes:/var/www/html/wp-content/plugins:ro
       - ${CONTENT_DIR}:/var/www/html/wp-content/
       - ${TEMP_DIR:-~/tmp/WordPress}:/tmp/WordPress:rw
     networks:

@@ -1,3 +1,2 @@
 #!/bin/bash
-composer install;
-sleep infinity;
+composer update;
