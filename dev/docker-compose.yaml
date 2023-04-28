@@ -121,4 +121,4 @@ services:
     networks:
       - wp_deploy
     depends_on:
-      - db
+    - db
