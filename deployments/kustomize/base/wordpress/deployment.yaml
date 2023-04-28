@@ -121,4 +121,3 @@ spec:
           - key: MYSQL_PASSWORD
             path: MYSQL_PASSWORD
           secretName: wordpress-secrets
-
