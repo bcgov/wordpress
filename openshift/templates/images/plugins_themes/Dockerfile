@@ -4,7 +4,7 @@ FROM php:8.0
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
-RUN apk update && apk add \
+RUN apt update && apt install \
   zip \
   unzip
 # RUN curl -sS https://getcomposer.org/installer | \
