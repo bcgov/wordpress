@@ -97,15 +97,15 @@ spec:
         - name: plugins-themes
           mountPath: /var/www/html/wp-content/plugins
           subPath: wp-content/plugins
-          readOnly: true
+          readOnly: false
         - name: plugins-themes
           mountPath: /var/www/html/wp-content/themes
           subPath: wp-content/themes
-          readOnly: true
+          readOnly: false
         - name: plugins-themes
           mountPath: /var/www/html/vendor
           subPath: vendor
-          readOnly: true
+          readOnly: false
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
