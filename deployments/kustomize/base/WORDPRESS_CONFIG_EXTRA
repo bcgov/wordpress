@@ -1,4 +1,5 @@
 /* Multisite */
+require_once dirname(__DIR__) . '/html/vendor/autoload.php';
 define( 'WP_ALLOW_MULTISITE', true );
 define( 'MULTISITE', !!filter_var( getenv_docker( 'WORDPRESS_MULTISITE', '0' ), FILTER_VALIDATE_BOOLEAN ) );
 define( 'SUBDOMAIN_INSTALL', false );

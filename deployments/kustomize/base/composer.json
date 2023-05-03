@@ -16,16 +16,18 @@
       ],
     "require": {
         "bcgov-plugin/bcgov-blocks": "dev-development",
-        "bcgov-plugin/bcgov-common-plugin": "^1.5.5",
+        "bcgov/wordpress-common": "dev-development",
         "wpackagist-plugin/advanced-custom-fields": "6.1.4",
         "wpackagist-plugin/all-bootstrap-blocks": "1.3.5",
         "wpackagist-plugin/all-in-one-seo-pack": "4.3.6.1",
         "wpackagist-plugin/custom-post-type-ui": "1.13.5",
         "wpackagist-theme/twentytwentythree": "1.1",
         "bcgov-theme/bcgov-wordpress-block-theme": "dev-development",
+        "bcgov-theme/bcgov-food-directory": "dev-development",
         "wpengine/advanced-custom-fields-pro": "6.1.4"
     },
     "config": {
+      "php": "8.0",
       "allow-plugins": {
         "composer/installers": true
       }
