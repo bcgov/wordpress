@@ -7,8 +7,6 @@ COPY --from=composer /usr/bin/composer /usr/bin/composer
 RUN apt update && apt install \
   zip \
   unzip
-# RUN curl -sS https://getcomposer.org/installer | \
-#     php -- --install-dir=/usr/bin/ --filename=composer
 
 COPY entrypoint.sh /entrypoint.sh
 

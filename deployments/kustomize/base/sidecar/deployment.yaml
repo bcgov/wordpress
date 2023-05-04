@@ -55,6 +55,18 @@ spec:
           mountPath: /run/secrets/WORDPRESS_DB_PASSWORD
           readOnly: true
           subPath: MYSQL_PASSWORD
+        - name: plugins-themes
+          mountPath: /var/www/html/wp-content/plugins
+          subPath: wp-content/plugins
+          readOnly: false
+        - name: plugins-themes
+          mountPath: /var/www/html/wp-content/themes
+          subPath: wp-content/themes
+          readOnly: false
+        - name: plugins-themes
+          mountPath: /var/www/html/vendor
+          subPath: vendor
+          readOnly: true
       - name: wordpress-core
         image: wordpress-wordpress-run
         env:
@@ -105,7 +117,7 @@ spec:
         - name: plugins-themes
           mountPath: /var/www/html/vendor
           subPath: vendor
-          readOnly: false
+          readOnly: true
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler

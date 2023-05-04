@@ -25,7 +25,7 @@ Assuming you have rancher desktop installed, you might have different contexts, 
 * To make local deployments more seamless, all images are being pulled from DockerHub [bcgovgdx namespace](https://hub.docker.com/?namespace=bcgovgdx).
 * These images should **NOT** be used in production deployments.
 * Prerequisites
-  * Kubernetes cluter 
+  * Kubernetes cluster 
   * Kubectl installed
 * Deploy using ```kubectl apply -k ./deployments/kustomize/overlays/local```
 * To **Delete** your deployment use:

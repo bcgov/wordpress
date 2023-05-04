@@ -4,7 +4,7 @@ bases:
 - mariadb
 - wordpress
 - sidecar
-- plugins_themes
+
 # Overrides the namespace
 namespace: default
 
@@ -34,7 +34,6 @@ configMapGenerator:
   - nginx.conf="# Extra ngix configs"
   files:
   - WORDPRESS_CONFIG_EXTRA
-  - composer.json
 # The Secrets, these values should not be used for production.
 secretGenerator:
 - name: wordpress-secrets

@@ -19,6 +19,9 @@ images:
   - name: wordpress-sidecar-run
     newName: bcgovgdx/wordpress-sidecar-run
     newTag: latest
+  - name: wordpress-plugins-themes
+    newName: bcgovgdx/wordpress-plugins-themes
+    newTag: latest
 configMapGenerator:
 - name: wordpress-config
   behavior: merge

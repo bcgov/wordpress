@@ -21,7 +21,7 @@ spec:
         env:
         envFrom:
         - configMapRef:
-            name: wordpress-config
+            name: wordpress-plugins-themes-config
         imagePullPolicy: Always
         securityContext:
         volumeMounts:
@@ -39,6 +39,6 @@ spec:
           items:
           - key: composer.json
             path: composer.json
-          name: wordpress-config
+          name: wordpress-plugins-themes-config
         name: composer-json
       restartPolicy: Never
