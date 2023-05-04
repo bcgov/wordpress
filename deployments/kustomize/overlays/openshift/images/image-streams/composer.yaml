@@ -1,0 +1,16 @@
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  name: composer
+  annotations:
+    description: Keeps track of composer images that originate from DockerHub
+  labels:
+    source: docker-remote
+spec:
+  tags:
+    - name: "lts"
+      from:
+        kind: DockerImage
+        name: "artifacts.developer.gov.bc.ca/docker-remote/composer:lts"
+      referencePolicy:
+        type: Local

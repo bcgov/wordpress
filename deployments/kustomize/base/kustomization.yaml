@@ -4,6 +4,7 @@ bases:
 - mariadb
 - wordpress
 - sidecar
+
 # Overrides the namespace
 namespace: default
 

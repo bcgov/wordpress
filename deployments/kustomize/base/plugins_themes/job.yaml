@@ -1,0 +1,44 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  labels:
+    app.kubernetes.io/part-of: wordpress
+  name: wordpress-plugins-themes
+  namespace: default
+spec:
+  ttlSecondsAfterFinished: 120
+  strategy: 
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        name: wordpress-plugins-themes
+        net-tcp-3306: client
+    spec:
+      containers:
+      - name: wordpress-plugins-themes
+        image: wordpress-plugins-themes-run
+        env:
+        envFrom:
+        - configMapRef:
+            name: wordpress-plugins-themes-config
+        imagePullPolicy: Always
+        securityContext:
+        volumeMounts:
+        - name: plugins-themes
+          mountPath: /var/www/html/
+        - name: composer-json
+          mountPath: /var/www/html/composer.json
+          subPath: composer.json
+      volumes:
+      - name: plugins-themes
+        persistentVolumeClaim:
+          claimName: plugins-themes
+      - configMap:
+          defaultMode: 420
+          items:
+          - key: composer.json
+            path: composer.json
+          name: wordpress-plugins-themes-config
+        name: composer-json
+      restartPolicy: Never

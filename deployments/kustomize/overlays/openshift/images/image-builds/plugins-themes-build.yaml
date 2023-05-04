@@ -1,0 +1,40 @@
+kind: ImageStream
+apiVersion: image.openshift.io/v1
+metadata:
+  name: wordpress-plugins-themes-run
+  annotations:
+    description: Installs plugins and themes
+  labels:
+    name: wordpress-plugins-themes-run-images
+spec:
+  lookupPolicy:
+    local: true
+
+---
+kind: BuildConfig
+apiVersion: build.openshift.io/v1
+metadata:
+  name: wordpress-plugins-themes-run
+  labels:
+    name: wordpress-plugins-themes-run
+spec:
+  successfulBuildsHistoryLimit: 2
+  failedBuildsHistoryLimit: 2
+  runPolicy: Parallel
+  completionDeadlineSeconds: 1800
+  source:
+    type: Git
+    git:
+      ref: main
+      uri: https://github.com/bcgov/wordpress.git
+    contextDir: openshift/templates/images/plugins_themes
+  strategy:
+    type: Docker
+  output:
+    to:
+      kind: ImageStreamTag
+      name: wordpress-plugins-themes-run:dev
+  resources:
+    limits:
+      cpu: 1
+      memory: 6Gi

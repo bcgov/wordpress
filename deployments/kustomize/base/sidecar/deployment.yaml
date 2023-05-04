@@ -55,6 +55,18 @@ spec:
           mountPath: /run/secrets/WORDPRESS_DB_PASSWORD
           readOnly: true
           subPath: MYSQL_PASSWORD
+        - name: plugins-themes
+          mountPath: /var/www/html/wp-content/plugins
+          subPath: wp-content/plugins
+          readOnly: false
+        - name: plugins-themes
+          mountPath: /var/www/html/wp-content/themes
+          subPath: wp-content/themes
+          readOnly: false
+        - name: plugins-themes
+          mountPath: /var/www/html/vendor
+          subPath: vendor
+          readOnly: true
       - name: wordpress-core
         image: wordpress-wordpress-run
         env:
@@ -94,6 +106,18 @@ spec:
           mountPath: /run/secrets/WORDPRESS_DB_PASSWORD
           readOnly: true
           subPath: MYSQL_PASSWORD
+        - name: plugins-themes
+          mountPath: /var/www/html/wp-content/plugins
+          subPath: wp-content/plugins
+          readOnly: false
+        - name: plugins-themes
+          mountPath: /var/www/html/wp-content/themes
+          subPath: wp-content/themes
+          readOnly: false
+        - name: plugins-themes
+          mountPath: /var/www/html/vendor
+          subPath: vendor
+          readOnly: true
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
@@ -118,3 +142,6 @@ spec:
       - name: wordpress-volume
         persistentVolumeClaim:
           claimName: wordpress
+      - name: plugins-themes
+        persistentVolumeClaim:
+          claimName: plugins-themes
