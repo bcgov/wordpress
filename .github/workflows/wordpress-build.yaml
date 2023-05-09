@@ -14,12 +14,23 @@ jobs:
     if: github.repository_owner == 'bcgov'
     runs-on: ubuntu-latest
     steps:
-      - name: Image Build for WordPress Image
-        uses: redhat-actions/oc-login@v1.2
+      - name: Install oc
+        if: "runner.os != 'Linux'"
+        uses: redhat-actions/openshift-tools-installer@v1
         with:
-          version: "latest"
+          oc: latest
+
+      - name: Test oc
+        run: oc version --client
+
+      - name: Authenticate and set context
+        uses: redhat-actions/oc-login@v1
+        with:
           openshift_server_url: ${{ secrets.OpenShiftServerURL }}
-          parameters: '{"apitoken": "${{ secrets.OpenShiftToken }}", "acceptUntrustedCerts": "true"}'
-          cmd: |
-            oc project 23576a-tools
-            oc start-build wordpress-wordpress-run --follow
+          openshift_token: ${{ secrets.OpenShiftToken }}
+          namespace: 23576a-tools
+
+      - name: Test
+        run: |
+          oc project 23576a-tools
+          oc start-build wordpress-wordpress-run --follow
