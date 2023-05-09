@@ -1,4 +1,6 @@
 # Changelog
+## May 09, 2023 (DESCW-1065)
+- Update github openshift actions to use node16 instead of deprecated 12.
 ## May 09, 2023 (DESCW-985)
 - Add plugins-themes deployment job to install plugins and themes to shared persistent volumes for dev and test environments.
   

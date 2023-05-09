@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Image Build for WordPress Image
-        uses: redhat-developer/openshift-actions@v1.1
+        uses: redhat-actions/oc-installer@v1
         with:
           version: "latest"
           openshift_server_url: ${{ secrets.OpenShiftServerURL }}
