@@ -1,0 +1,23 @@
+name: Install oc and set up the openshift context
+on:
+  workflow_call:
+defaults:
+  run:
+    working-directory: ./
+jobs:
+  deploy:
+    if: github.repository_owner == 'bcgov'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install oc
+        if: "runner.os != 'Linux'"
+        uses: redhat-actions/openshift-tools-installer@v1
+        with:
+          oc: latest
+
+      - name: Authenticate and set context
+        uses: redhat-actions/oc-login@v1
+        with:
+          openshift_server_url: ${{ secrets.OpenShiftServerURL }}
+          openshift_token: ${{ secrets.OpenShiftToken }}
+          namespace: ${{ secrets.OPENSHIFT_LICENSEPLATE }}-tools
