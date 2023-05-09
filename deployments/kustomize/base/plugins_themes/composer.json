@@ -1,29 +1,38 @@
 {
-    "name": "test/test",
-    "type": "project",
-    "license": "MIT",
-    "description": "Plugin and theme installer for WordPress",
-    "repositories": [
-        {
-          "type": "composer",
-          "url": "https://wpackagist.org",
-          "only": ["wpackagist-plugin/*", "wpackagist-theme/*"]
-        },
-        {
-          "type": "composer",
-          "url": "https://apps.itsm.gov.bc.ca/satis"
-        }
-      ],
-    "require": {
-        "wpackagist-plugin/advanced-custom-fields": "6.1.6",
-        "wpackagist-plugin/custom-post-type-ui": "1.13.5",
-        "wpackagist-theme/twentytwentythree": "1.1",
-        "bcgov-theme/bcgov-wordpress-block-theme": "dev-development"
-    },
-    "config": {
-      "php": "8.0",
-      "allow-plugins": {
-        "composer/installers": true
+  "name": "bcgov-wordpress/dev",
+  "type": "project",
+  "license": "MIT",
+  "description": "Plugin and theme installer for WordPress",
+  "repositories": [
+      {
+        "type": "composer",
+        "url": "https://wpackagist.org",
+        "only": ["wpackagist-plugin/*", "wpackagist-theme/*"]
+      },
+      {
+        "type": "composer",
+        "url": "https://apps.itsm.gov.bc.ca/satis"
       }
+    ],
+  "require": {
+      "bcgov-plugin/bcgov-blocks": "dev-development",
+      "bcgov/wordpress-common": "dev-development",
+      "bcgov-plugin/gravityforms": "2.7.4",
+      "bcgov-plugin/bcgov-looker-snowplow": "dev-development",
+      "bcgov-theme/bcgov-engagement": "dev-development",
+      "bcgov-theme/bcgov-food-directory": "dev-development",
+      "bcgov-theme/bcgov-wordpress-block-theme": "dev-development",
+      "wpackagist-plugin/all-in-one-wp-migration": "7.74",
+      "wpackagist-plugin/custom-post-type-ui": "1.13.5",
+      "wpackagist-plugin/miniorange-login-with-eve-online-google-facebook": "6.24.5",
+      "wpackagist-plugin/password-protected": "2.6.2",
+      "wpackagist-theme/twentytwentythree": "1.1",
+      "wpackagist-theme/twentytwentytwo": "1.4"
+  },
+  "config": {
+    "php": "8.0.2",
+    "allow-plugins": {
+      "composer/installers": true
     }
+  }
 }
