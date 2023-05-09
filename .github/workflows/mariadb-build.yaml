@@ -10,14 +10,15 @@ defaults:
   run:
     working-directory: ./
 jobs:
+  oc:
+    uses: bcgov/wordpress/.github/workflows/oc-setup.yaml@feature/descw-1065-update-openshift-actions-node-16
   deploy:
     if: github.repository_owner == 'bcgov'
     runs-on: ubuntu-latest
-    uses: bcgov/wordpress/.github/workflows/oc-setup.yaml@feature/descw-1065-update-openshift-actions-node-16
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-        
+
       - name: Image build
         run: |
           oc start-build wordpress-mariadb-run --follow
