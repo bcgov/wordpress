@@ -29,5 +29,4 @@ jobs:
 
       - name: Image build
         run: |
-          oc project ${{ secrets.OPENSHIFT_LICENSEPLATE }}-tools
           oc start-build wordpress-wordpress-run --follow
