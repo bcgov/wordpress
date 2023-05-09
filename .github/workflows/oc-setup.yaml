@@ -1,6 +1,13 @@
 name: Install oc and set up the openshift context
 on:
   workflow_call:
+    secrets:
+      openshift_server_url:
+        required: true
+      openshift_token:
+        required: true
+      openshift_licenseplate:
+        required: true
 defaults:
   run:
     working-directory: ./
@@ -18,6 +25,6 @@ jobs:
       - name: Authenticate and set context
         uses: redhat-actions/oc-login@v1
         with:
-          openshift_server_url: ${{ secrets.OpenShiftServerURL }}
-          openshift_token: ${{ secrets.OpenShiftToken }}
-          namespace: ${{ secrets.OPENSHIFT_LICENSEPLATE }}-tools
+          openshift_server_url: ${{ secrets.openshift_server_url }}
+          openshift_token: ${{ secrets.openshift_token }}
+          namespace: ${{ secrets.openshift_licenseplate }}-tools
