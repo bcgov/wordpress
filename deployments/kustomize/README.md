@@ -365,7 +365,7 @@ namespace: 123456-dev
 
 images:
   - name: wordpress-plugins-themes-run
-    newName: image-registry.openshift-image-registry.svc:5000/23576a-tools/wordpress-plugins-themes-run
+    newName: image-registry.openshift-image-registry.svc:5000/123456-tools/wordpress-plugins-themes-run
     newTag: dev
 configMapGenerator:
 - name: wordpress-plugins-themes-config
