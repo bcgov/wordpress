@@ -1,7 +1,7 @@
 name: Install oc and set up the openshift context
 on:
   workflow_call:
-    with:
+    inputs:
       image: ${{ inputs.image }}
     secrets:
       openshift_server_url:
