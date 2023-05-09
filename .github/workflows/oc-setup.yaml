@@ -4,6 +4,7 @@ on:
     inputs:
       image:
         required: true
+        type: string
     secrets:
       openshift_server_url:
         required: true
