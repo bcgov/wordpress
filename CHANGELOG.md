@@ -1,4 +1,7 @@
 # Changelog
+## May 09, 2023 (DESCW-985)
+- Add plugins-themes deployment job to install plugins and themes to shared persistent volumes for dev and test environments.
+  
 ## April 21, 2023 (DESCW-1014)
 - Update WordPress version 6.2, and updated PHP version to 8.0 from 8.2 as this is more widely supported by plugins and themes.
 

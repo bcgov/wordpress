@@ -1,5 +1,5 @@
 {
-    "name": "test/test",
+    "name": "wordpress-plugins-themes/base",
     "type": "project",
     "license": "MIT",
     "description": "Plugin and theme installer for WordPress",

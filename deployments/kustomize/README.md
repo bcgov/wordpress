@@ -348,8 +348,30 @@ spec:
     spec:
       serviceAccountName: 123456-vault
       serviceAccount: 123456-vault
+```
 
+### Updating plugins and themes
+* To update plugins and themes in the openshift deployments, you will have to generate another overlay which will point to the `./deployments/kustomize/overlays/openshift/images` folder of this repo and mimics `./deployments/kustomize/base/plugins-themes/`
+* Update your license plate in the kustomization.yaml file.
+* Update the plugins and/or themes in the composer.json file.
+#### Sample plugins and themes deployment
+```yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- github.com/bcgov/wordpress/deployments/base/plugins_themes
+# Update to your license plate in the dev|test|prod namespace.
+namespace: 123456-dev
 
+images:
+  - name: wordpress-plugins-themes-run
+    newName: image-registry.openshift-image-registry.svc:5000/123456-tools/wordpress-plugins-themes-run
+    newTag: dev
+configMapGenerator:
+- name: wordpress-plugins-themes-config
+  behavior: replace
+  files:
+  - composer.json
 
 ```
 ### Figure 1 Vault secrets
