@@ -1,6 +1,8 @@
 name: Install oc and set up the openshift context
 on:
   workflow_call:
+    with:
+      image: ${{ inputs.image }}
     secrets:
       openshift_server_url:
         required: true
@@ -12,7 +14,7 @@ defaults:
   run:
     working-directory: ./
 jobs:
-  deploy:
+  install:
     if: github.repository_owner == 'bcgov'
     runs-on: ubuntu-latest
     steps:
@@ -28,3 +30,7 @@ jobs:
           openshift_server_url: ${{ secrets.openshift_server_url }}
           openshift_token: ${{ secrets.openshift_token }}
           namespace: ${{ secrets.openshift_licenseplate }}-tools
+
+      - name: Image build
+        run: |
+          oc start-build wordpress-${{ inputs.image }}-run --follow
