@@ -15,10 +15,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
-        
+        uses: actions/checkout@v3
+
       - name: Install and set up oc
-        uses: ./oc-setup.yaml@feature/descw-1065-update-openshift-actions-node-16
+        uses: bcgov/wordpress/.github/workflows/oc-setup.yaml@feature/descw-1065-update-openshift-actions-node-16
 
       - name: Image build
         run: |
