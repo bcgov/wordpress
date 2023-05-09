@@ -35,4 +35,4 @@ jobs:
 
       - name: Image build
         run: |
-          oc start-build wordpress-${{ inputs.image }}-run --follow
+          oc start-build ${{ inputs.image }} --follow

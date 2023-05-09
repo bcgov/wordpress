@@ -13,7 +13,7 @@ jobs:
   oc:
     uses: bcgov/wordpress/.github/workflows/oc-setup.yaml@feature/descw-1065-update-openshift-actions-node-16
     with:
-      image: mariadb-run
+      image: wordpress-mariadb-run
     secrets:
       openshift_server_url: ${{ secrets.OpenShiftServerURL }}
       openshift_token: ${{ secrets.OpenShiftToken }}
