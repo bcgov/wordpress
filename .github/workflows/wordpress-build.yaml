@@ -20,17 +20,14 @@ jobs:
         with:
           oc: latest
 
-      - name: Test oc
-        run: oc version --client
-
       - name: Authenticate and set context
         uses: redhat-actions/oc-login@v1
         with:
           openshift_server_url: ${{ secrets.OpenShiftServerURL }}
           openshift_token: ${{ secrets.OpenShiftToken }}
-          namespace: 23576a-tools
+          namespace: ${{ secrets.OPENSHIFT_LICENSEPLATE }}-tools
 
-      - name: Test
+      - name: Image build
         run: |
-          oc project 23576a-tools
+          oc project ${{ secrets.OPENSHIFT_LICENSEPLATE }}-tools
           oc start-build wordpress-wordpress-run --follow
