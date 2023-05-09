@@ -350,7 +350,6 @@ spec:
       serviceAccount: 123456-vault
 ```
 
-
 ### Updating plugins and themes
 * To update plugins and themes in the openshift deployments, you will have to generate another overlay which will point to the `./deployments/kustomize/overlays/openshift/images` folder of this repo and mimics `./deployments/kustomize/base/plugins-themes/`
 * Update your license plate in the kustomization.yaml file.
@@ -375,7 +374,6 @@ configMapGenerator:
   - composer.json
 
 ```
-
 ### Figure 1 Vault secrets
 ![](../../docs/images/vault-secrets.png)
 
