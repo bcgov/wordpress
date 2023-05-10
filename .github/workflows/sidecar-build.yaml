@@ -11,7 +11,7 @@ defaults:
     working-directory: ./
 jobs:
   oc:
-    uses: bcgov/wordpress/.github/workflows/oc-setup.yaml@feature/descw-1065-update-openshift-actions-node-16
+    uses: bcgov/wordpress/.github/workflows/oc-setup.yaml@main
     with:
       image: wordpress-sidecar-run
     secrets:
