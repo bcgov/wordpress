@@ -28,10 +28,10 @@ jobs:
 
       - name: Authenticate and set context
         uses: redhat-actions/oc-login@v1
-        with:
-          openshift_server_url: ${{ secrets.openshift_server_url }}
-          openshift_token: ${{ secrets.openshift_token }}
-          namespace: ${{ secrets.openshift_licenseplate }}-tools
+        secrets:
+          openshift_server_url: ${{ secrets.OpenShiftServerURL }}
+          openshift_token: ${{ secrets.OpenShiftToken }}
+          openshift_licenseplate: ${{ secrets.OPENSHIFT_LICENSEPLATE }}
 
       - name: Image build
         run: |
