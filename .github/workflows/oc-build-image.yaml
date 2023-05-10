@@ -1,0 +1,38 @@
+name: Install oc and set up the openshift context
+on:
+  workflow_call:
+    inputs:
+      image:
+        required: true
+        type: string
+    secrets:
+      openshift_server_url:
+        required: true
+      openshift_token:
+        required: true
+      openshift_licenseplate:
+        required: true
+defaults:
+  run:
+    working-directory: ./
+jobs:
+  install:
+    if: github.repository_owner == 'bcgov'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install oc
+        if: "runner.os != 'Linux'"
+        uses: redhat-actions/openshift-tools-installer@v1
+        with:
+          oc: latest
+
+      - name: Authenticate and set context
+        uses: redhat-actions/oc-login@v1
+        secrets:
+          openshift_server_url: ${{ secrets.OpenShiftServerURL }}
+          openshift_token: ${{ secrets.OpenShiftToken }}
+          openshift_licenseplate: ${{ secrets.OPENSHIFT_LICENSEPLATE }}
+
+      - name: Image build
+        run: |
+          oc start-build ${{ inputs.image }} --follow

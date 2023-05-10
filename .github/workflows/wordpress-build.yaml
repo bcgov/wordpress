@@ -10,16 +10,11 @@ defaults:
   run:
     working-directory: ./
 jobs:
-  deploy:
-    if: github.repository_owner == 'bcgov'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Image Build for WordPress Image
-        uses: redhat-developer/openshift-actions@v1.1
-        with:
-          version: "latest"
-          openshift_server_url: ${{ secrets.OpenShiftServerURL }}
-          parameters: '{"apitoken": "${{ secrets.OpenShiftToken }}", "acceptUntrustedCerts": "true"}'
-          cmd: |
-            oc project 23576a-tools
-            oc start-build wordpress-wordpress-run --follow
+  oc:
+    uses: bcgov/wordpress/.github/workflows/oc-build-image.yaml@main
+    with:
+      image: wordpress-wordpress-run
+    secrets:
+      openshift_server_url: ${{ secrets.OpenShiftServerURL }}
+      openshift_token: ${{ secrets.OpenShiftToken }}
+      openshift_licenseplate: ${{ secrets.OPENSHIFT_LICENSEPLATE }}
