@@ -10,23 +10,11 @@ defaults:
   run:
     working-directory: ./
 jobs:
-  deploy:
-    if: github.repository_owner == 'bcgov'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Install oc
-        if: "runner.os != 'Linux'"
-        uses: redhat-actions/openshift-tools-installer@v1
-        with:
-          oc: latest
-
-      - name: Authenticate and set context
-        uses: redhat-actions/oc-login@v1
-        with:
-          openshift_server_url: ${{ secrets.OpenShiftServerURL }}
-          openshift_token: ${{ secrets.OpenShiftToken }}
-          namespace: ${{ secrets.OPENSHIFT_LICENSEPLATE }}-tools
-
-      - name: Image build
-        run: |
-          oc start-build wordpress-wordpress-run --follow
+  oc:
+    uses: bcgov/wordpress/.github/workflows/oc-setup.yaml@feature/descw-1065-update-openshift-actions-node-16
+    with:
+      image: wordpress-wordpress-run
+    secrets:
+      openshift_server_url: ${{ secrets.OpenShiftServerURL }}
+      openshift_token: ${{ secrets.OpenShiftToken }}
+      openshift_licenseplate: ${{ secrets.OPENSHIFT_LICENSEPLATE }}
