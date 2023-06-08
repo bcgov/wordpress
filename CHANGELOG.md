@@ -1,6 +1,7 @@
 # Changelog
 ## June 8, 2023 (DESCW-1189)
 - update wordpress to 6.2.2
+- fix bug caused by redhat dependency update
 ## May 09, 2023 (DESCW-1065)
 - Update github openshift actions to use node16 instead of deprecated 12.
 ## May 09, 2023 (DESCW-985)
