@@ -1,9 +1,11 @@
 # Changelog
+## June 8, 2023 (DESCW-1189)
+- update wordpress to 6.2.2
 ## May 09, 2023 (DESCW-1065)
 - Update github openshift actions to use node16 instead of deprecated 12.
 ## May 09, 2023 (DESCW-985)
 - Add plugins-themes deployment job to install plugins and themes to shared persistent volumes for dev and test environments.
-  
+
 ## April 21, 2023 (DESCW-1014)
 - Update WordPress version 6.2, and updated PHP version to 8.0 from 8.2 as this is more widely supported by plugins and themes.
 

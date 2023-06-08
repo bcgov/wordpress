@@ -15,7 +15,7 @@ Base images are images that would use dockerhub image streams to create an addit
 * clean up docker resources: `docker compose -f openshift/templates/images/mariadb/docker-compose.yaml down`
 
 
-### Nginx 
+### Nginx
 * Creates the nginx web server.
 * nginx:1.23.1-alpine -> wordpress-nginx-run
   *  `oc process -f openshift/templates/images/nginx/build.yaml | oc apply -f -`
@@ -33,7 +33,7 @@ Base images are images that would use dockerhub image streams to create an addit
 ### Sidecar
 * Creates Sidecar image used for WordPress maintenance and diagnostics.
 * ubuntu -> wordpress-sidecar
-  * `oc process -f openshift/templates/images/sidecar/build.yaml | oc apply -f -` 
+  * `oc process -f openshift/templates/images/sidecar/build.yaml | oc apply -f -`
 
 ## Naming Conventions
 ### Base Images
@@ -77,5 +77,5 @@ Use the convention [product]-[service component]-run:tag. For example:
 | alpine | 3.15.4 | Base Alpine linux |
 | mariadb | 10.6.8-r0 | MariaDB version that gets build in base-images via Dockerfile. Dependent on the [Alpine version](https://pkgs.alpinelinux.org/packages?name=mariadb&branch=v3.15): |
 | nginx | 1.23.1-alpine | Nginx web server, used to serve WordPress / PHP |
-| wordpress | 6.2.0-php8.0-fpm-alpine | PHP-FPM for WordPress 7.4 no longer supported by WordPress docker image|
+| wordpress | 6.2.2-php8.0-fpm-alpine | PHP-FPM for WordPress 7.4 no longer supported by WordPress docker image|
 | ubuntu | 22.04| Used for the sidecar |
