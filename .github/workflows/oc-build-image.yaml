@@ -21,17 +21,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install oc
-        if: "runner.os != 'Linux'"
+        if: runner.os != 'Linux'
         uses: redhat-actions/openshift-tools-installer@v1
         with:
           oc: latest
 
       - name: Authenticate and set context
         uses: redhat-actions/oc-login@v1
-        secrets:
+        env:
+          OPENSHIFT_NAMESPACE: ${{ secrets.OPENSHIFT_LICENSEPLATE }}
+        with:
           openshift_server_url: ${{ secrets.OpenShiftServerURL }}
           openshift_token: ${{ secrets.OpenShiftToken }}
-          openshift_licenseplate: ${{ secrets.OPENSHIFT_LICENSEPLATE }}
+          namespace: ${{ env.OPENSHIFT_NAMESPACE }}
 
       - name: Image build
         run: |
