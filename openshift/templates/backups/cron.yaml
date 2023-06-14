@@ -117,7 +117,7 @@ objects:
                     claimName: ${APP_NAME}-backup-verification
                 - name: ${APP_NAME}-mariadb-backup-file-config
                   configMap:
-                    name: ${APP_NAME}-mariadb-backup-file-config--${SITE_NAME}
+                    name: ${APP_NAME}-config--${SITE_NAME}
                     items:
                       - key: backup.conf
                         path: backup.conf
