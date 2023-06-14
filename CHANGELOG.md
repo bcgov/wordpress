@@ -1,4 +1,7 @@
 # Changelog
+## June 14, 2023 (DESCW-1237)
+- Fixed volume config map for the mariadb backup cronjob, which was causing the backup job to fail.
+
 ## June 8, 2023 (DESCW-1189)
 - update wordpress to 6.2.2
 - fix bug caused by redhat dependency update
