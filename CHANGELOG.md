@@ -1,4 +1,6 @@
 # Changelog
+## August 17, 2023 (DESCW-1428)
+- update wordpress to 6.3.0
 ## June 14, 2023 (DESCW-1237)
 - Fixed volume config map for the mariadb backup cronjob, which was causing the backup job to fail.
 

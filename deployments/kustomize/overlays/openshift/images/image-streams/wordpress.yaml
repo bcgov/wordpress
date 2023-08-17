@@ -9,7 +9,7 @@ metadata:
     source: docker-remote
 spec:
   tags:
-    - name: "6.2.2-php8.0-fpm-alpine"
+    - name: "6.3.0-php8.0-fpm-alpine"
       from:
         kind: DockerImage
         name: "artifacts.developer.gov.bc.ca/docker-remote/wordpress:6.2.0-php8.0-fpm-alpine"
