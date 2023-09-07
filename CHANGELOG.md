@@ -1,4 +1,7 @@
 # Changelog
+
+## September 07, 2023 (DESCW-1465)
+- Fixed wrong option name (max_post_size) in php.conf.ini
 ## August 17, 2023 (DESCW-1428)
 - update wordpress to 6.3.0
 ## June 14, 2023 (DESCW-1237)
