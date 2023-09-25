@@ -89,6 +89,14 @@ spec:
         - name: nginx-configmap-volume
           mountPath: /etc/nginx/conf.d/nginx.conf
           subPath: nginx.conf
+        - name: plugins-themes
+          mountPath: /var/www/html/wp-content/plugins
+          subPath: wp-content/plugins
+          readOnly: true
+        - name: plugins-themes
+          mountPath: /var/www/html/wp-content/themes
+          subPath: wp-content/themes
+          readOnly: true
       dnsPolicy: ClusterFirst
       restartPolicy: Always
       schedulerName: default-scheduler
