@@ -1,5 +1,7 @@
 # Changelog
-
+## September 25, 2023 (DESCW-1536)
+- Fixed vendor dependency loads.
+- Fixed issues with plugin/theme resources not being rendered
 ## September 07, 2023 (DESCW-1465)
 - Fixed wrong option name (max_post_size) in php.conf.ini
 ## August 17, 2023 (DESCW-1428)
