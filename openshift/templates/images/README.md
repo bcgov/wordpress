@@ -40,7 +40,7 @@ Base images are images that would use dockerhub image streams to create an addit
 >A base image is an image that has no parent layer.
 
 Use the same convention as dockerhub, specifying the full version tag where possible. For example:
-* `alpine:3.15.4`
+* `alpine:3.16.2`
 * `mariadb:10.5.13-r0`
 * `nginx:1.23.1-alpine`
 
@@ -74,8 +74,8 @@ Use the convention [product]-[service component]-run:tag. For example:
 
 | Image | Version | Description |
 | ----- | ------- | ----------- |
-| alpine | 3.15.4 | Base Alpine linux |
-| mariadb | 10.6.8-r0 | MariaDB version that gets build in base-images via Dockerfile. Dependent on the [Alpine version](https://pkgs.alpinelinux.org/packages?name=mariadb&branch=v3.15): |
+| alpine | 3.16.2 | Base Alpine linux |
+| mariadb | 10.6.8-r0 | MariaDB version that gets build in base-images via Dockerfile. Dependent on the [Alpine version](https://pkgs.alpinelinux.org/packages?name=mariadb&branch=v3.16): |
 | nginx | 1.23.1-alpine | Nginx web server, used to serve WordPress / PHP |
-| wordpress | 6.3.0-php8.0-fpm-alpine | PHP-FPM for WordPress 7.4 no longer supported by WordPress docker image|
+| wordpress | 6.3.1-php8.0-fpm-alpine | PHP-FPM for WordPress 7.4 no longer supported by WordPress docker image|
 | ubuntu | 22.04| Used for the sidecar |

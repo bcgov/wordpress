@@ -16,7 +16,7 @@ LABEL org.opencontainers.image.created=$BUILD_DATE \
 
 SHELL ["/bin/ash", "-euo", "pipefail", "-c"]
 
-# Mariadb versions are here: https://pkgs.alpinelinux.org/packages?name=mariadb&branch=v3.15
+# Mariadb versions are here: https://pkgs.alpinelinux.org/packages?name=mariadb&branch=v3.16
 RUN \
   apk add --no-cache mariadb && \
   TO_KEEP=$(echo " \

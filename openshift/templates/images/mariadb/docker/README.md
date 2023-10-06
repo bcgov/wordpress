@@ -5,4 +5,4 @@ This docker build is from https://github.com/jbergstroem/mariadb-alpine and is p
     * Compatibility
     * Security
   * Customizations can be made for our platform, if need be, and then preserved.
-* The mariadb packages for specific versions of Alpine can be found here: https://pkgs.alpinelinux.org/packages?name=mariadb&branch=v3.15
+* The mariadb packages for specific versions of Alpine can be found here: https://pkgs.alpinelinux.org/packages?name=mariadb&branch=v3.16

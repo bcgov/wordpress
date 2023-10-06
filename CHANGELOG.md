@@ -1,4 +1,7 @@
 # Changelog
+## October 05, 2023 (DESCW-1534)
+- Update wordpress to 6.3.1.
+
 ## September 25, 2023 (DESCW-1536)
 - Fixed vendor dependency loads.
 - Fixed issues with plugin/theme resources not being rendered
