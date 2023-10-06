@@ -5,7 +5,6 @@ services:
     user: "1002:1001"
     environment:
       MARIADB_ROOT_PASSWORD: password
-      MARIADB_AUTO_UPGRADE: 1
     command: >-
       mariadb --innodb-buffer-pool-size=10M
       --innodb_log_buffer_size=512K
