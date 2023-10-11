@@ -27,6 +27,7 @@ RUN set -ex; \
 		php-zip \
 		composer \
 		mariadb-client \
+		mariadb-server-utils \
 		inetutils-ping \
 	; \
 	add-apt-repository ppa:git-core/ppa ; \

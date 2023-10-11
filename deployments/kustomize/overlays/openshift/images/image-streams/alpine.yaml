@@ -8,9 +8,9 @@ metadata:
     source: docker-remote
 spec:
   tags:
-    - name: "3.16.2"
+    - name: "3.18.4"
       from:
         kind: DockerImage
-        name: "artifacts.developer.gov.bc.ca/docker-remote/alpine:3.16.2"
+        name: "artifacts.developer.gov.bc.ca/docker-remote/alpine:3.18.4"
       referencePolicy:
         type: Local

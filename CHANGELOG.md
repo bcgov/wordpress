@@ -1,4 +1,9 @@
 # Changelog
+
+## October 11, 2023 (DESCW-1534)
+- Update Alpine to 3.18.4
+- Add mariadb-server-utils to sidecar
+
 ## October 05, 2023 (DESCW-1534)
 - Update wordpress to 6.3.1.
 
