@@ -62,7 +62,6 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MARIADB_AUTO_UPGRADE: 1
     volumes:
       - db_run:/var/run
       - ${DB_VOLUME:-database}:/var/lib/mysql
