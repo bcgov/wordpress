@@ -351,6 +351,7 @@ spec:
 ```
 
 ### Updating plugins and themes
+* If a plugins-themes PVC does not exist in the namespace, you will need to create one.
 * To update plugins and themes in the openshift deployments, you will have to generate another overlay which will point to the `./deployments/kustomize/overlays/openshift/images` folder of this repo and mimics `./deployments/kustomize/base/plugins-themes/`
 * Update your license plate in the kustomization.yaml file.
 * Update the plugins and/or themes in the composer.json file.
