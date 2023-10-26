@@ -1,4 +1,6 @@
 # Changelog
+## October 26, 2023
+- Removed plugins-themes volume from the plugins_themes kustomize deployment to avoid deleting it when using oc delete -k
 
 ## October 11, 2023 (DESCW-1534)
 - Update Alpine to 3.18.4
