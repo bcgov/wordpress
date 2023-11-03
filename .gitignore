@@ -2,3 +2,9 @@
 dev/certs/*
 .DS_Store
 deployments/kustomize/overlays/experimental
+
+
+#documentation
+documentation/docs/.vuepress/.temp
+documentation/docs/.vuepress/.cache
+documentation/node_modules

@@ -1,4 +1,8 @@
 # Changelog
+## November 1, 2023 (DECW-1559)
+- Added vuepress documentation boiler plate
+- Added github workflows to publish to gh_pages
+
 ## October 26, 2023
 - Removed plugins-themes volume from the plugins_themes kustomize deployment to avoid deleting it when using oc delete -k
 
