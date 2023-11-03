@@ -1,6 +1,7 @@
 ![Lifecycle:Experimental](https://img.shields.io/badge/Lifecycle-Experimental-339999)
 
 # WordPress Deployments
+WordPress Deployments uses [Kustomize](https://kustomize.io/) for deploying WordPress to a Kubernetes cluster, or to OpenShift.  [WordPress Deployment Documentation](https://bcgov.github.io/wordpress/).
 
 ## Running on Docker
 The project can also be run locally using Docker and Docker Compose.  Refer to [Running with Docker](./dev/README.md) for instructions.
