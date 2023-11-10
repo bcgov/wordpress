@@ -1,1 +1,0 @@
-import{_ as s,o as t,c as o,a as e,b as r}from"./app-f472f789.js";const a={},n=e("h1",{id:"wordpress-deployments",tabindex:"-1"},[e("a",{class:"header-anchor",href:"#wordpress-deployments","aria-hidden":"true"},"#"),r(" WordPress Deployments")],-1),d=[n];function c(_,i){return t(),o("div",null,d)}const h=s(a,[["render",c],["__file","index.html.vue"]]);export{h as default};

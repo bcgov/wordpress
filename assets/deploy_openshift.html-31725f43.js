@@ -1,1 +1,0 @@
-const e=JSON.parse('{"key":"v-d7c4465a","path":"/guide/GettingStarted/deploy_openshift.html","title":"Deploying WordPress to OpenShift","lang":"en-US","frontmatter":{},"headers":[],"git":{"contributors":[{"name":"Shawn","email":"45861534+ShawnTurple@users.noreply.github.com","commits":1}]},"filePathRelative":"guide/GettingStarted/deploy_openshift.md"}');export{e as data};

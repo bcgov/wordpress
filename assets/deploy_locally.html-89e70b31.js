@@ -1,1 +1,0 @@
-const e=JSON.parse('{"key":"v-6ee2e0da","path":"/guide/GettingStarted/deploy_locally.html","title":"Deploying WordPress to Docker","lang":"en-US","frontmatter":{},"headers":[],"git":{"contributors":[{"name":"Shawn","email":"45861534+ShawnTurple@users.noreply.github.com","commits":1}]},"filePathRelative":"guide/GettingStarted/deploy_locally.md"}');export{e as data};

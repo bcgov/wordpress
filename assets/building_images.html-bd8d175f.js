@@ -1,0 +1,1 @@
+const t=JSON.parse('{"key":"v-cdf68408","path":"/guide/GettingStarted/building_images.html","title":"Building Images","lang":"en-US","frontmatter":{},"headers":[],"git":{"contributors":[{"name":"ASpiteri-BCGov","email":"49036255+ASpiteri-BCGov@users.noreply.github.com","commits":1}]},"filePathRelative":"guide/GettingStarted/building_images.md"}');export{t as data};
