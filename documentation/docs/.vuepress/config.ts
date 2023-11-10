@@ -6,8 +6,8 @@ import { searchPlugin } from "@vuepress/plugin-search";
 export default defineUserConfig({
   base: "/wordpress/",
   lang: "en-US",
-  title: "OpenShift WordPress Deployments",
-  description: "Developer Documentation for WordPress OpenShift Deployments",
+  title: "WordPress Deployments",
+  description: "Developer Documentation for WordPress Deployments",
   theme: defaultTheme({
     logo: "/images/BCID_H_rgb_pos.png",
     logoDark: "/images/BCID_H_rgb_rev.png",
@@ -43,4 +43,6 @@ export default defineUserConfig({
       // options
     })
   ],
+  port: 30060
+
 });
