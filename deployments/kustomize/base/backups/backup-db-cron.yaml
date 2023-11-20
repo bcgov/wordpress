@@ -29,7 +29,8 @@ spec:
         spec:
           containers:
             - name: wordpress-mariadb-backup-runner
-              image: backup-container-mariadb
+              image: >-
+                image-registry.openshift-image-registry.svc:5000/23576a-tools/backup-container-mariadb:latest
               command:
                 - "/bin/bash"
                 - "-c"

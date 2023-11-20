@@ -1,4 +1,7 @@
 # Changelog
+## November 20, 2023 (DESCW-1686)
+- Update image reference for backup-container-mariadb
+
 ## November 1, 2023 (DECW-1559)
 - Added vuepress documentation boiler plate
 - Added github workflows to publish to gh_pages
