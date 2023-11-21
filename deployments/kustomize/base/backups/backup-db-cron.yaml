@@ -29,7 +29,8 @@ spec:
         spec:
           containers:
             - name: wordpress-mariadb-backup-runner
-              image: backup-container-mariadb
+              image: >-
+                backup-container-mariadb
               command:
                 - "/bin/bash"
                 - "-c"
