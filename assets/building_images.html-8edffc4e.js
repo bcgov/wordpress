@@ -1,0 +1,1 @@
+import{_ as a,o as i,c as s,a as e,b as t}from"./app-1ff8ad8d.js";const n={},c=e("h1",{id:"building-images",tabindex:"-1"},[e("a",{class:"header-anchor",href:"#building-images","aria-hidden":"true"},"#"),t(" Building Images")],-1),d=[c];function o(r,_){return i(),s("div",null,d)}const m=a(n,[["render",o],["__file","building_images.html.vue"]]);export{m as default};
