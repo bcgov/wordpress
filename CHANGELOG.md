@@ -1,4 +1,7 @@
 # Changelog
+## November 24, 2023 (DESCW-1677)
+- Added documentation for manually backing up or copying a site.
+
 ## November 1, 2023 (DECW-1559)
 - Added vuepress documentation boiler plate
 - Added github workflows to publish to gh_pages

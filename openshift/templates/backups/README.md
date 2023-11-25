@@ -57,3 +57,47 @@ gzip -cd ~/backups/db/daily/test.sql.gz | mysql -u $WORDPRESS_DB_USER -p$(cat $M
 * Do a ```rsync -a --exclude=restore /home/sidecar/backups/html/ /var/www/html/``` 
     * you might have to delete the files in /var/www/html, but **WARNING** make sure you know what you are doing.
 * Switch from backup volume to regular volume as indicated below, so now WordPress should be using restored files.
+
+### Manual backups/site duplication
+At times you may wish to back up the database manually - for example, when copying a site or in preparation for a potentially disruptive operation.
+1. Export the database by running the following command from the `sidecar of the original site`. Replace example.gov.bc.ca with the URL of the site.
+    ```bash
+    wp db export --tables=$(wp db tables --url=old-example.url/ --path=/var/www/html/ --all-tables-with-prefix --format=csv) --url=old-example.url/ --path=/var/www/html/ backup.sql
+    ```
+2. If the site to be backed up is part of a multisite deployment and you are copying/restoring it to another multisite deployment, replace all instances of the old site id with the new one (if it is different). To find the id of the site, navigate to the `Sites` dashboard page and hover over the site. the URL will end in `?id=[site-id]`.
+   * Note: If the new deployment is not multisite, new-site-id will be an `empty string`.
+    * From the terminal, run:
+        ```bash
+        vi backup.sql
+        ```
+    * Then from the vi editor, run the search and replace command:
+        ```vi
+        :%s/wp_[example-site-id]_/wp_[new-site-id]/g
+        ```
+3. Copy the backup file from the old sidecar to your local machine. 
+   * Note: We need to do this step because we can't copy files from one pod directly to another.
+   * Log in to the `openshift-cli` namespace of the site to be backed up from `your local terminal` then run these commands:
+    ```bash
+    # Find the full name of the sidecar from which to copy the file
+    oc get pods
+
+    # Copy the file from that pod using the full sidecar pod name from the command above.
+    oc cp [sidecar-full-pod-name]:/var/www/html/backup.sql [local-path-to-copy-to]/backup.sql
+    ```
+4. Now copy the backup file to the new site's sidecar.
+   * You might need to change projects first if the new site will be in a different namespace than the original.
+   * Run this command from `your local terminal`:
+        ```bash
+        oc cp [local-path-to-copy-from]/backup.sql [new-sidecar-pod-name]:/var/www/html/backup.sql
+        ```
+5. From the `new sidecar`, import the backup into the new site.
+    ```bash
+    wp db import --url=new-example.url/ backup.sql
+    ```
+6. If the new site will be running parallel to the old, replace all instances of the old url with the new url to avoid conflicts
+   ```bash
+   wp search-replace --url=new-example.url/ --all-tables-with-prefix old-example.url new-example.url
+
+   wp search-replace --url=new-example.url --all-tables-with-prefix new-example.url/wp-content/uploads/sites/[old-site-id] new-example.url/wp-content/uploads/[new-site-id]
+   ```
+7. Double check the /var/www/html/wp-content/uploads/sites/ folder has a subdirectory for the [new-site-id]. For example, if the new site id is 1, there should be a folder /var/www/html/wp-content/uploads/sites/1 which contains the uploads from the original site.
