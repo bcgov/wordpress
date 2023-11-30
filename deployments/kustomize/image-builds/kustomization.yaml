@@ -8,3 +8,4 @@ resources:
 - nginx-build.yaml
 - wordpress-build.yaml
 - sidecar-build.yaml
+- plugins-themes-build.yaml

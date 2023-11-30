@@ -11,13 +11,7 @@ kind: BuildConfig
 apiVersion: build.openshift.io/v1
 metadata:
   name: wordpress-nginx-run
-strategy:
-  dockerStrategy:
-    from:
-        kind: DockerImage
-        name: nginx:1.25.3
-    type: Docker
-    forcePull: true
+
 spec:
   successfulBuildsHistoryLimit: 2
   failedBuildsHistoryLimit: 2
@@ -29,7 +23,11 @@ spec:
       uri: https://github.com/bcgov/wordpress.git
     contextDir: openshift/templates/images/nginx/docker
   strategy:
-    type: Docker
+    dockerStrategy:
+      from:
+          kind: DockerImage
+          name: nginx:1.25.3
+      type: Docker
   output:
     to:
       kind: ImageStreamTag
