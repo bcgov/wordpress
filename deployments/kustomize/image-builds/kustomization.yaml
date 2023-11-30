@@ -1,5 +1,8 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+commonLabels:
+  env: tools
+  app: wordpress
 resources:
 - mariadb-build.yaml
 - nginx-build.yaml

@@ -1,4 +1,5 @@
-FROM nginx:1.23.1-alpine
+# OpenShift uses version from buildconfig - Don't update
+FROM nginx:1
 
 RUN set -x \
     && sed -i -e 's/^\(nginx:[^:]\):[0-9]*:[0-9]*:/\1:1001:0:/' /etc/passwd \

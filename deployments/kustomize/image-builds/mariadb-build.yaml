@@ -1,18 +1,25 @@
 kind: ImageStream
 apiVersion: image.openshift.io/v1
 metadata:
-  name: wordpress-nginx-run
+  name: mariadb-run
   annotations:
-    description: Keeps track of wordpress-nginx-run images
+    description: Keeps track of wordpress-mariadb-run images
   labels:
-    name: wordpress-nginx-run-images
+    name: wordpress-mariadb-run-image
+
 ---
 kind: BuildConfig
 apiVersion: build.openshift.io/v1
 metadata:
-  name: wordpress-nginx-run
+  name: wordpress-mariadb-run
+  annotations:
+    description: This builds the wordpress-mariadb-run image from GIT source.
 strategy:
   dockerStrategy:
+    from:
+        kind: DockerImage
+        name: alpine:3.18.4
+    type: Docker
     forcePull: true
 spec:
   successfulBuildsHistoryLimit: 2
@@ -23,11 +30,10 @@ spec:
     git:
       ref: main
       uri: https://github.com/bcgov/wordpress.git
-    contextDir: openshift/templates/images/nginx/docker
+    contextDir: openshift/templates/images/mariadb/docker
   strategy:
     type: Docker
   output:
     to:
       kind: ImageStreamTag
-      name: wordpress-nginx-run:dev
-
+      name: wordpress-mariadb-run:dev

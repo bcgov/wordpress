@@ -1,4 +1,5 @@
-FROM alpine:3.18.4
+# OpenShift uses version from buildconfig - Don't update
+FROM alpine:3.18
 
 # https://github.com/opencontainers/image-spec/blob/master/annotations.md
 ARG BUILD_DATE

@@ -1,4 +1,5 @@
-FROM ubuntu:22.04
+# OpenShift uses version from buildconfig - Don't update
+FROM ubuntu:22
 
 ARG CHANGE_USER=0
 

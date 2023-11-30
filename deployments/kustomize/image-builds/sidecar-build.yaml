@@ -22,7 +22,7 @@ metadata:
 spec:
   successfulBuildsHistoryLimit: 2
   failedBuildsHistoryLimit: 2
-  runPolicy: Parallel
+  runPolicy: Serial
   completionDeadlineSeconds: 1800
   source:
     type: Git
@@ -31,8 +31,10 @@ spec:
       uri: https://github.com/bcgov/wordpress.git
     contextDir: openshift/templates/images/sidecar/docker
   strategy:
-    # The FROM line in the Dockerfile gets replaced by the `name:` in the dockerStrategy below.
     dockerStrategy:
+      from:
+        kind: DockerImage
+        name: ubuntu:22.04
       buildArgs:
         - name: CHANGE_USER
           value: '1003760000'
@@ -44,4 +46,4 @@ spec:
   resources:
     limits:
       cpu: 1
-      memory: 6Gi
+      memory: 3Gi
