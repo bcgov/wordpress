@@ -20,16 +20,20 @@ metadata:
 spec:
   successfulBuildsHistoryLimit: 2
   failedBuildsHistoryLimit: 2
-  runPolicy: Parallel
+  runPolicy: Serial
   completionDeadlineSeconds: 1800
+  strategy:
+    dockerStrategy:
+      from:
+        kind: DockerImage
+        name: wordpress:6.4.1-php8.0-fpm-alpine
+    type: Docker
   source:
     type: Git
     git:
       ref: main
       uri: https://github.com/bcgov/wordpress.git
     contextDir: openshift/templates/images/wordpress/docker
-  strategy:
-    type: Docker
   output:
     to:
       kind: ImageStreamTag
@@ -37,4 +41,4 @@ spec:
   resources:
     limits:
       cpu: 1
-      memory: 6Gi
+      memory: 3Gi

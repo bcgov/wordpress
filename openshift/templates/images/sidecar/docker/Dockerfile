@@ -1,4 +1,5 @@
-FROM ubuntu:22.04
+# OpenShift uses version from buildconfig - Don't update
+FROM ubuntu:latest
 
 ARG CHANGE_USER=0
 
@@ -27,7 +28,6 @@ RUN set -ex; \
 		php-zip \
 		composer \
 		mariadb-client \
-		mariadb-server-utils \
 		inetutils-ping \
 	; \
 	add-apt-repository ppa:git-core/ppa ; \

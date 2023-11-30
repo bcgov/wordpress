@@ -1,7 +1,7 @@
 kind: ImageStream
 apiVersion: image.openshift.io/v1
 metadata:
-  name: wordpress-mariadb-run
+  name: mariadb-run
   annotations:
     description: Keeps track of wordpress-mariadb-run images
   labels:
@@ -14,10 +14,14 @@ metadata:
   name: wordpress-mariadb-run
   annotations:
     description: This builds the wordpress-mariadb-run image from GIT source.
-strategy:
-  dockerStrategy:
-    forcePull: true
+
 spec:
+  strategy:
+    dockerStrategy:
+      from:
+          kind: DockerImage
+          name: alpine:3.18.4
+      type: Docker
   successfulBuildsHistoryLimit: 2
   failedBuildsHistoryLimit: 2
   runPolicy: Serial
@@ -27,8 +31,6 @@ spec:
       ref: main
       uri: https://github.com/bcgov/wordpress.git
     contextDir: openshift/templates/images/mariadb/docker
-  strategy:
-    type: Docker
   output:
     to:
       kind: ImageStreamTag

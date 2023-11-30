@@ -28,6 +28,18 @@ spec:
       ref: main
       uri: https://github.com/bcgov/wordpress.git
     contextDir: openshift/templates/images/plugins_themes
+    images:
+    - from:
+        kind: DockerImage
+        name: composer:lts
+      as:
+      - composer-source
+    - from:
+        kind: DockerImage
+        name: php:8.0
+      as:
+      - php-source
+    
   strategy:
     type: Docker
   output:
@@ -37,4 +49,4 @@ spec:
   resources:
     limits:
       cpu: 1
-      memory: 6Gi
+      memory: 3Gi
