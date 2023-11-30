@@ -1,4 +1,11 @@
 # Changelog
+## November 30, 2023 (DESCW-1771)
+- moved image_builds from deployments/kustomize/overlays/openshift -> deployments/kustomize to be consistent with other repositories.
+- documentation update.
+- all image versions are now only changed at the build configs, not at the Dockerfile
+- removed mariadb-server-utils from sidecar build, as this package doesn't exists.
+
+
 ## November 24, 2023 (DESCW-1677)
 - Added documentation for manually backing up or copying a site.
 

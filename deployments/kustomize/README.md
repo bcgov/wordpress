@@ -44,7 +44,7 @@ Assuming you have rancher desktop installed, you might have different contexts, 
 
 
 ## Deploying images to OpenShift tools namespace
-* In order for deployments in openshift to work, you will have to generate your own overlay which will point to the `./deployments/kustomize/overlays/openshift/images` folder of this repo.
+* In order for deployments in openshift to work, you will have to generate your own overlay which will point to the `./deployments/kustomize/image_builds` folder of this repo.
 * Update your license plate in the kustomization.yaml file.
 
 #### Sample overlay for image deployment in tool namespace
@@ -54,7 +54,7 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 # Points to the overlay that creates the images.
 resources:
-- github.com/bcgov/wordpress/deployments/kustomize/overlays/openshift/images
+- github.com/bcgov/wordpress/deployments/kustomize/image_builds
 # Update to your license plate in the tools namespace.
 namespace: 123456-tools
 ```
