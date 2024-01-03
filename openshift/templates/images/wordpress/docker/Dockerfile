@@ -1,5 +1,5 @@
 # OpenShift uses version from buildconfig - Don't update
-FROM wordpress:6-php8.0-fpm-alpine
+FROM wordpress:6-php8.3-fpm-alpine
 # Install LDAP for Next Active Directory Integration Plugin.
 RUN set -ex; \
         apk add --no-cache --virtual .build-deps \
