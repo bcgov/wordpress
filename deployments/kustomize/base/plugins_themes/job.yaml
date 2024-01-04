@@ -4,7 +4,6 @@ metadata:
   labels:
     app.kubernetes.io/part-of: wordpress
   name: wordpress-plugins-themes
-  namespace: default
 spec:
   ttlSecondsAfterFinished: 120
   strategy: 

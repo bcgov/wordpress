@@ -21,7 +21,7 @@
         "bcgov-theme/bcgov-wordpress-block-theme": "dev-development"
     },
     "config": {
-      "php": "8.0",
+      "php": "8.3",
       "allow-plugins": {
         "composer/installers": true
       }

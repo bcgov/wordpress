@@ -2,6 +2,7 @@
 ## January 3, 2023 
 - updated WorPress 6.4.2, and upgraded PHP 8.0 -> 8.3 as 6.4.2 no longer supports PHP 8.0 (DESCW-1872)
 - update plugins_themes php 8.0 -> 8.3
+- remove namespace from volume and job in base plugin_themes deployment (DESCW-1429)
 
 ## November 30, 2023 (DESCW-1771)
 - moved image_builds from deployments/kustomize/overlays/openshift -> deployments/kustomize to be consistent with other repositories.
