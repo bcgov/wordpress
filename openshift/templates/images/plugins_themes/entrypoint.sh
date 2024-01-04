@@ -1,2 +1,4 @@
 #!/bin/bash
-composer update;
+rm composer.lock
+rm -rf vendor
+composer install;
