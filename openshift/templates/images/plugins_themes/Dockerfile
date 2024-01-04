@@ -1,7 +1,8 @@
 # OpenShift uses version from buildconfig, and renames images composer -> composer-source, and php -> php-source
-FROM composer-source AS composer
+#FROM composer-source AS composer
+FROM composer:lts AS composer
 
-FROM php-source
+FROM php:8.3
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
