@@ -1,4 +1,8 @@
 # Changelog
+## January 8, 2023
+- update codeowners and dependabot to digital-engagement-solutions-custom-web team
+
+
 ## January 3, 2023 
 - updated WorPress 6.4.2, and upgraded PHP 8.0 -> 8.3 as 6.4.2 no longer supports PHP 8.0 (DESCW-1872)
 - update plugins_themes php 8.0 -> 8.3
