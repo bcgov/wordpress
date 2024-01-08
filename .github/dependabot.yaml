@@ -7,7 +7,7 @@ updates:
       interval: "daily"
     open-pull-requests-limit: 0
     reviewers:
-      - bcgov/gdx-engagement-admin
+      - bcgov/digital-engagement-solutions-custom-web
 
   # Maintain dependencies for wordpress
   - package-ecosystem: "docker"
@@ -16,7 +16,7 @@ updates:
       interval: "daily"
     open-pull-requests-limit: 0
     reviewers:
-      - bcgov/gdx-engagement-admin
+      - bcgov/digital-engagement-solutions-custom-web
 
   # Maintain dependencies for mariadb
   - package-ecosystem: "docker"
@@ -25,7 +25,7 @@ updates:
       interval: "daily"
     open-pull-requests-limit: 0
     reviewers:
-      - bcgov/gdx-engagement-admin
+      - bcgov/digital-engagement-solutions-custom-web
 
   # Maintain dependencies for the sidecar
   - package-ecosystem: "docker"
@@ -34,4 +34,4 @@ updates:
       interval: "daily"
     open-pull-requests-limit: 0
     reviewers:
-      - bcgov/gdx-engagement-admin
+      - bcgov/digital-engagement-solutions-custom-web
