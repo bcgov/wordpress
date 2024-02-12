@@ -1,13 +1,14 @@
 import { defaultTheme } from "@vuepress/theme-default";
-
 import { defineUserConfig } from "vuepress";
 import { searchPlugin } from "@vuepress/plugin-search";
+import { viteBundler } from "@vuepress/bundler-vite";
 
 export default defineUserConfig({
   base: "/wordpress/",
   lang: "en-US",
   title: "WordPress Deployments",
   description: "Developer Documentation for WordPress Deployments",
+  bundler: viteBundler({}),
   theme: defaultTheme({
     logo: "/images/BCID_H_rgb_pos.png",
     logoDark: "/images/BCID_H_rgb_rev.png",
