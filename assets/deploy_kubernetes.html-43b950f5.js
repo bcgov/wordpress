@@ -1,1 +1,0 @@
-const e=JSON.parse('{"key":"v-884bebbe","path":"/guide/GettingStarted/deploy_kubernetes.html","title":"Deploying WordPress to Kubernetes","lang":"en-US","frontmatter":{},"headers":[],"git":{"contributors":[{"name":"Shawn","email":"45861534+ShawnTurple@users.noreply.github.com","commits":1}]},"filePathRelative":"guide/GettingStarted/deploy_kubernetes.md"}');export{e as data};
