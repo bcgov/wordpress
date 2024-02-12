@@ -1,4 +1,8 @@
 # Changelog
+
+## February 12, 2023
+- Update VuePress dependencies (DESCW-1926)
+
 ## January 8, 2023
 - update codeowners and dependabot to digital-engagement-solutions-custom-web team
 
