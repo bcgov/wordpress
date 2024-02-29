@@ -48,7 +48,7 @@ services:
             wp site list --fields=url &&
             echo '*** Backing up Database in case of disaster ***' &&
             wp db export /tmp/WordPress/all-sites-$(date '+%Y-%m-%d').sql --add-drop-table &&
-            echo '*** The WordPress CLI is no available in any terminal window `wp help` ***' &&
+            echo '*** The WordPress CLI is now available in any terminal window `wp help` ***' &&
             tail -f /dev/null"
     environment:
       WORDPRESS_DB_HOST: ${MYSQL_HOST}
