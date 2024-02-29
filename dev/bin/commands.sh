@@ -42,6 +42,14 @@ gowp() {
 	echo $(pwd)
 }
 
+# php composer docker instance https://hub.docker.com/_/composer
+wp_composer() {
+  docker run --rm --interactive --tty \
+  --volume $PWD:/app \
+  composer:latest $@
+
+}
+
 # Searches WordPress ,but excludes certain directories.
 wpgrep() {
 	echo 'WordPress Grep...'

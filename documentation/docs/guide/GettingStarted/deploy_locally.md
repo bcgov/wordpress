@@ -96,6 +96,7 @@ fi
  * `gowp` - Goes to plugin directory
  * `gowp themes` - Goes to themes directory
  * `wpgrep` - Does a grep with certain excludes to directories like .git, node_modules, vendor
+ * `wp_composer` - Runs the latest php composer
  * `wp` - [Wordpress Command line](https://wp-cli.org/) that allows an endless amount of things to be completed with your local WordPress instance.
 
 
