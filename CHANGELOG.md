@@ -1,13 +1,19 @@
 # Changelog
+## February 29, 2024
+- Updated local WordPress Deployment
+  - auto updates 3rd party plugins to minor versions.
+  - checks to see if cores is at latest version
+  - lists sites in the stdout for docker compose up
+  - backups entire database to /tmp/WordPress -> ~/tmp/WordPress (default)
+- Add a `wp_composer` command which equals composer:latest https://hub.docker.com/_/composer
 
-## February 12, 2023
+## February 12, 2024
 - Update VuePress dependencies (DESCW-1926)
 
-## January 8, 2023
+## January 8, 2024
 - update codeowners and dependabot to digital-engagement-solutions-custom-web team
 
-
-## January 3, 2023 
+## January 3, 2024
 - updated WorPress 6.4.2, and upgraded PHP 8.0 -> 8.3 as 6.4.2 no longer supports PHP 8.0 (DESCW-1872)
 - update plugins_themes php 8.0 -> 8.3
 - remove namespace from volume and job in base plugin_themes deployment (DESCW-1429)
