@@ -105,6 +105,9 @@ services:
     build:
       context: ../openshift/templates/images/wordpress/docker
     environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      WP_CORE_DIR: /var/www/html/
+      TMPDIR: /tmp/WordPress
       WORDPRESS_DB_HOST: ${MYSQL_HOST}
       WORDPRESS_DB_USER: ${MYSQL_USER}
       WORDPRESS_DB_PASSWORD: ${MYSQL_PASSWORD}
@@ -127,6 +130,7 @@ services:
       - /var/www/html
       - ${CONTENT_DIR}:/var/www/html/wp-content/
       - ${TEMP_DIR:-~/tmp/WordPress}:/tmp/WordPress:rw
+      - ./bin/setup-tests.sh:/usr/bin/setup-tests.sh
     networks:
       - wp_deploy
     depends_on:

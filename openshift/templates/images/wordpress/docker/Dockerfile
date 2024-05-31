@@ -8,3 +8,6 @@ RUN set -ex; \
         docker-php-ext-enable ldap;
 
 COPY php.conf.ini /usr/local/etc/php/conf.d/php.ini
+
+RUN apk add subversion
+RUN apk add mysql mysql-client

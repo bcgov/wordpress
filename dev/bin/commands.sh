@@ -34,6 +34,20 @@ wp() {
 wp_audit() {
     source "${ROOT_PATH}bin/wpaudit.sh"
 }
+
+# Set up WordPress unit testing environment
+wp_setup_tests() {
+    docker exec -it dev-wordpress-php-fpm-1 /bin/sh -c "/usr/bin/setup-tests.sh wordpress_test root ${MYSQL_ROOT_PASSWORD} ${MYSQL_HOST}"
+}
+
+# Perform WordPress PHP unit tests on the current directory
+# Should be used from a theme or plugin project's root
+wp_test() {
+    docker exec \
+    -w /var/www/html/wp-content/${PWD//$CONTENT_DIR/} \
+    -it dev-wordpress-php-fpm-1 \
+    vendor/bin/phpunit --configuration phpunit.xml.dist
+}
     
 # Goes to either the plugin directory or theme directory
 gowp() {
@@ -44,10 +58,9 @@ gowp() {
 
 # php composer docker instance https://hub.docker.com/_/composer
 wp_composer() {
-  docker run --rm --interactive --tty \
-  --volume $PWD:/app \
-  composer:latest $@
-
+    docker run --rm --interactive --tty \
+    --volume $PWD:/app \
+    composer:latest $@
 }
 
 # Searches WordPress ,but excludes certain directories.
