@@ -5,6 +5,7 @@
 - Created two new commands to support the above:
   - `wp_setup_tests`: Runs the WP-provided script to install test files and set up the test database.
   - `wp_test`: Runs unit tests on the current directory.
+- **NOTE:** Run `docker compose down` and `docker compose up --build` to get these changes if you already have this deployment running.
 
 ## February 29, 2024
 - Updated local WordPress Deployment
