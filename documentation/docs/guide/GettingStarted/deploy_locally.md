@@ -125,7 +125,7 @@ Once this is done you can use the following commands from any directory
 - `wp_log` - Tails the debug.log in the content directory
 - `gowp` - Goes to plugin directory
 - `gowp themes` - Goes to themes directory
-- `wp_setup_tests` - Sets up WordPress unit testing environment.
+- `wp_setup_tests` - Sets up WordPress unit testing environment. See the Unit tests section below for instructions.
 - `wp_test` - Runs unit tests from the current directory.
 - `wpgrep` - Does a grep with certain excludes to directories like .git, node_modules, vendor
 - `wp_composer` - Runs the latest php composer
@@ -161,6 +161,8 @@ wp db import /tmp/WordPress/all-sites.sql
 
 `wp-cli` provides [a way to set up and perform unit/integration tests](https://developer.wordpress.org/cli/commands/scaffold/plugin-tests/) in WordPress' official testing environment.
 If a plugin has been configured to use this method of unit testing, we can run those tests inside this docker deployment.
+
+The WordPress Docker instance must be up and running to use the `wp_setup_tests` or `wp_test` commands (run `wp_start` to start the Docker instance).
 
 ### Setup
 
