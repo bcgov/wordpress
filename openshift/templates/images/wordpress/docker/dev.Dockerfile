@@ -8,3 +8,7 @@ RUN set -ex; \
         docker-php-ext-enable ldap;
 
 COPY php.conf.ini /usr/local/etc/php/conf.d/php.ini
+
+# Required for installing the WP unit testing environment
+RUN apk add subversion
+RUN apk add mysql mysql-client

@@ -125,6 +125,8 @@ Once this is done you can use the following commands from any directory
 - `wp_log` - Tails the debug.log in the content directory
 - `gowp` - Goes to plugin directory
 - `gowp themes` - Goes to themes directory
+- `wp_setup_tests` - Sets up WordPress unit testing environment. See the Unit tests section below for instructions.
+- `wp_test` - Runs unit tests from the current directory.
 - `wpgrep` - Does a grep with certain excludes to directories like .git, node_modules, vendor
 - `wp_composer` - Runs the latest php composer
 - `wp` - [Wordpress Command line](https://wp-cli.org/) that allows an endless amount of things to be completed with your local WordPress instance.
@@ -154,3 +156,24 @@ This command will replace your entire database, before running `wp db import` ma
 ```sh:no-line-numbers
 wp db import /tmp/WordPress/all-sites.sql
 ```
+
+## Unit tests
+
+`wp-cli` provides [a way to set up and perform unit/integration tests](https://developer.wordpress.org/cli/commands/scaffold/plugin-tests/) in WordPress' official testing environment.
+If a plugin has been configured to use this method of unit testing, we can run those tests inside this docker deployment.
+
+The WordPress Docker instance must be up and running to use the `wp_setup_tests` or `wp_test` commands (run `wp_start` to start the Docker instance).
+
+### Setup
+
+To set up the WP testing environment inside the WordPress container, run the command `wp_setup_tests` from anywhere.
+
+If you get an error saying `command not found: wp_setup_tests`, follow the steps in the "Helper functions" section above.
+
+### Running tests
+
+To run a test:
+1. Navigate to the plugin you want to execute tests on.
+2. Run the command `wp_test`.
+   - If you get a message saying "No tests executed" the plugin is most likely not configured using the `wp scaffold plugin-tests` command so its tests cannot be executed this way. Run the unit tests locally instead (`composer run test`).
+   - If you get a message saying "Have you run bin/install-wp-tests.sh?" you will need to run the `wp_setup_tests` command, then try again.
