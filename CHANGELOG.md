@@ -1,5 +1,5 @@
 # Changelog
-### 2.2.0 May 2, 2024
+### May 2, 2024
 - Integrate reusable unit tests by adding resulable functionality to test commands. ([DESCW-2664](https://apps.itsm.gov.bc.ca/jira/browse/DESCW-2664))
 - 
 ## May 31, 2024
