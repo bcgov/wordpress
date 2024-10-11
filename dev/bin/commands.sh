@@ -46,7 +46,7 @@ wp_test() {
     docker exec \
     -w /var/www/html/wp-content/${PWD//$CONTENT_DIR/} \
     -it dev-wordpress-php-fpm-1 \
-    vendor/bin/phpunit --configuration phpunit.xml.dist
+    vendor/bin/phpunit --configuration vendor/bcgov/wordpress-utils/phpunit.xml.dist
 }
     
 # Goes to either the plugin directory or theme directory
