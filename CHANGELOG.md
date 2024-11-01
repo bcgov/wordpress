@@ -1,5 +1,6 @@
 # Changelog
 ### November 1, 2024
+- update plugin/theme deployments ([DESCW-2691](https://citz-gdx.atlassian.net/browse/DESCW-2691))
 - update images ([DESCW-2689](https://citz-gdx.atlassian.net/browse/DESCW-2689))
   - update WordPress deploy image  wordpress:6.4.2-php8.3-fpm-alpine - wordpress:6.6.2-php8.3-fpm-alpine
   - update Nginx deploy image 1.25.3 - 1.26.2
