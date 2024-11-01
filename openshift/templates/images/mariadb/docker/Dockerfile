@@ -1,5 +1,5 @@
 # OpenShift uses version from buildconfig - Don't update
-FROM alpine:3.18
+FROM alpine:3.20
 
 # https://github.com/opencontainers/image-spec/blob/master/annotations.md
 ARG BUILD_DATE
@@ -17,7 +17,7 @@ LABEL org.opencontainers.image.created=$BUILD_DATE \
 
 SHELL ["/bin/ash", "-euo", "pipefail", "-c"]
 
-# Mariadb versions are here: https://pkgs.alpinelinux.org/packages?name=mariadb&branch=v3.18
+# Mariadb versions are here: https://pkgs.alpinelinux.org/packages?name=mariadb&branch=v3.20&repo=&arch=x86_64&origin=&flagged=&maintainer=
 RUN \
   apk add --no-cache mariadb && \
   TO_KEEP=$(echo " \

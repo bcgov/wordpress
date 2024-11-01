@@ -20,7 +20,7 @@ spec:
     dockerStrategy:
       from:
           kind: DockerImage
-          name: alpine:3.18.4
+          name: alpine:3.20.3
       type: Docker
   successfulBuildsHistoryLimit: 2
   failedBuildsHistoryLimit: 2
