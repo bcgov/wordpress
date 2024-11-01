@@ -74,8 +74,8 @@ Use the convention [product]-[service component]-run:tag. For example:
 
 | Image | Version | Description |
 | ----- | ------- | ----------- |
-| alpine | 3.18.4 | Base Alpine linux |
-| mariadb | 10.6.8-r0 | MariaDB version that gets build in base-images via Dockerfile. Dependent on the [Alpine version](https://pkgs.alpinelinux.org/packages?name=mariadb&branch=v3.18): |
-| nginx | 1.23.1-alpine | Nginx web server, used to serve WordPress / PHP |
-| wordpress | 6.3.1-php8.0-fpm-alpine | PHP-FPM for WordPress 7.4 no longer supported by WordPress docker image|
+| alpine | 3.20.3 | Base Alpine linux |
+| mariadb | 10.11.8-r0 | MariaDB version that gets build in base-images via Dockerfile. Dependent on the [Alpine version](https://pkgs.alpinelinux.org/packages?name=mariadb&branch=v3.20&repo=&arch=x86_64&origin=&flagged=&maintainer=): |
+| nginx | 1.26.2-alpine | Nginx web server, used to serve WordPress / PHP |
+| wordpress | wordpress:6.4.2-php8.3-fpm-alpine | PHP-FPM for WordPress 7.4 no longer supported by WordPress docker image|
 | ubuntu | 22.04| Used for the sidecar |

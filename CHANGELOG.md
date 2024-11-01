@@ -1,6 +1,11 @@
 # Changelog
+### November 1, 2024
+- update images ([DESCW-2689](https://citz-gdx.atlassian.net/browse/DESCW-2689))
+  - update WordPress deploy image  wordpress:6.4.2-php8.3-fpm-alpine - wordpress:6.6.2-php8.3-fpm-alpine
+  - update Nginx deploy image 1.25.3 - 1.26.2
+  - update alpine deploy image 3.18.4 - 3.20.3 (mariadb v)
 ### May 2, 2024
-- Integrate reusable unit tests by adding resulable functionality to test commands. ([DESCW-2664](https://apps.itsm.gov.bc.ca/jira/browse/DESCW-2664))
+- Integrate reusable unit tests by adding resulable functionality to test commands. ([DESCW-2664](https://citz-gdx.atlassian.net/browse/DESCW-2664))
 - 
 ## May 31, 2024
 - Updated dev deployment to allow WordPress unit tests to be run inside the PHP Wordpress container.
