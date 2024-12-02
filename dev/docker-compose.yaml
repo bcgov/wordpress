@@ -14,6 +14,8 @@ services:
       context: ../openshift/templates/images/nginx/docker
     ports:
       - 443:443
+      # This is to allow access to WordPress local deployment inside another container
+      - 38080:38080
     links:
       - wordpress-php-fpm
     depends_on:

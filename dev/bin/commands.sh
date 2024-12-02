@@ -26,7 +26,7 @@ wp_stop() {
 
 # Access to the WordPress cli
 wp() {
-    cd $ROOT_PATH
+    #cd $ROOT_PATH
     docker exec -it dev-wp-cli-1 wp $@
 }
 
