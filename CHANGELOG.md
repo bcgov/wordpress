@@ -1,4 +1,8 @@
 # Changelog
+### December 2, 2024
+- allow access for WordPress local dev from within a local container ([DESCW-2657](https://citz-gdx.atlassian.net/browse/DESCW-2657))
+- removed $ROOT_PATH from wp command as it gave undesired results, and not required.
+
 ### November 1, 2024
 - update plugin/theme deployments ([DESCW-2691](https://citz-gdx.atlassian.net/browse/DESCW-2691))
 - update images ([DESCW-2689](https://citz-gdx.atlassian.net/browse/DESCW-2689))
