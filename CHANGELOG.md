@@ -1,6 +1,6 @@
 # Changelog
 ### December 16, 2024
-- update WordPress version to 2.7.1 ([DESCW-2837](https://citz-gdx.atlassian.net/browse/DESCW-2837))
+- update WordPress version to 6.7.1 ([DESCW-2837](https://citz-gdx.atlassian.net/browse/DESCW-2837))
 
 ### December 2, 2024
 - allow access for WordPress local dev from within a local container ([DESCW-2657](https://citz-gdx.atlassian.net/browse/DESCW-2657))
