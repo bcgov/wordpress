@@ -1,10 +1,6 @@
 # WordPress deployments
 *All commands are given from root of the repository.
 
-## OpenShift template deployments are deprecated
-**Warning**  Use of the OpenShift templates including image builds and deployments will be deprecated in favour of using Kustomize deployments.  Refer to [OpenShift Template Deployment](https://github.com/bcgov/wordpress/tree/bb8fd6066bcc2087605c50f941b8b906dc0e9b61/openshift/templates)
-
-
 
 ## Local deployment with Docker
 [Deploying WordPress with Docker Compose](../../dev/README.md)
@@ -19,28 +15,6 @@ Assuming you have rancher desktop installed, you might have different contexts, 
 * Set context ```kubectl config use-context rancher-desktop```
   * If successful you should see something like:
   * `Switched to context "rancher-desktop"`
-
-### Deploy with Kustomize
-* [Kustomize](https://kubectl.docs.kubernetes.io/) is a standalone tool to customize Kubernetes objects through a kustomization file, that ships with both OC and kubectl deployment utilities.
-* To make local deployments more seamless, all images are being pulled from DockerHub [bcgovgdx namespace](https://hub.docker.com/?namespace=bcgovgdx).
-* These images should **NOT** be used in production deployments.
-* Prerequisites
-  * Kubernetes cluster 
-  * Kubectl installed
-* Deploy using ```kubectl apply -k ./deployments/kustomize/overlays/local```
-* To **Delete** your deployment use:
-  * ```kubectl delete -k ./deployments/kustomize/overlays/local```
-  * CAUTION this will delete all resources, including volumes
-* Your new site should be accessible at http://0.0.0.0:30080/ 
-* WordPress networks can't be used due to the port restrictions.
-
-#### Access the sidecar
-* Find the sidecar pod by running ```kubectl get pods``` then replace the pod name in the command.
-* ```kubectl exec -it  pod/wordpress-sidecar-abcd -- bash```
-* cd /var/www/html
-* you can now run [wp cli](https://wp-cli.org/) commands, however locally this container is running in root so you will have to use the --allow-root flag
-* sample command ```wp plugin list --allow-root```
-
 
 
 ## Deploying images to OpenShift tools namespace
