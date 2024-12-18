@@ -43,7 +43,7 @@ docker compose --file docker-compose-init.yaml run self-signed-certificate-gener
   - Double-click the certificate.
   - Next to Trust, click the arrow and in the dropdown box for "When using this certificate:" select `Always Trust`.
 
-![keychainSnippet](./keychainSnippet.png)
+![keychainSnippet](../../assets/keychainSnippet.png)
 
 ::: tip
 If this cert is not working, try restarting your MAC, however there might be a less drastic way of making this work.
@@ -75,7 +75,7 @@ wp_start
 
 When you access Wordpress local for the first time, you will be prompted with the intial setup. You can use this screenshot for reference for what to enter.
 
-![wordpressInitialSetup](./wordpressInitialSetup.png)
+![wordpressInitialSetup](../../assets/wordpressInitialSetup.png)
 
 Once you have filled out all required inputs, click "Install WordPress"
 

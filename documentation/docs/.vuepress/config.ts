@@ -33,7 +33,6 @@ export default defineUserConfig({
           "/guide/GettingStarted/deploy_locally",
           "/guide/GettingStarted/deploy_kubernetes",
           "/guide/GettingStarted/deploy_openshift",
-          "/guide/GettingStarted/building_images",
         ]
       }, 
       // string - page file path
