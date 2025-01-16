@@ -1,4 +1,7 @@
 # Changelog
+### January 16, 2025
+- updating Code owners file, to configure requirements of code owner decision ([DESCW-2805](https://citz-gdx.atlassian.net/browse/DESCW-2805))
+  
 ### December 16, 2024
 - update WordPress version to 6.7.1 ([DESCW-2837](https://citz-gdx.atlassian.net/browse/DESCW-2837))
 
