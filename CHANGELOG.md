@@ -1,4 +1,8 @@
 # Changelog
+
+### February 21, 2025
+- Increase nginx `client_max_body_size` for port 38080 (used by NaadConnector/EEWS)
+
 ### January 16, 2025
 - updating Code owners file, to configure requirements of code owner decision ([DESCW-2805](https://citz-gdx.atlassian.net/browse/DESCW-2805))
   
