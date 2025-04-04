@@ -1,5 +1,8 @@
 # Changelog
 
+### April 4, 2025
+- improve workflow for wp-cli container ([DESCW-2977](https://citz-gdx.atlassian.net/browse/DESCW-2977))
+
 ### February 21, 2025
 - Increase nginx `client_max_body_size` for port 38080 (used by NaadConnector/EEWS)
 

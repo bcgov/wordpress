@@ -43,13 +43,18 @@ services:
       - db
     command: >
       sh -c "
-            echo '**** Checking WordPress Plugins, Core and Site List ***' &&
-            wp plugin update --all --minor  &&
-            wp core check-update &&
-            wp site list --fields=url &&
-            echo '*** Backing up Database in case of disaster ***' &&
-            wp db export /tmp/WordPress/all-sites-$(date '+%Y-%m-%d').sql --add-drop-table &&
-            echo '*** The WordPress CLI is now available in any terminal window `wp help` ***' &&
+            echo '**** Checking WordPress Plugins, Core and Site List ***' \
+            if ! wp core is-installed 2&> /dev/null; then \
+              # WP is not installed. Let's try installing it. \
+              echo '** installing wordpress core' \
+              wp core multisite-install --url=localhost --title='Local Development' --admin_user=admin --admin_password=password --admin_email=admin@example.com \
+            else
+              wp core check-update \
+              wp plugin update --all --minor  \
+              echo '*** Backing up Database in case of disaster ***' \
+              wp db export /tmp/WordPress/all-sites-$(date '+%Y-%m-%d-%H:%M').sql --add-drop-table \
+            fi \
+            echo '*** The WordPress CLI is now available in any terminal window `wp help` ***' \
             tail -f /dev/null"
     environment:
       WORDPRESS_DB_HOST: ${MYSQL_HOST}
