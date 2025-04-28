@@ -18,14 +18,29 @@ cd wordpress/dev
 cp sample-env .env
 ```
 
+::: tip
+you should be using <https://github.com/bcgov/wordpress> as your local WordPress development.
+ensure you pull the latest: `git pull origin main` before you start working on your local WordPress development.
+:::
+
 ## Environment Basics
 
 - Update variables inside `.env` file to reflect your setup.
   - The `CONTENT_DIR` variable is the location of your WordPress content directory.
   - The `TEMP_DIR` variable can be used to import/export db using the wp-cli command.
-    ::: tip
-    When Importing and Exporting databases with the `wp cli` This will be the link between the WordPress container and your local machine.
-    :::
+::: tip
+When Importing and Exporting databases with the `wp cli` This will be the link between the WordPress container and your local machine.
+:::
+::: warning
+If you are using Docker Desktop:
+
+- Uninstall Docker Desktop
+- Install and start Rancher Desktop: https://rancherdesktop.io/
+- Don't enable Kubernetes
+- run `wp_start` (might have to do this 2x and it should create a network)
+- `wp db import /tmp/WordPress/all-sites-2025-04-03.sql` (or whatever the name of your file is)
+your site should now be back to normal.
+:::
 
 ## Setting up SSL on Mac (required)
 
@@ -46,11 +61,14 @@ docker compose --file docker-compose-init.yaml run self-signed-certificate-gener
 ![keychainSnippet](../../assets/keychainSnippet.png)
 
 ::: tip
-If this cert is not working, try restarting your MAC, however there might be a less drastic way of making this work.
+If this cert is not working, try refreshing the Keychain or verifying the certificate installation before considering a Mac restart as a last resort.
 :::
 
 ::: warning
-WordPress will now run on localhost port 443, which is exactly the same port that Kubernetes runs on. Therefore local Kubernetes and WordPress can't be running at the same time.
+WordPress will now run on localhost port 443, which is exactly the same port that Kubernetes runs on. Therefore, local Kubernetes and WordPress can't be running at the same time.
+
+::: tip Workaround
+If you need both services running simultaneously, consider changing the port for one of them. For example, you can modify the `docker-compose.yaml` file to use a different port for WordPress by updating the `ports` section under the `nginx` service.
 :::
 
 ## Run Docker compose
@@ -70,18 +88,31 @@ docker compose up --build
 wp_start
 ```
 
-- Access Wordpress at [https://localhost](https://localhost)
-- Access PHPMyAdmin at [http://localhost:8081](http:/localhost:8081) (Note: does not use https)
+- ensure that the wp-cli container backs up the latest WP Database
+- You should see the following in the terminal:
 
-When you access Wordpress local for the first time, you will be prompted with the intial setup. You can use this screenshot for reference for what to enter.
+```shell:no-line-numbers
+...
+wp-cli-1 | *** Backing up Database in case of disaster ***
+wp-cli-1 | Success: Exported to '/tmp/WordPress/all-sites-<yyyy-mm-dd>.sql'.
+# (This should be accessible to ~/tmp/WordPress)
+...
+```
+
+- Access Wordpress at [https://localhost](https://localhost)
+- Access PHPMyAdmin at [http://localhost:8081](http://localhost:8081) (Note: does not use https)
+
+When you access Wordpress local for the first time, you will be prompted with the initial setup. You can use this screenshot for reference for what to enter.
 
 ![wordpressInitialSetup](../../assets/wordpressInitialSetup.png)
 
 Once you have filled out all required inputs, click "Install WordPress"
 
-## Optional multi-site (Recommended):
+## Recommended multi-site configuration
 
-WordPress (WP) multisite is a configuration that enables multiple websites on the same WP installation.
+::: tip
+WordPress (WP) multi-site is a configuration that enables multiple websites on the same WP installation.
+:::
 
 - In the WordPress admin UI, go to menu Tools -> Network Setup and click install
 - Bring down the WordPress site `docker compose down` (or \<CTRL>-C if docker is in the foreground and then `docker compose down`).
@@ -94,23 +125,26 @@ WordPress (WP) multisite is a configuration that enables multiple websites on th
 
 <img src="/images/max-upload-file-size.png" style="max-width:250px;margin: 1rem 0"/>
 
-## Running Thereafter:
+- The WordPress wp-content directory can be found at the path specified in your `.env` file under the `CONTENT_DIR` variable.
+
+## Running Thereafter
 
 - `docker compose up` runs the nginx, db, WordPress php-fpm, and wp-cli containers, this will also output debug.log in the stdout.
 
 - WordPress wp-content directory, can be found at the path specified in your `.env` under variable `CONTENT_DIR`, .
 
-## Helper functions.
+## Helper functions
 
 The [Helper functions](./bin/commands.sh) can be linked to run anytime a new terminal window is open by adding it to your `~/.bash_profile`
 
-### Including helper functions in bash profile.
+### Including helper functions in bash profile
 
 ::: tip
 In order to make the helper functions accessible you need to include them into your bash or zsh profile. These commands then can be run from anywhere on your file system from a terminal window.
 :::
 
-If you are using bash add this to your `~/.bash_profile`
+If you are using bash, add this to your `~/.bash_profile`.
+If you are using Zsh, add this to your `~/.zshrc`.
 
 ```bash
 if [ -f /location-of-this-repo/wordpress/dev/bin/commands.sh ] ; then
@@ -172,7 +206,12 @@ If you get an error saying `command not found: wp_setup_tests`, follow the steps
 
 ### Running tests
 
-To run a test:
+1. Navigate to the plugin you want to execute tests on. For example:
+
+  ```sh:no-line-numbers
+  cd /path/to/your/plugin-directory
+  ```
+
 1. Navigate to the plugin you want to execute tests on.
 2. Run the command `wp_test`.
    - If you get a message saying "No tests executed" the plugin is most likely not configured using the `wp scaffold plugin-tests` command so its tests cannot be executed this way. Run the unit tests locally instead (`composer run test`).
