@@ -31,8 +31,11 @@ ensure you pull the latest: `git pull origin main` before you start working on y
 ::: tip
 When Importing and Exporting databases with the `wp cli` This will be the link between the WordPress container and your local machine.
 :::
-::: warning
-If you are using Docker Desktop:
+::: warning Optional: Switching to Rancher Desktop
+If you are using Docker Desktop, you can switch to Rancher Desktop. This is not required, but it is recommended for a more stable experience.
+Rancher Desktop is a free and open-source desktop application that provides a Kubernetes environment for local development. It is an alternative to Docker Desktop and is designed to be lightweight and easy to use.
+
+If you want to use Rancher Desktop:
 
 - Uninstall Docker Desktop
 - Install and start Rancher Desktop: https://rancherdesktop.io/
@@ -66,9 +69,6 @@ If this cert is not working, try refreshing the Keychain or verifying the certif
 
 ::: warning
 WordPress will now run on localhost port 443, which is exactly the same port that Kubernetes runs on. Therefore, local Kubernetes and WordPress can't be running at the same time.
-
-::: tip Workaround
-If you need both services running simultaneously, consider changing the port for one of them. For example, you can modify the `docker-compose.yaml` file to use a different port for WordPress by updating the `ports` section under the `nginx` service.
 :::
 
 ## Run Docker compose
@@ -198,7 +198,7 @@ If a plugin has been configured to use this method of unit testing, we can run t
 
 The WordPress Docker instance must be up and running to use the `wp_setup_tests` or `wp_test` commands (run `wp_start` to start the Docker instance).
 
-### Setup
+### Testing Setup
 
 To set up the WP testing environment inside the WordPress container, run the command `wp_setup_tests` from anywhere.
 
@@ -206,13 +206,7 @@ If you get an error saying `command not found: wp_setup_tests`, follow the steps
 
 ### Running tests
 
-1. Navigate to the plugin you want to execute tests on. For example:
-
-  ```sh:no-line-numbers
-  cd /path/to/your/plugin-directory
-  ```
-
-1. Navigate to the plugin you want to execute tests on.
-2. Run the command `wp_test`.
+1. Navigate to the plugin you want to execute tests on: `cd /path/to/your/plugin-directory`
+2. Run `wp_test`.
    - If you get a message saying "No tests executed" the plugin is most likely not configured using the `wp scaffold plugin-tests` command so its tests cannot be executed this way. Run the unit tests locally instead (`composer run test`).
    - If you get a message saying "Have you run bin/install-wp-tests.sh?" you will need to run the `wp_setup_tests` command, then try again.
