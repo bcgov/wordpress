@@ -33,7 +33,7 @@ When Importing and Exporting databases with the `wp cli` This will be the link b
 :::
 ::: warning Optional: Switching to Rancher Desktop
 If you are using Docker Desktop, you can switch to Rancher Desktop. This is not required, but it is recommended for a more stable experience.
-Rancher Desktop is a free and open-source desktop application that provides a Kubernetes environment for local development. It is an alternative to Docker Desktop and is designed to be lightweight and easy to use.
+Rancher Desktop is a free and open-source desktop application that is designed to be lightweight and easy to use.
 
 If you want to use Rancher Desktop:
 
