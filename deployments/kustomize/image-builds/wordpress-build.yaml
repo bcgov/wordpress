@@ -31,7 +31,7 @@ spec:
   source:
     type: Git
     git:
-      ref: feature/descw-3022-update-dependency-WP-WPCLI-NGINX
+      ref: main
       uri: https://github.com/bcgov/wordpress.git
     contextDir: openshift/templates/images/wordpress/docker
   output:
