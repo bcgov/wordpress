@@ -26,12 +26,12 @@ spec:
     dockerStrategy:
       from:
         kind: DockerImage
-        name: wordpress:6.7.1-php8.3-fpm-alpine
+        name: wordpress:6.8.1-php8.3-fpm-alpine
     type: Docker
   source:
     type: Git
     git:
-      ref: main
+      ref: feature/descw-3022-update-dependency-WP-WPCLI-NGINX
       uri: https://github.com/bcgov/wordpress.git
     contextDir: openshift/templates/images/wordpress/docker
   output:

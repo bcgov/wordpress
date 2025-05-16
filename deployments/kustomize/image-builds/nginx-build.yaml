@@ -19,14 +19,14 @@ spec:
   source:
     type: Git
     git:
-      ref: main
+      ref: feature/descw-3022-update-dependency-WP-WPCLI-NGINX
       uri: https://github.com/bcgov/wordpress.git
     contextDir: openshift/templates/images/nginx/docker
   strategy:
     dockerStrategy:
       from:
           kind: DockerImage
-          name: nginx:1.26.2
+          name: nginx:1.27.5
       type: Docker
   output:
     to:
