@@ -3,7 +3,7 @@
 ### May 16, 2025
 - ([DESCW-3022](https://citz-gdx.atlassian.net/browse/DESCW-3022))
   - update WordPress from 6.7.1 - 6.8.1
-  - update WordPress CLI from 2.7.1 -> 1.12.0
+  - update WordPress CLI from 2.7.1 -> 2.12.0
   - update Nginx from 1.26.2 -> 1.27.5
 
 ### April 4, 2025
