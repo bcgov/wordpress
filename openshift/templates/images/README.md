@@ -34,6 +34,9 @@ Base images are images that would use dockerhub image streams to create an addit
 * Creates Sidecar image used for WordPress maintenance and diagnostics.
 * ubuntu -> wordpress-sidecar
   * `oc process -f openshift/templates/images/sidecar/build.yaml | oc apply -f -`
+#### Build Locally
+* `docker build -t wordpress-sidecar-run:dev -f openshift/templates/images/sidecar/docker/Dockerfile openshift/templates/images/sidecar/docker`
+* verify image `docker run -it wordpress-sidecar-run:dev wp --version --allow-root`
 
 ## Naming Conventions
 ### Base Images

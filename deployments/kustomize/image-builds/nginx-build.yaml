@@ -26,7 +26,7 @@ spec:
     dockerStrategy:
       from:
           kind: DockerImage
-          name: nginx:1.26.2
+          name: nginx:1.27.5
       type: Docker
   output:
     to:
