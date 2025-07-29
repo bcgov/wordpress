@@ -26,9 +26,7 @@ jobs:
       - name: Install oc # Install OpenShift CLI, which is required for building images. It is not included in the default GitHub Actions runner.
         uses: redhat-actions/openshift-tools-installer@v1
         with:
-          # "mirror" is the default source, so this is optional.
-          source: "mirror"
-          oc: "4"
+          oc: "latest"
 
       - name: Authenticate and set context
         uses: redhat-actions/oc-login@v1
