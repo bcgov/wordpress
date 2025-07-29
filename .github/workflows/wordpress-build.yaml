@@ -15,7 +15,7 @@ defaults:
     working-directory: ./
 jobs:
   oc:
-    uses: bcgov/wordpress/.github/workflows/oc-build-image.yaml@feature/DESCW-3086_workflow-permissions
+    uses: bcgov/wordpress/.github/workflows/oc-build-image.yaml@main
     with:
       image: wordpress-wordpress-run
     secrets:
