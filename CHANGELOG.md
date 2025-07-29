@@ -1,6 +1,7 @@
 # Changelog
 ### July 29, 2025
 - ([DESCW-3086](https://citz-gdx.atlassian.net/browse/DESCW-3086))
+  - update permissions for the sidecar workflow
   - Add required permissions to workflows for GitHub Actions to function correctly
   - Fixed some Issues with the workflow syntax and formatting
   - added helpful comments to the workflow files
