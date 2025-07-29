@@ -12,6 +12,12 @@ on:
         required: true
       openshift_licenseplate:
         required: true
+  workflow_dispatch: # Allows manual triggering of the workflow
+    inputs:
+      image:
+        description: 'Image name to build'
+        required: true
+        type: string
 permissions:
   contents: read # Needed for any potential checkout operations
   id-token: write # Needed for OIDC authentication with OpenShift
@@ -19,14 +25,19 @@ defaults:
   run:
     working-directory: ./
 jobs:
-  install:
+  build-image:
     if: github.repository_owner == 'bcgov'
     runs-on: ubuntu-latest
     steps:
       - name: Install oc # Install OpenShift CLI, which is required for building images. It is not included in the default GitHub Actions runner.
         uses: redhat-actions/openshift-tools-installer@v1
         with:
-          oc: latest
+          oc: "4"
+
+      - name: Verify oc installation
+        run: |
+          which oc
+          oc version --client
 
       - name: Authenticate and set context
         uses: redhat-actions/oc-login@v1
@@ -37,4 +48,13 @@ jobs:
 
       - name: Image build
         run: |
+          echo "Starting build for image: ${{ inputs.image }}"
           oc start-build ${{ inputs.image }} --follow
+
+          # Verify the build completed successfully
+          if [ $? -eq 0 ]; then
+            echo "✅ Build completed successfully"
+          else
+            echo "❌ Build failed"
+            exit 1
+          fi
