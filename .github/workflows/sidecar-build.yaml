@@ -1,4 +1,7 @@
 name: Build Sidecar Utility Image.
+permissions:
+  contents: read # Used to checkout/read this repository's contents
+  id-token: write # Used by redhat-actions/oc-login in oc-build-image.yaml
 on:
   push:
     branches:
