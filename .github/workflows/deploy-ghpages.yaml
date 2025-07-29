@@ -1,0 +1,39 @@
+name: Deploy to GitHub pages
+permissions:
+  contents: write # Needed to checkout code and push to gh-pages branch
+  pages: write # Needed to deploy to GitHub Pages
+  id-token: write # Needed for GitHub Pages deployment
+  actions: read # Needed to use GITHUB_TOKEN
+on:
+  push:
+    branches:
+      - main
+  release:
+    types:
+      - published
+  workflow_dispatch: # Allows manual triggering of the workflow
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4 # Updated to latest version
+
+      - uses: actions/setup-node@v4 # Updated to latest version
+        with:
+          node-version: "18.18"
+
+      - name: Install and Build 🔧
+        run: |
+          cd documentation
+          npm install
+          npm run docs:build
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4 # Updated to latest version
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}  # 'token' is the parameter name
+          branch: gh-pages                    # 'branch' is another parameter name
+          folder: documentation/docs/.vuepress/dist  # 'folder' is another parameter name
+          clean: true
+          clean-exclude: '["version"]'

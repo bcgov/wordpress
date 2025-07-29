@@ -1,4 +1,11 @@
 # Changelog
+### July 29, 2025
+- ([DESCW-3086](https://citz-gdx.atlassian.net/browse/DESCW-3086))
+  - Add required permissions to workflows for GitHub Actions to function correctly
+  - Fixed some Issues with the workflow syntax and formatting
+  - added helpful comments to the workflow files
+  - enabled manual triggering of the workflows
+  - renamed deploy_ghpages.yml to ghpages.yaml for consistency with other workflows
 
 ### May 16, 2025
 - ([DESCW-3022](https://citz-gdx.atlassian.net/browse/DESCW-3022))
@@ -14,7 +21,7 @@
 
 ### January 16, 2025
 - updating Code owners file, to configure requirements of code owner decision ([DESCW-2805](https://citz-gdx.atlassian.net/browse/DESCW-2805))
-  
+
 ### December 16, 2024
 - update WordPress version to 6.7.1 ([DESCW-2837](https://citz-gdx.atlassian.net/browse/DESCW-2837))
 
@@ -30,7 +37,7 @@
   - update alpine deploy image 3.18.4 - 3.20.3 (mariadb v)
 ### May 2, 2024
 - Integrate reusable unit tests by adding resulable functionality to test commands. ([DESCW-2664](https://citz-gdx.atlassian.net/browse/DESCW-2664))
-- 
+-
 ## May 31, 2024
 - Updated dev deployment to allow WordPress unit tests to be run inside the PHP Wordpress container.
 - Created two new commands to support the above:

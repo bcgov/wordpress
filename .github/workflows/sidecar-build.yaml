@@ -5,7 +5,7 @@ on:
       - main
     paths:
       - "openshift/templates/images/sidecar/**/*"
-  workflow_dispatch:
+  workflow_dispatch: # Allows manual triggering of the workflow
 defaults:
   run:
     working-directory: ./
