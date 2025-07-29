@@ -12,26 +12,28 @@ on:
         required: true
       openshift_licenseplate:
         required: true
+permissions:
+  contents: read # Needed for any potential checkout operations
+  id-token: write # Needed for OIDC authentication with OpenShift
 defaults:
   run:
     working-directory: ./
 jobs:
-  install:
+  build-image:
     if: github.repository_owner == 'bcgov'
     runs-on: ubuntu-latest
     steps:
-      - name: Install oc
-        if: runner.os != 'Linux'
+      - name: Install oc # Install OpenShift CLI, which is required for building images. It is not included in the default GitHub Actions runner.
         uses: redhat-actions/openshift-tools-installer@v1
         with:
-          oc: latest
+          oc: "latest"
 
       - name: Authenticate and set context
         uses: redhat-actions/oc-login@v1
         with:
-          openshift_server_url: ${{ secrets.openshift_server_url}}
+          openshift_server_url: ${{ secrets.openshift_server_url }}
           openshift_token: ${{ secrets.openshift_token }}
-          namespace: ${{ secrets.openshift_licenseplate}}
+          namespace: ${{ secrets.openshift_licenseplate }}
 
       - name: Image build
         run: |

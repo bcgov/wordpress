@@ -1,11 +1,15 @@
-name: Build WordPress Image.
+name: Build WordPress Image
+permissions:
+  contents: read # Used to checkout/read this repository's contents
+  id-token: write # Used by redhat-actions/oc-login in oc-build-image.yaml
+  actions: read # Used to call the reusable workflow oc-build-image.yaml
 on:
   push:
     branches:
       - main
     paths:
       - "openshift/templates/images/wordpress/**/*"
-  workflow_dispatch:
+  workflow_dispatch: # Allows manual triggering of the workflow
 defaults:
   run:
     working-directory: ./
