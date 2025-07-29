@@ -23,18 +23,12 @@ jobs:
     if: github.repository_owner == 'bcgov'
     runs-on: ubuntu-latest
     steps:
-
-      - name: Manually install oc CLI
-        run: |
-          curl -LO https://mirror.openshift.com/pub/openshift-v4/clients/ocp/latest/openshift-client-linux.tar.gz
-          tar -xzvf openshift-client-linux.tar.gz oc
-          sudo mv oc /usr/local/bin/
-          oc version --client
-
-      - name: Verify oc installation
-        run: |
-          which oc
-          oc version --client
+      - name: Install oc # Install OpenShift CLI, which is required for building images. It is not included in the default GitHub Actions runner.
+        uses: redhat-actions/openshift-tools-installer@v1
+        with:
+          # "mirror" is the default source, so this is optional.
+          source: "mirror"
+          oc: "4"
 
       - name: Authenticate and set context
         uses: redhat-actions/oc-login@v1
@@ -45,13 +39,4 @@ jobs:
 
       - name: Image build
         run: |
-          echo "Starting build for image: ${{ inputs.image }}"
           oc start-build ${{ inputs.image }} --follow
-
-          # Verify the build completed successfully
-          if [ $? -eq 0 ]; then
-            echo "✅ Build completed successfully"
-          else
-            echo "❌ Build failed"
-            exit 1
-          fi
