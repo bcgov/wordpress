@@ -1,4 +1,7 @@
-# docker compose --env-file .env up --build site --force-recreate
+# Simple usage
+# docker composer up 
+# Creating a unique deploy by adding a prefix and unique env file
+# docker compose --env-file .env-mysite -p mysite up --build site --force-recreate
 networks:
   wp_deploy:
 volumes:

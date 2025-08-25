@@ -86,6 +86,8 @@ docker compose up --build
 # If you enable build in shell scripts, this scripts works from anywhere
 # Starts WordPress deployments
 wp_start
+# Creating a unique WordPress build by using alternative env, and different database
+docker compose -p mysite --env-file .env-mysite up
 ```
 
 - ensure that the wp-cli container backs up the latest WP Database
@@ -133,6 +135,58 @@ WordPress (WP) multi-site is a configuration that enables multiple websites on t
 
 - WordPress wp-content directory, can be found at the path specified in your `.env` under variable `CONTENT_DIR`, .
 
+## Creating an Alternative WordPress Instance
+::: tip
+This is useful for working on projects, where the database, and resources can be distributed in a way, that only requires a simple database import, and file extraction.
+:::
+
+There are two variations that can be used, one is by using the existing `.env` or by creating an alternative `.env-mysite` file in which a new location could be setup.
+
+### Creating with Existing .env
+Choosing the existing `.env` file, the `MULTISITE` variable will need to be set to `0`, until the multi-site installation has been completed, this instance will be constrained to the same `uploads` folder structure.  Possibly causing conflicts with existing assets.
+```sh:no-line-numbers
+# ensure a full docker compose down has been completed
+docker composer down
+# update your .env file MULTISITE=0
+
+# Run the docker compose up with the --project-name (-p) 
+#   to prepend all containers, and volumes with this project name
+docker compose --project-name mysite up
+# Follow the `Recommended multi-site configuration` 
+#   (In the WordPress admin UI, go to menu
+#   Tools -> Network Setup and click install)
+
+# Do a docker compose down with the project name
+docker compose --project-name mysite down
+# update your .env file back to MULTISITE=1
+
+# For any future times run the docker compose up command with the project name
+docker compose --project-name mysite up
+```
+### Creating with New .env-mysite
+Choosing a new environment file `.env-mysite` allows for a clean installation, providing the `CONTENT_DIR` and `WORDPRESS_DIR` are different than the original installation. The disadvantage is multiple copies of plugins/themes.
+```sh:no-line-numbers
+# ensure a full docker compose down has been completed
+docker composer down
+# update your .env-mysite file MULTISITE=0, and CONTENT_DIR to new directory
+
+
+# Run the docker compose up with the --project-name (-p) 
+#   to prepend all containers, and volumes with this project name
+#   use a specific env file
+docker compose --project-name mysite --env-file .env-mysite up
+# Follow the `Recommended multi-site configuration` 
+#   (In the WordPress admin UI, go to menu
+#   Tools -> Network Setup and click install)
+
+# Do a docker compose down with the project name
+docker compose --project-name mysite down
+# update your .env file back to MULTISITE=1
+
+# For any future times run the docker compose up command with the project name and env file
+docker compose --project-name mysite --env-file .env-mysite  up
+```
+
 ## Helper functions
 
 The [Helper functions](./bin/commands.sh) can be linked to run anytime a new terminal window is open by adding it to your `~/.bash_profile`
@@ -179,6 +233,25 @@ This file will get stored in a directory that you determined in your `.env` as t
 # In order for this command to work you need the following in your terminal profile (bash or zsh)
 # . /location-of-this-repo/wordpress/dev/bin/commands.sh as shown above
 wp db export /tmp/WordPress/all-sites.sql --add-drop-table
+```
+
+## Useful Commands for Migration of db
+```sh:no-line-numbers
+# updating guid and internal links
+wp search-replace \
+   --url=source-url.com \
+   --all-tables-with-prefix \
+   #--dry-run \
+   source-url.com \
+   localhost 
+
+# Updating the location of assets
+wp search-replace \
+   --url=localhost \
+   --all-tables-with-prefix \
+   #--dry-run \
+   source-url.com/app/uploads/sites/982 \
+   localhost/wp-content/uploads/sites/3 
 ```
 
 ## Restoring full database
