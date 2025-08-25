@@ -38,7 +38,11 @@ wp_audit() {
 
 # Set up WordPress unit testing environment
 wp_setup_tests() {
-    docker exec -it dev-wordpress-php-fpm-1 /bin/sh -c "/usr/bin/setup-tests.sh wordpress_test root ${MYSQL_ROOT_PASSWORD} ${MYSQL_HOST}"
+    docker exec -it \
+    $(docker ps --filter "ancestor=des-wordpress-php-fpm:latest" --format "{{.Names}}") \
+    /bin/sh -c \
+    "/usr/bin/setup-tests.sh wordpress_test root ${MYSQL_ROOT_PASSWORD} ${MYSQL_HOST}"
+
 }
 
 # Perform WordPress PHP unit tests on the current directory
@@ -46,7 +50,7 @@ wp_setup_tests() {
 wp_test() {
     docker exec \
     -w /var/www/html/wp-content/${PWD//$CONTENT_DIR/} \
-    -it dev-wordpress-php-fpm-1 \
+    -it $(docker ps --filter "ancestor=des-wordpress-php-fpm:latest" --format "{{.Names}}") \
     vendor/bin/phpunit --configuration vendor/bcgov/wordpress-utils/phpunit.xml.dist
 }
     
