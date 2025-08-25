@@ -27,7 +27,8 @@ wp_stop() {
 # Access to the WordPress cli
 wp() {
     #cd $ROOT_PATH
-    docker exec -it dev-wp-cli-1 wp $@
+    # gets any container that has the image of wordpress:cli-php7.4, so wp cli can be ran on any developer instance
+    docker exec -it $(docker ps --filter "ancestor=wordpress:cli-php7.4" --format "{{.Names}}") wp $@
 }
 
 # Audit plugins or themes
