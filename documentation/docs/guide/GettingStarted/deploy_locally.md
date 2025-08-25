@@ -88,7 +88,6 @@ docker compose up --build
 wp_start
 # Creating a unique WordPress build by using alternative env, and different database
 docker compose -p mysite --env-file .env-mysite up
-# Creating a unique WordPress build an
 ```
 
 - ensure that the wp-cli container backs up the latest WP Database
@@ -144,7 +143,7 @@ This is useful for working on projects, where the database, and resources can be
 There are two variations that can be used, one is by using the existing `.env` or by creating an alternative `.env-mysite` file in which a new location could be setup.
 
 ### Creating with Existing .env
-- If you choose to use the existing `.env` you will have to reset your `MULTISITE` temporarily  back to `0`, until you create your new multi-site installation, you will also be constrained to the same uploads/folder structure.
+Choosing the existing `.env` file, the `MULTISITE` variable will need to be set to `0`, until the multi-site installation has been completed, this instance will be constrained to the same `uploads` folder structure.  Possibly causing conflicts with existing assets.
 ```sh:no-line-numbers
 # ensure a full docker compose down has been completed
 docker composer down
@@ -165,7 +164,7 @@ docker compose --project-name mysite down
 docker compose --project-name mysite up
 ```
 ### Creating with New .env-mysite
-- If you choose to create a new `.env-mysite` you will still have to go through the process of installing WordPress and multi-site, and will need to include copies of plugins and themes in your new location.
+Choosing a new environment file `.env-mysite` allows for a clean installation, providing the `CONTENT_DIR` and `WORDPRESS_DIR` are different than the original installation. The disadvantage is multiple copies of plugins/themes.
 ```sh:no-line-numbers
 # ensure a full docker compose down has been completed
 docker composer down
