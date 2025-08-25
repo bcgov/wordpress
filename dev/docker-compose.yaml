@@ -15,6 +15,7 @@ services:
   nginx:
     build:
       context: ../openshift/templates/images/nginx/docker
+    image: des-nginx:latest
     ports:
       - 443:443
       # This is to allow access to WordPress local deployment inside another container
@@ -73,6 +74,7 @@ services:
   db:
     build:
       context: ../openshift/templates/images/mariadb/docker
+    image: des-db:latest
     logging:
       driver: none
     environment:
@@ -114,6 +116,7 @@ services:
     build:
       context: ../openshift/templates/images/wordpress/docker
       dockerfile: dev.Dockerfile
+    image: des-wordpress-php-fpm:latest
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       WP_CORE_DIR: /var/www/html/

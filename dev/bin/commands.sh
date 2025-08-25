@@ -27,7 +27,8 @@ wp_stop() {
 # Access to the WordPress cli
 wp() {
     #cd $ROOT_PATH
-    docker exec -it dev-wp-cli-1 wp $@
+    # gets any container that has the image of wordpress:cli-php7.4, so wp cli can be ran on any developer instance
+    docker exec -it $(docker ps --filter "ancestor=wordpress:cli-php7.4" --format "{{.Names}}") wp $@
 }
 
 # Audit plugins or themes
@@ -37,7 +38,19 @@ wp_audit() {
 
 # Set up WordPress unit testing environment
 wp_setup_tests() {
-    docker exec -it dev-wordpress-php-fpm-1 /bin/sh -c "/usr/bin/setup-tests.sh wordpress_test root ${MYSQL_ROOT_PASSWORD} ${MYSQL_HOST}"
+    CLI_CONTAINER=$(docker ps --filter "ancestor=wordpress:cli-php7.4" --format "{{.Names}}")
+    CURRENT_WORDPRESS_VERSION=$(docker exec -it $CLI_CONTAINER wp core version | tr -d '\r')
+    echo "Current WordPress Version ${CURRENT_WORDPRESS_VERSION} on container ${CLI_CONTAINER}" 
+    docker exec -it \
+    $(docker ps --filter "ancestor=des-wordpress-php-fpm:latest" --format "{{.Names}}") \
+    /bin/sh -c \
+    "/usr/bin/setup-tests.sh \
+    wordpress_test \
+    root \
+    ${MYSQL_ROOT_PASSWORD} \
+    ${MYSQL_HOST} \
+    ${CURRENT_WORDPRESS_VERSION}"
+
 }
 
 # Perform WordPress PHP unit tests on the current directory
@@ -45,7 +58,7 @@ wp_setup_tests() {
 wp_test() {
     docker exec \
     -w /var/www/html/wp-content/${PWD//$CONTENT_DIR/} \
-    -it dev-wordpress-php-fpm-1 \
+    -it $(docker ps --filter "ancestor=des-wordpress-php-fpm:latest" --format "{{.Names}}") \
     vendor/bin/phpunit --configuration vendor/bcgov/wordpress-utils/phpunit.xml.dist
 }
     

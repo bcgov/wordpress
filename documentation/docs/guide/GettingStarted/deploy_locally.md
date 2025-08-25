@@ -142,6 +142,12 @@ This is useful for working on projects, where the database, and resources can be
 
 There are two variations that can be used, one is by using the existing `.env` or by creating an alternative `.env-mysite` file in which a new location could be setup.
 
+The `wp` cli might no longer work, here are the two solutions
+- download latest version of https://github.com/bcgov/wordpress, as it has a fix, and allows any project, to execute the `wp` cli command
+- manually shell into container
+  - ```docker exec -it mysite-wp-cli-1 sh```
+  - use the wp cli command 
+
 ### Creating with Existing .env
 Choosing the existing `.env` file, the `MULTISITE` variable will need to be set to `0`, until the multi-site installation has been completed, this instance will be constrained to the same `uploads` folder structure.  Possibly causing conflicts with existing assets.
 ```sh:no-line-numbers
