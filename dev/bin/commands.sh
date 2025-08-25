@@ -38,10 +38,18 @@ wp_audit() {
 
 # Set up WordPress unit testing environment
 wp_setup_tests() {
+    CLI_CONTAINER=$(docker ps --filter "ancestor=wordpress:cli-php7.4" --format "{{.Names}}")
+    CURRENT_WORDPRESS_VERSION=$(docker exec -it $CLI_CONTAINER wp core version | tr -d '\r')
+    echo "Current WordPress Version `${CURRENT_WORDPRESS_VERSION}` on container ${CLI_CONTAINER}" 
     docker exec -it \
     $(docker ps --filter "ancestor=des-wordpress-php-fpm:latest" --format "{{.Names}}") \
     /bin/sh -c \
-    "/usr/bin/setup-tests.sh wordpress_test root ${MYSQL_ROOT_PASSWORD} ${MYSQL_HOST}"
+    "/usr/bin/setup-tests.sh \
+    wordpress_test \
+    root \
+    ${MYSQL_ROOT_PASSWORD} \
+    ${MYSQL_HOST} \
+    ${CURRENT_WORDPRESS_VERSION}"
 
 }
 
