@@ -40,7 +40,7 @@ wp_audit() {
 wp_setup_tests() {
     CLI_CONTAINER=$(docker ps --filter "ancestor=wordpress:cli-php7.4" --format "{{.Names}}")
     CURRENT_WORDPRESS_VERSION=$(docker exec -it $CLI_CONTAINER wp core version | tr -d '\r')
-    echo "Current WordPress Version `${CURRENT_WORDPRESS_VERSION}` on container ${CLI_CONTAINER}" 
+    echo "Current WordPress Version ${CURRENT_WORDPRESS_VERSION} on container ${CLI_CONTAINER}" 
     docker exec -it \
     $(docker ps --filter "ancestor=des-wordpress-php-fpm:latest" --format "{{.Names}}") \
     /bin/sh -c \
