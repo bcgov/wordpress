@@ -12,13 +12,13 @@
   "license": "ISC",
   "engineStrict": true,
   "engines": {
-    "node": "^20.19"
+    "node": ">=22.18"
   },
   "devDependencies": {
-    "@vuepress/bundler-vite": "^2.0.0-rc.24",
-    "@vuepress/plugin-search": "^2.0.0-rc.112",
-    "@vuepress/theme-default": "^2.0.0-rc.112",
-    "sass-embedded": "^1.90.0",
-    "vuepress": "^2.0.0-rc.24"
+    "@vuepress/bundler-vite": "^2.0.0-rc.7",
+    "@vuepress/plugin-search": "^2.0.0-rc.7",
+    "@vuepress/theme-default": "^2.0.0-rc.7",
+    "sass-embedded": "^1.93.2",
+    "vuepress": "^2.0.0-rc.7"
   }
 }
