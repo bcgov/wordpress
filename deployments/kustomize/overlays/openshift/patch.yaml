@@ -1,4 +1,4 @@
-# Patch Mariadb PV , change storage amount, and make a block storage
+# Patch Mariadb PV, change storage amount, and make a block storage
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -21,7 +21,7 @@ spec:
   resources:
     requests:
       storage: 1Gi
-  storageClassName: netapp-file-standard
+  storageClassName: netapp-file-backup
 
 ---
 # Patch WordPress deployment for OS.
