@@ -90,6 +90,8 @@ wp_start
 docker compose -p mysite --env-file .env-mysite up
 ```
 
+The local WordPress PHP-FPM image is built on PHP 7.4 and currently pins WordPress 6.8.1. If you already have this stack running, use `docker compose up --build` so the refreshed image is applied.
+
 - ensure that the wp-cli container backs up the latest WP Database
 - You should see the following in the terminal:
 
@@ -146,7 +148,7 @@ The `wp` cli might no longer work, here are the two solutions
 - download latest version of https://github.com/bcgov/wordpress, as it has a fix, and allows any project, to execute the `wp` cli command
 - manually shell into container
   - ```docker exec -it mysite-wp-cli-1 sh```
-  - use the wp cli command 
+  - use the wp cli command
 
 ### Creating with Existing .env
 Choosing the existing `.env` file, the `MULTISITE` variable will need to be set to `0`, until the multi-site installation has been completed, this instance will be constrained to the same `uploads` folder structure.  Possibly causing conflicts with existing assets.
@@ -155,10 +157,10 @@ Choosing the existing `.env` file, the `MULTISITE` variable will need to be set 
 docker composer down
 # update your .env file MULTISITE=0
 
-# Run the docker compose up with the --project-name (-p) 
+# Run the docker compose up with the --project-name (-p)
 #   to prepend all containers, and volumes with this project name
 docker compose --project-name mysite up
-# Follow the `Recommended multi-site configuration` 
+# Follow the `Recommended multi-site configuration`
 #   (In the WordPress admin UI, go to menu
 #   Tools -> Network Setup and click install)
 
@@ -177,11 +179,11 @@ docker composer down
 # update your .env-mysite file MULTISITE=0, and CONTENT_DIR to new directory
 
 
-# Run the docker compose up with the --project-name (-p) 
+# Run the docker compose up with the --project-name (-p)
 #   to prepend all containers, and volumes with this project name
 #   use a specific env file
 docker compose --project-name mysite --env-file .env-mysite up
-# Follow the `Recommended multi-site configuration` 
+# Follow the `Recommended multi-site configuration`
 #   (In the WordPress admin UI, go to menu
 #   Tools -> Network Setup and click install)
 
@@ -249,7 +251,7 @@ wp search-replace \
    --all-tables-with-prefix \
    #--dry-run \
    source-url.com \
-   localhost 
+   localhost
 
 # Updating the location of assets
 wp search-replace \
@@ -257,7 +259,7 @@ wp search-replace \
    --all-tables-with-prefix \
    #--dry-run \
    source-url.com/app/uploads/sites/982 \
-   localhost/wp-content/uploads/sites/3 
+   localhost/wp-content/uploads/sites/3
 ```
 
 ## Restoring full database
